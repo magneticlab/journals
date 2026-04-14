@@ -1,6 +1,5 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
-import MeshGradient from '../components/MeshGradient.vue'
 
 const manifest = ref({ work: [], daily: [] })
 const weather = ref(null)
@@ -123,7 +122,6 @@ const dailySpark = computed(() => spark7(manifest.value.daily, 'commits'))
 
 <template>
   <div class="page">
-    <MeshGradient />
     <div class="mx content">
 
       <!-- Hero: Logo + Greeting + Weather -->
