@@ -251,11 +251,20 @@ const dailySpark = computed(() => spark7(manifest.value.daily, 'commits'))
 
 /* Cards */
 .cards { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 40px; }
-.card { border-radius: 14px; padding: 24px; transition: all 0.2s; display: block; }
-.card-work { background: rgba(99,149,255,0.03); border: 1px solid rgba(99,149,255,0.15); }
-.card-work:hover { border-color: rgba(99,149,255,0.3); box-shadow: 0 4px 20px rgba(99,149,255,0.08); }
-.card-daily { background: rgba(52,211,153,0.03); border: 1px solid rgba(52,211,153,0.15); }
-.card-daily:hover { border-color: rgba(52,211,153,0.3); box-shadow: 0 4px 20px rgba(52,211,153,0.08); }
+.card {
+  border-radius: 14px; padding: 24px; transition: all 0.2s; display: block;
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+}
+.card-work {
+  background: rgba(12,12,14,0.82); border: 1px solid rgba(99,149,255,0.18);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3), 0 1px 2px rgba(0,0,0,0.2);
+}
+.card-work:hover { border-color: rgba(99,149,255,0.35); box-shadow: 0 8px 28px rgba(0,0,0,0.4), 0 0 20px rgba(99,149,255,0.06); }
+.card-daily {
+  background: rgba(12,12,14,0.82); border: 1px solid rgba(52,211,153,0.18);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3), 0 1px 2px rgba(0,0,0,0.2);
+}
+.card-daily:hover { border-color: rgba(52,211,153,0.35); box-shadow: 0 8px 28px rgba(0,0,0,0.4), 0 0 20px rgba(52,211,153,0.06); }
 .card-head { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 16px; }
 .card-icon { display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 10px; }
 .icon-work { background: rgba(99,149,255,0.12); color: #6395ff; }

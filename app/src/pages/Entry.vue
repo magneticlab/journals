@@ -76,16 +76,19 @@ const activeHours = computed(() => {
 
 <template>
   <div class="page">
-    <!-- Hero header -->
-    <div class="hero" :style="{ borderBottomColor: brand + '20' }">
-      <div class="mx">
-        <!-- Nav row -->
-        <div class="nav-row">
-          <router-link :to="`/${journal}`" class="back-link">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
-            All entries
+    <!-- Nav header -->
+    <div class="nav-header">
+      <div class="mx nav-inner">
+        <div class="nav-left">
+          <router-link to="/" class="nav-logo">Journals</router-link>
+          <span class="nav-sep">/</span>
+          <router-link :to="`/${journal}`" :class="['nav-tab', isWork ? 'tab-work active' : 'tab-daily active']">
+            <svg v-if="isWork" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+            <svg v-else width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            {{ isWork ? 'Work' : 'Daily' }}
           </router-link>
-          <div class="date-nav">
+        </div>
+        <div class="date-nav">
             <button @click="goToPrev" :disabled="!hasPrev" :class="['nav-btn', { disabled: !hasPrev }]">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
             </button>
@@ -96,9 +99,12 @@ const activeHours = computed(() => {
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
             </button>
           </div>
-        </div>
+      </div>
+    </div>
 
-        <!-- Title block -->
+    <!-- Hero -->
+    <div class="hero" :style="{ borderBottomColor: brand + '20' }">
+      <div class="mx">
         <div v-if="data" class="hero-content">
           <h1 class="hero-date">{{ data.day }}, {{ data.display }}</h1>
           <div class="hero-stats">
@@ -310,21 +316,31 @@ const activeHours = computed(() => {
 <style scoped>
 .page { min-height: calc(100vh - 52px); }
 
-/* Hero header */
-.hero {
-  background: var(--bg-card); padding: 20px 0 28px;
-  border-bottom: 2px solid;
+/* Nav header */
+.nav-header {
+  border-bottom: 1px solid var(--border); background: var(--bg-card);
+  padding: 14px 0; position: sticky; top: 0; z-index: 50;
 }
 .mx { max-width: 880px; margin: 0 auto; padding-left: 24px; padding-right: 24px; }
-
-.nav-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
-.back-link {
-  display: flex; align-items: center; gap: 6px;
-  font-size: 12px; color: var(--text-muted);
-  padding: 6px 12px; border-radius: 8px; border: 1px solid var(--border);
-  transition: all 0.15s;
+.nav-inner { display: flex; align-items: center; justify-content: space-between; }
+.nav-left { display: flex; align-items: center; gap: 10px; }
+.nav-logo { font-family: var(--serif); font-size: 16px; color: var(--text-heading); }
+.nav-sep { color: var(--border-hover); font-size: 14px; }
+.nav-tab {
+  display: flex; align-items: center; gap: 5px;
+  padding: 6px 12px; border-radius: 7px;
+  font-size: 13px; font-weight: 500;
+  color: var(--text-muted); transition: all 0.15s;
 }
-.back-link:hover { border-color: var(--border-hover); color: var(--text-strong); }
+.nav-tab:hover { color: var(--text-strong); background: var(--bg-elevated); }
+.tab-work.active { color: #6395ff; background: var(--bg-elevated); }
+.tab-daily.active { color: #34d399; background: var(--bg-elevated); }
+
+/* Hero */
+.hero {
+  background: var(--bg-card); padding: 24px 0 28px;
+  border-bottom: 2px solid;
+}
 
 .date-nav { display: flex; align-items: center; gap: 4px; }
 .nav-btn { padding: 6px; border-radius: 8px; border: none; background: none; cursor: pointer; color: var(--text-muted); transition: all 0.15s; display: flex; }

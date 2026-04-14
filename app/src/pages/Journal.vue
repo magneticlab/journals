@@ -82,18 +82,24 @@ const brandColor = computed(() => isWork.value ? '#6395ff' : '#34d399')
 
 <template>
   <div class="page">
-    <!-- Header -->
-    <div class="subheader" @click="router.push('/')">
-      <div class="mx header-inner">
-        <div class="header-left">
-          <div :class="['header-icon', isWork ? 'hicon-work' : 'hicon-daily']">
-            <svg v-if="isWork" class="brand-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
-            <svg v-else class="brand-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-            <svg class="back-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+    <!-- Inline nav header -->
+    <div class="nav-header">
+      <div class="mx nav-inner">
+        <div class="nav-left">
+          <router-link to="/" class="nav-logo">Journals</router-link>
+          <span class="nav-sep">/</span>
+          <div class="nav-tabs">
+            <router-link to="/work" :class="['nav-tab', 'tab-work', { active: journal === 'work' }]">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+              Work
+            </router-link>
+            <router-link to="/daily" :class="['nav-tab', 'tab-daily', { active: journal === 'daily' }]">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              Daily
+            </router-link>
           </div>
-          <h1 class="htitle">{{ title }}</h1>
         </div>
-        <p class="hsub">{{ entries.length }} reports</p>
+        <span class="nav-count">{{ entries.length }} reports</span>
       </div>
     </div>
 
@@ -225,24 +231,30 @@ const brandColor = computed(() => isWork.value ? '#6395ff' : '#34d399')
 <style scoped>
 .page { min-height: calc(100vh - 52px); }
 
-/* Header */
-.subheader { border-bottom: 1px solid var(--border); background: var(--bg-card); padding: 18px 0; cursor: pointer; transition: background 0.15s; }
-.subheader:hover { background: var(--bg-elevated); }
-.mx { max-width: 880px; margin: 0 auto; padding-left: 24px; padding-right: 24px; }
-.header-inner { display: flex; align-items: center; justify-content: space-between; }
-.header-left { display: flex; align-items: center; gap: 14px; }
-.header-icon {
-  display: flex; align-items: center; justify-content: center;
-  width: 44px; height: 44px; border-radius: 12px; flex-shrink: 0; position: relative;
+/* Nav header */
+.nav-header {
+  border-bottom: 1px solid var(--border); background: var(--bg-card);
+  padding: 14px 0; position: sticky; top: 0; z-index: 50;
 }
-.hicon-work { background: rgba(99,149,255,0.12); color: #6395ff; }
-.hicon-daily { background: rgba(52,211,153,0.12); color: #34d399; }
-.brand-icon { transition: opacity 0.15s; }
-.back-icon { position: absolute; opacity: 0; transition: opacity 0.15s; color: var(--text-strong); }
-.subheader:hover .brand-icon { opacity: 0; }
-.subheader:hover .back-icon { opacity: 1; }
-.htitle { font-family: var(--serif); font-size: 26px; font-weight: 400; color: var(--text-heading); }
-.hsub { font-size: 12px; color: var(--text-muted); }
+.mx { max-width: 880px; margin: 0 auto; padding-left: 24px; padding-right: 24px; }
+.nav-inner { display: flex; align-items: center; justify-content: space-between; }
+.nav-left { display: flex; align-items: center; gap: 10px; }
+.nav-logo { font-family: var(--serif); font-size: 16px; color: var(--text-heading); }
+.nav-sep { color: var(--border-hover); font-size: 14px; }
+.nav-tabs { display: flex; gap: 2px; }
+.nav-tab {
+  display: flex; align-items: center; gap: 5px;
+  padding: 6px 12px; border-radius: 7px;
+  font-size: 13px; font-weight: 500;
+  color: var(--text-muted); transition: all 0.15s;
+}
+.nav-tab:hover { color: var(--text-strong); background: var(--bg-elevated); }
+.nav-tab.active { color: var(--text-heading); background: var(--bg-elevated); }
+.tab-work.active { color: #6395ff; }
+.tab-daily.active { color: #34d399; }
+.tab-work.active svg { color: #6395ff; }
+.tab-daily.active svg { color: #34d399; }
+.nav-count { font-size: 12px; color: var(--text-muted); }
 
 .body { padding: 24px 0 64px; }
 
