@@ -4,7 +4,7 @@ import { computed } from 'vue'
 const props = defineProps({
   metrics: Object,
   brandColor: { type: String, default: '#6395ff' },
-  size: { type: Number, default: 260 },
+  size: { type: Number, default: 220 },
 })
 
 const keys = computed(() => Object.keys(props.metrics || {}))
@@ -75,12 +75,12 @@ const uid = 'r' + Math.random().toString(36).slice(2, 6)
         stroke="rgba(255,255,255,0.07)" stroke-width="0.75" />
 
       <!-- Data shape — glow -->
-      <path :d="dataPath" :fill="brandColor + '18'"
+      <path :d="dataPath" :fill="brandColor + '28'"
         :stroke="brandColor" stroke-width="1.5" stroke-linejoin="round"
         :filter="`url(#${uid}-glow)`" opacity="0.4" />
 
       <!-- Data shape — crisp -->
-      <path :d="dataPath" :fill="brandColor + '18'"
+      <path :d="dataPath" :fill="brandColor + '28'"
         :stroke="brandColor" stroke-width="1.5" stroke-linejoin="round"
         stroke-opacity="0.9" />
 

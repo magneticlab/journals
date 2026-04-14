@@ -333,23 +333,24 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
 .duo-text { font-size: 13px; line-height: 1.6; color: var(--text); }
 
 /* Performance layout */
-.perf-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start; }
+.perf-layout { display: grid; grid-template-columns: 240px 1fr; gap: 12px; align-items: stretch; }
 .perf-radar {
   background: rgba(12,12,14,0.5); border: 1px solid var(--border);
-  border-radius: 14px; padding: 12px;
+  border-radius: 12px; padding: 8px;
   backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
   display: flex; align-items: center; justify-content: center;
 }
-.perf-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.perf-cards { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr 1fr; gap: 6px; }
 
 .metric-card {
   background: rgba(12,12,14,0.7); border: 1px solid var(--border);
   border-radius: 8px; padding: 10px 12px;
   backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  display: flex; flex-direction: column; justify-content: center;
 }
-.metric-top { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 6px; }
+.metric-top { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 5px; }
 .metric-label { font-size: 10px; font-weight: 500; color: var(--text-muted); }
-.metric-score { font-size: 16px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.metric-score { font-size: 15px; font-weight: 700; font-variant-numeric: tabular-nums; }
 .metric-bar-bg { height: 3px; background: var(--bg-elevated); border-radius: 2px; overflow: hidden; }
 .metric-bar { height: 100%; border-radius: 2px; transition: width 0.5s ease-out; }
 
@@ -473,7 +474,7 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
   .hero-title-row { flex-direction: column; align-items: flex-start; gap: 12px; }
   .duo-grid { grid-template-columns: 1fr; }
   .perf-layout { grid-template-columns: 1fr; }
-  .perf-cards { grid-template-columns: 1fr 1fr 1fr; }
+  .perf-cards { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
   .theme-grid { grid-template-columns: 1fr; }
 }
 </style>
