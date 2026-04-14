@@ -4,7 +4,7 @@ import { computed } from 'vue'
 const props = defineProps({
   metrics: Object,
   brandColor: { type: String, default: '#6395ff' },
-  size: { type: Number, default: 220 },
+  size: { type: Number, default: 280 },
 })
 
 const keys = computed(() => Object.keys(props.metrics || {}))

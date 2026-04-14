@@ -125,23 +125,29 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
         </div>
 
         <!-- Performance -->
-        <section v-if="isWork && data.metrics" v-reveal class="section section-tint" :style="{ '--tint': brand + '06' }">
+        <section v-if="isWork && data.metrics" v-reveal class="section">
           <p class="section-label" :style="{ color: brand }">Performance</p>
-          <div class="perf-layout">
-            <!-- Radar chart -->
+          <div class="perf-card">
+            <!-- Radar -->
             <div class="perf-radar rv">
-              <RadarChart :metrics="data.metrics" :brandColor="brand" :size="240" />
+              <RadarChart :metrics="data.metrics" :brandColor="brand" :size="280" />
             </div>
-            <!-- Metric cards -->
-            <div class="perf-cards">
-              <div v-for="(m, key) in data.metrics" :key="key" class="metric-card rv">
-                <div class="metric-top">
-                  <span class="metric-label">{{ m.label }}</span>
-                  <span class="metric-score" :style="{ color: scoreColor(m.score) }">{{ m.score }}</span>
+            <!-- Stats ring grid -->
+            <div class="perf-stats">
+              <div v-for="(m, key) in data.metrics" :key="key" class="stat-ring rv">
+                <div class="ring-visual">
+                  <svg width="52" height="52" viewBox="0 0 52 52">
+                    <circle cx="26" cy="26" r="22" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="3" />
+                    <circle cx="26" cy="26" r="22" fill="none"
+                      :stroke="scoreColor(m.score)" stroke-width="3"
+                      stroke-linecap="round"
+                      :stroke-dasharray="`${m.score * 1.382} 200`"
+                      transform="rotate(-90 26 26)"
+                    />
+                  </svg>
+                  <span class="ring-num" :style="{ color: scoreColor(m.score) }">{{ m.score }}</span>
                 </div>
-                <div class="metric-bar-bg">
-                  <div class="metric-bar" :style="{ width: m.score + '%', background: scoreColor(m.score) }"></div>
-                </div>
+                <span class="ring-label">{{ m.label }}</span>
               </div>
             </div>
           </div>
@@ -332,27 +338,29 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
 .duo-green .duo-label { color: #34d399; } .duo-red .duo-label { color: #f87171; }
 .duo-text { font-size: 13px; line-height: 1.6; color: var(--text); }
 
-/* Performance layout */
-.perf-layout { display: grid; grid-template-columns: 240px 1fr; gap: 12px; align-items: stretch; }
-.perf-radar {
-  background: rgba(12,12,14,0.5); border: 1px solid var(--border);
-  border-radius: 12px; padding: 8px;
-  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-  display: flex; align-items: center; justify-content: center;
-}
-.perf-cards { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr 1fr; gap: 6px; }
-
-.metric-card {
+/* Performance — athlete card */
+.perf-card {
+  display: flex; align-items: center; gap: 16px;
   background: rgba(12,12,14,0.7); border: 1px solid var(--border);
-  border-radius: 8px; padding: 10px 12px;
+  border-radius: 16px; padding: 20px;
   backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-  display: flex; flex-direction: column; justify-content: center;
 }
-.metric-top { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 5px; }
-.metric-label { font-size: 10px; font-weight: 500; color: var(--text-muted); }
-.metric-score { font-size: 15px; font-weight: 700; font-variant-numeric: tabular-nums; }
-.metric-bar-bg { height: 3px; background: var(--bg-elevated); border-radius: 2px; overflow: hidden; }
-.metric-bar { height: 100%; border-radius: 2px; transition: width 0.5s ease-out; }
+.perf-radar { flex-shrink: 0; }
+.perf-stats {
+  flex: 1; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;
+}
+.stat-ring {
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  padding: 12px 4px;
+}
+.ring-visual { position: relative; width: 52px; height: 52px; }
+.ring-visual svg { display: block; }
+.ring-visual circle:last-child { transition: stroke-dasharray 0.8s var(--ease-spring); }
+.ring-num {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 700; font-variant-numeric: tabular-nums;
+}
+.ring-label { font-size: 9px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); text-align: center; }
 
 /* Did */
 .did-list { display: flex; flex-direction: column; gap: 4px; }
@@ -473,8 +481,8 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
   .hero-h1 { font-size: 24px; }
   .hero-title-row { flex-direction: column; align-items: flex-start; gap: 12px; }
   .duo-grid { grid-template-columns: 1fr; }
-  .perf-layout { grid-template-columns: 1fr; }
-  .perf-cards { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
+  .perf-card { flex-direction: column; }
+  .perf-stats { grid-template-columns: 1fr 1fr 1fr; }
   .theme-grid { grid-template-columns: 1fr; }
 }
 </style>
