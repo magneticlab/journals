@@ -169,27 +169,48 @@ const dailySpark = computed(() => spark7(manifest.value.daily, 'commits'))
             <div class="group-entries">
               <div v-for="d in group.items" :key="d.date" class="day-card">
                 <div class="day-line"></div>
-                <div class="day-dot"></div>
-                <div class="day-content">
-                  <!-- Day heading -->
-                  <div class="day-head">
-                    <div class="day-name-block">
-                      <span class="day-name">{{ d.day }}</span>
-                      <span class="day-num">{{ dateNum(d) }}</span>
-                    </div>
-                    <span class="day-summary-text">{{ daySummary(d) }}</span>
-                  </div>
 
-                  <!-- Work + Daily rows inside the card -->
-                  <div class="day-rows">
-                    <router-link v-if="d.work" :to="`/work/${d.date}`" class="day-row row-work">
-                      <span class="row-badge badge-work">Work</span>
-                      <span class="row-summary">{{ d.work.summary }}</span>
+                <!-- Calendar sticker -->
+                <div class="cal-sticker">
+                  <span class="cal-day">{{ d.day?.slice(0, 3) }}</span>
+                  <span class="cal-num">{{ dateNum(d) }}</span>
+                </div>
+
+                <!-- Card content -->
+                <div class="day-content">
+                  <div class="day-cols">
+                    <!-- Work column -->
+                    <router-link v-if="d.work" :to="`/work/${d.date}`" class="day-col col-work">
+                      <div class="col-head">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+                        <span class="col-label">Work</span>
+                      </div>
+                      <p class="col-summary">{{ d.work.summary }}</p>
+                      <div class="col-meta" v-if="d.work.stats">
+                        <span v-if="d.work.stats.sessions">{{ d.work.stats.sessions }}s</span>
+                        <span v-if="d.work.stats.commits">{{ d.work.stats.commits }}c</span>
+                        <span v-if="d.work.stats.repos">{{ d.work.stats.repos }}r</span>
+                      </div>
                     </router-link>
-                    <router-link v-if="d.daily" :to="`/daily/${d.date}`" class="day-row row-daily">
-                      <span class="row-badge badge-daily">Daily</span>
-                      <span class="row-summary">{{ d.daily.summary }}</span>
+                    <div v-else class="day-col col-empty">
+                      <span class="empty-label">No work session</span>
+                    </div>
+
+                    <!-- Daily column -->
+                    <router-link v-if="d.daily" :to="`/daily/${d.date}`" class="day-col col-daily">
+                      <div class="col-head">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                        <span class="col-label">Daily</span>
+                      </div>
+                      <p class="col-summary">{{ d.daily.summary }}</p>
+                      <div class="col-meta" v-if="d.daily.stats">
+                        <span v-if="d.daily.stats.commands">{{ d.daily.stats.commands }} cmd</span>
+                        <span v-if="d.daily.stats.commits">{{ d.daily.stats.commits }}c</span>
+                      </div>
                     </router-link>
+                    <div v-else class="day-col col-empty">
+                      <span class="empty-label">No daily log</span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -249,44 +270,53 @@ const dailySpark = computed(() => spark7(manifest.value.daily, 'commits'))
 
 /* Day card */
 .group-entries { padding-left: 4px; }
-.day-card { display: flex; align-items: stretch; position: relative; margin-left: 1px; }
-.day-line { position: absolute; left: 4px; top: 0; bottom: 0; width: 1px; background: var(--border); }
-.day-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--border-hover); border: 1.5px solid var(--border); flex-shrink: 0; margin-top: 18px; margin-right: 14px; position: relative; z-index: 1; transition: all 0.15s; }
-.day-card:hover .day-dot { background: var(--text-muted); transform: scale(1.3); }
+.day-card { display: flex; align-items: flex-start; position: relative; margin-left: 1px; gap: 0; }
+.day-line { position: absolute; left: 22px; top: 0; bottom: 0; width: 1px; background: var(--border); }
 
+/* Calendar sticker */
+.cal-sticker {
+  width: 44px; flex-shrink: 0; margin-top: 10px; margin-right: 12px;
+  display: flex; flex-direction: column; align-items: center;
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px;
+  padding: 6px 4px; position: relative; z-index: 1;
+  transition: border-color 0.15s;
+}
+.day-card:hover .cal-sticker { border-color: var(--border-hover); }
+.cal-day { font-size: 9px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); }
+.cal-num { font-size: 18px; font-weight: 700; color: var(--text-heading); font-variant-numeric: tabular-nums; line-height: 1.1; }
+
+/* Card content */
 .day-content {
-  flex: 1; margin: 4px 0;
+  flex: 1; margin: 6px 0;
   background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px;
   overflow: hidden; transition: border-color 0.15s;
 }
 .day-card:hover .day-content { border-color: var(--border-hover); }
 
-.day-head {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 10px 14px; border-bottom: 1px solid var(--border);
+.day-cols { display: grid; grid-template-columns: 1fr 1fr; }
+
+.day-col {
+  padding: 12px 14px; transition: background 0.1s;
+  display: flex; flex-direction: column; gap: 6px;
 }
-.day-name-block { display: flex; align-items: baseline; gap: 6px; }
-.day-name { font-size: 13px; font-weight: 600; color: var(--text-strong); }
-.day-num { font-size: 11px; color: var(--text-muted); font-variant-numeric: tabular-nums; }
-.day-summary-text { font-size: 11px; color: var(--text-muted); }
+.day-col:first-child { border-right: 1px solid var(--border); }
+.day-col:hover { background: var(--bg-elevated); }
 
-.day-rows { display: flex; flex-direction: column; }
-.day-row {
-  display: flex; align-items: center; gap: 10px;
-  padding: 8px 14px; transition: background 0.1s;
-  border-bottom: 1px solid var(--border);
-}
-.day-row:last-child { border-bottom: none; }
-.day-row:hover { background: var(--bg-elevated); }
+.col-head { display: flex; align-items: center; gap: 5px; }
+.col-work .col-head { color: var(--blue); }
+.col-daily .col-head { color: var(--green); }
+.col-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; }
+.col-summary { font-size: 11px; color: var(--text-muted); line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.col-meta { display: flex; gap: 8px; font-size: 10px; color: var(--text-muted); font-variant-numeric: tabular-nums; margin-top: auto; }
 
-.row-badge { font-size: 9px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; padding: 2px 7px; border-radius: 4px; flex-shrink: 0; }
-.badge-work { color: var(--blue); background: var(--blue-bg); }
-.badge-daily { color: var(--green); background: var(--green-bg); }
-
-.row-summary { font-size: 12px; color: var(--text-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; line-height: 1.4; }
+.col-empty { display: flex; align-items: center; justify-content: center; min-height: 60px; }
+.empty-label { font-size: 11px; color: var(--border-hover); font-style: italic; }
 
 @media (max-width: 640px) {
   .cards { grid-template-columns: 1fr; }
-  .day-head { flex-direction: column; align-items: flex-start; gap: 2px; }
+  .day-cols { grid-template-columns: 1fr; }
+  .day-col:first-child { border-right: none; border-bottom: 1px solid var(--border); }
+  .cal-sticker { width: 36px; }
+  .cal-num { font-size: 15px; }
 }
 </style>
