@@ -145,12 +145,20 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
               <RadarChart :metrics="data.metrics" :brandColor="brand" :size="280" />
             </div>
             <div class="perf-rings">
-              <div v-for="(m, key) in data.metrics" :key="key" class="ring-item">
+              <div v-for="(m, key, idx) in data.metrics" :key="key" class="ring-item">
                 <div class="ring-wrap">
                   <svg width="58" height="58" viewBox="0 0 58 58">
+                    <defs>
+                      <linearGradient :id="'rg-' + idx" x1="0" y1="1" x2="1" y2="0">
+                        <stop offset="0%" stop-color="#f87171" />
+                        <stop offset="40%" stop-color="#fbbf24" />
+                        <stop offset="70%" stop-color="#6395ff" />
+                        <stop offset="100%" stop-color="#34d399" />
+                      </linearGradient>
+                    </defs>
                     <circle cx="29" cy="29" r="24" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="4" />
                     <circle cx="29" cy="29" r="24" fill="none"
-                      :stroke="scoreColor(m.score)" stroke-width="4"
+                      :stroke="`url(#rg-${idx})`" stroke-width="4"
                       stroke-linecap="round"
                       :stroke-dasharray="`${m.score * 1.508} 200`"
                       transform="rotate(-90 29 29)"

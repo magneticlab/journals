@@ -11,7 +11,6 @@ const keys = computed(() => Object.keys(props.metrics || {}))
 const values = computed(() => keys.value.map(k => props.metrics[k].score))
 const labels = computed(() => keys.value.map(k => {
   const l = props.metrics[k].label
-  // Shorten for display
   if (l === 'Output Volume') return 'Output'
   return l
 }))
@@ -39,6 +38,27 @@ const dataPath = computed(() => {
   }).join(' ') + ' Z'
 })
 
+// Each edge of the polygon as a separate line with gradient
+const edges = computed(() => {
+  return values.value.map((v, i) => {
+    const next = (i + 1) % n.value
+    const [x1, y1] = pt(i, v / 100)
+    const [x2, y2] = pt(next, values.value[next] / 100)
+    return { x1, y1, x2, y2, c1: scoreColor(v), c2: scoreColor(values.value[next]) }
+  })
+})
+
+function scoreColor(s) {
+  if (s >= 80) return '#34d399'
+  if (s >= 60) return '#6395ff'
+  if (s >= 40) return '#fbbf24'
+  return '#f87171'
+}
+
+// Interpolate color for the fill based on average
+const avgScore = computed(() => values.value.reduce((a, b) => a + b, 0) / values.value.length)
+const fillColor = computed(() => scoreColor(avgScore.value))
+
 function labelXY(i) {
   const a = (Math.PI * 2 * i) / n.value - Math.PI / 2
   const lr = r.value + 24
@@ -63,9 +83,15 @@ const uid = 'r' + Math.random().toString(36).slice(2, 6)
           <feGaussianBlur stdDeviation="5" result="blur" />
           <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
         </filter>
+        <!-- Per-edge gradients -->
+        <linearGradient v-for="(e, i) in edges" :key="'g'+i" :id="uid + '-eg' + i"
+          :x1="e.x1" :y1="e.y1" :x2="e.x2" :y2="e.y2" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" :stop-color="e.c1" />
+          <stop offset="100%" :stop-color="e.c2" />
+        </linearGradient>
       </defs>
 
-      <!-- Grid framework — visible -->
+      <!-- Grid -->
       <path v-for="ring in [0.25, 0.5, 0.75, 1.0]" :key="ring" :d="hexPath(ring)"
         fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.75" />
 
@@ -74,22 +100,25 @@ const uid = 'r' + Math.random().toString(36).slice(2, 6)
         :x1="cx" :y1="cy" :x2="pt(i-1,1)[0]" :y2="pt(i-1,1)[1]"
         stroke="rgba(255,255,255,0.07)" stroke-width="0.75" />
 
-      <!-- Data shape — glow -->
-      <path :d="dataPath" :fill="brandColor + '28'"
-        :stroke="brandColor" stroke-width="1.5" stroke-linejoin="round"
-        :filter="`url(#${uid}-glow)`" opacity="0.4" />
+      <!-- Data fill — glow -->
+      <path :d="dataPath" :fill="fillColor + '20'"
+        stroke="none"
+        :filter="`url(#${uid}-glow)`" opacity="0.5" />
 
-      <!-- Data shape — crisp -->
-      <path :d="dataPath" :fill="brandColor + '28'"
-        :stroke="brandColor" stroke-width="1.5" stroke-linejoin="round"
-        stroke-opacity="0.9" />
+      <!-- Data fill — crisp -->
+      <path :d="dataPath" :fill="fillColor + '18'" stroke="none" />
 
-      <!-- Score values at each vertex -->
-      <template v-for="(v, i) in values" :key="'v'+i">
-        <text :x="scoreXY(i)[0]" :y="scoreXY(i)[1]"
-          text-anchor="middle" dominant-baseline="middle"
-          class="score-num" :fill="brandColor">{{ v }}</text>
-      </template>
+      <!-- Per-edge gradient strokes -->
+      <line v-for="(e, i) in edges" :key="'e'+i"
+        :x1="e.x1" :y1="e.y1" :x2="e.x2" :y2="e.y2"
+        :stroke="`url(#${uid}-eg${i})`" stroke-width="2"
+        stroke-linecap="round" />
+
+      <!-- Score values — colored by their score -->
+      <text v-for="(v, i) in values" :key="'v'+i"
+        :x="scoreXY(i)[0]" :y="scoreXY(i)[1]"
+        text-anchor="middle" dominant-baseline="middle"
+        class="score-num" :fill="scoreColor(v)">{{ v }}</text>
 
       <!-- Axis labels -->
       <text v-for="(label, i) in labels" :key="'l'+i"
