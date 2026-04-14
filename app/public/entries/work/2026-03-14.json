@@ -2,7 +2,7 @@
   "date": "2026-03-14",
   "day": "Saturday",
   "display": "March 14, 2026",
-  "generatedAt": "2026-04-14T07:57:10.175967",
+  "generatedAt": "2026-04-14T08:02:33.279120",
   "metrics": {
     "volume": {
       "score": 75,
@@ -66,6 +66,10 @@
     "growthmentor-playground: Add live prototype links to matching V2 overview page",
     "growthmentor-playground: chore: morning brief 2026-03-14",
     "shadcnui: chore(release): version packages (#10037)"
+  ],
+  "insights": [
+    "Cross-project day spanning 2 repositories (growthmentor-playground, shadcnui). Context switching between projects may indicate parallel workstreams or dependencies.",
+    "Feature-forward day: 1 feature commits vs 0 fixes. Building momentum on new functionality rather than firefighting."
   ],
   "continuedFromYesterday": [],
   "roadblocks": [],

@@ -166,6 +166,17 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
           </section>
         </div>
 
+        <!-- Insights -->
+        <section v-if="isWork && data.insights?.length" v-reveal class="section section-tint" style="--tint: rgba(99,149,255,0.04)">
+          <p class="section-label" :style="{ color: brand }">Insights</p>
+          <ul class="insights-list">
+            <li v-for="(item, i) in data.insights" :key="i" class="insight-item rv">
+              <span class="insight-dot" :style="{ background: brand }"></span>
+              <span class="insight-text">{{ item }}</span>
+            </li>
+          </ul>
+        </section>
+
         <!-- Focus Areas / Terminal Activity -->
         <section v-if="(isWork && data.themes && Object.keys(data.themes).length) || (!isWork && data.categories && Object.keys(data.categories).length)" v-reveal class="section section-tint" :style="{ '--tint': brand + '04' }">
           <p class="section-label" :style="{ color: brand }">{{ isWork ? 'Focus Areas' : 'Terminal Activity' }}</p>
@@ -329,6 +340,12 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
 .cont-list li { display: flex; align-items: flex-start; gap: 10px; font-size: 13px; line-height: 1.6; color: var(--text); }
 .cont-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--text-muted); flex-shrink: 0; margin-top: 7px; }
 .dot-amber { background: var(--amber); }
+
+/* Insights */
+.insights-list { list-style: none; display: flex; flex-direction: column; gap: 14px; }
+.insight-item { display: flex; align-items: flex-start; gap: 14px; }
+.insight-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; margin-top: 8px; }
+.insight-text { font-size: 14px; line-height: 1.7; color: var(--text-strong); }
 
 /* Activity Timeline toggle */
 .timeline-toggle {

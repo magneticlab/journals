@@ -2,7 +2,7 @@
   "date": "2026-04-01",
   "day": "Wednesday",
   "display": "April 01, 2026",
-  "generatedAt": "2026-04-14T07:57:13.847484",
+  "generatedAt": "2026-04-14T08:02:37.878754",
   "metrics": {
     "volume": {
       "score": 55,
@@ -47,6 +47,7 @@
   "activityTimeline": [
     "growthmentor-playground: chore: morning brief 2026-04-01"
   ],
+  "insights": [],
   "continuedFromYesterday": [],
   "roadblocks": [],
   "themes": {},

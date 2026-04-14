@@ -2,7 +2,7 @@
   "date": "2026-03-02",
   "day": "Monday",
   "display": "March 02, 2026",
-  "generatedAt": "2026-04-14T07:57:07.709513",
+  "generatedAt": "2026-04-14T08:02:30.113577",
   "metrics": {
     "volume": {
       "score": 63,
@@ -65,6 +65,9 @@
     "shadcnui: fix",
     "shadcnui: refactor: presets",
     "shadcnui: fix: esling config for start-monorepo"
+  ],
+  "insights": [
+    "Refactoring-heavy session: 163 deletions vs 159 insertions. Cleaning up technical debt or restructuring existing code."
   ],
   "continuedFromYesterday": [],
   "roadblocks": [],

@@ -2,7 +2,7 @@
   "date": "2026-03-10",
   "day": "Tuesday",
   "display": "March 10, 2026",
-  "generatedAt": "2026-04-14T07:57:09.270325",
+  "generatedAt": "2026-04-14T08:02:32.195203",
   "metrics": {
     "volume": {
       "score": 49,
@@ -56,6 +56,7 @@
     "shadcnui: fix",
     "shadcnui: fix: animations for sheets and navigation-menu"
   ],
+  "insights": [],
   "continuedFromYesterday": [],
   "roadblocks": [],
   "themes": {},

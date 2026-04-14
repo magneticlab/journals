@@ -206,6 +206,75 @@ def derive_continued_and_roadblocks(entries, themes, sessions_count, total_commi
     return continued, roadblocks
 
 
+def derive_insights(git_activity, themes, sessions_count, total_commits,
+                    total_insertions, total_deletions, total_files_changed, entries):
+    """Generate strategic insights — observations about the day's work patterns."""
+    insights = []
+
+    # Volume insight
+    if total_insertions > 1000:
+        net = total_insertions - total_deletions
+        insights.append(
+            f"High-volume day: {total_insertions:,} lines added across {total_files_changed} files. "
+            f"Net change of +{net:,} lines — {'significant new code' if net > 500 else 'mix of new code and refactoring'}."
+        )
+    elif total_insertions > 0 and total_deletions > total_insertions * 0.8:
+        insights.append(
+            f"Refactoring-heavy session: {total_deletions:,} deletions vs {total_insertions:,} insertions. "
+            "Cleaning up technical debt or restructuring existing code."
+        )
+
+    # Multi-repo insight
+    repos = [r["repo"] for r in git_activity]
+    if len(repos) > 1:
+        insights.append(
+            f"Cross-project day spanning {len(repos)} repositories ({', '.join(repos)}). "
+            "Context switching between projects may indicate parallel workstreams or dependencies."
+        )
+
+    # Theme diversity insight
+    active_themes = [(k, len(v)) for k, v in themes.items() if k != "General Development" and len(v) >= 3]
+    if len(active_themes) >= 3:
+        top3 = [f"{t[0]} ({t[1]})" for t in sorted(active_themes, key=lambda x: -x[1])[:3]]
+        insights.append(
+            f"Diverse focus across {len(active_themes)} areas: {', '.join(top3)}. "
+            "Breadth of work suggests design-to-implementation pipeline or sprint-style execution."
+        )
+
+    # Session depth insight
+    if entries:
+        session_map = {}
+        for e in entries:
+            sid = e.get("sessionId", "")
+            session_map[sid] = session_map.get(sid, 0) + 1
+        longest = max(session_map.values()) if session_map else 0
+        if longest >= 30:
+            insights.append(
+                f"Deep work detected: longest session had {longest} messages — sustained focus on a complex task. "
+                "This level of engagement typically produces the highest-quality output."
+            )
+
+    # Commit pattern insight
+    if total_commits >= 5:
+        feat_count = sum(1 for r in git_activity for c in r["commits"] if c["message"].startswith("feat"))
+        fix_count = sum(1 for r in git_activity for c in r["commits"] if c["message"].startswith("fix"))
+        if feat_count > fix_count:
+            insights.append(
+                f"Feature-forward day: {feat_count} feature commits vs {fix_count} fixes. "
+                "Building momentum on new functionality rather than firefighting."
+            )
+
+    # Design system insight
+    ds_count = len(themes.get("Design System", []))
+    if ds_count >= 5:
+        insights.append(
+            "Significant design system investment today. Systematic token and component work "
+            "compounds over time — every page built after this benefits from the foundation."
+        )
+
+    return insights[:6]
+
+
 def derive_projects_wip(git_activity, entries):
     """Derive project tags from git and session data."""
     projects = set()
@@ -371,6 +440,12 @@ def generate_report(target_date):
     elif total_commits == 0 and sessions_count > 0:
         could_be_better = "Sessions ran but no commits — work may be exploratory or incomplete."
 
+    # Insights
+    insights = derive_insights(
+        git_activity, themes, sessions_count, total_commits,
+        total_insertions, total_deletions, total_files_changed, entries
+    )
+
     # Continued from yesterday + roadblocks
     continued, roadblocks = derive_continued_and_roadblocks(
         entries, themes, sessions_count, total_commits, bug_count
@@ -402,6 +477,7 @@ def generate_report(target_date):
         "couldBeBetter": could_be_better,
         "whatIDid": what_i_did,
         "activityTimeline": activity_timeline,
+        "insights": insights,
         "continuedFromYesterday": continued,
         "roadblocks": roadblocks,
         "themes": {k: len(v) for k, v in sorted(themes.items(), key=lambda x: -len(x[1]))},

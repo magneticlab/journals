@@ -2,7 +2,7 @@
   "date": "2026-03-21",
   "day": "Saturday",
   "display": "March 21, 2026",
-  "generatedAt": "2026-04-14T07:57:11.515740",
+  "generatedAt": "2026-04-14T08:02:34.994512",
   "metrics": {
     "volume": {
       "score": 55,
@@ -50,6 +50,9 @@
     "growthmentor-playground: chore: morning brief 2026-03-21",
     "shadcnui: Fix tracking empty preset code in init routes",
     "shadcnui: Fix tracking empty preset code in init route"
+  ],
+  "insights": [
+    "Cross-project day spanning 2 repositories (growthmentor-playground, shadcnui). Context switching between projects may indicate parallel workstreams or dependencies."
   ],
   "continuedFromYesterday": [],
   "roadblocks": [],
