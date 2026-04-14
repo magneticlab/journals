@@ -1,69 +1,172 @@
+<template>
+  <canvas ref="canvas" class="ribbon-canvas" />
+</template>
+
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
 
 const canvas = ref(null)
-let animId = null
-let time = 0
+let ctx, W, H, t = 0, rafId
 
-function lerp(a, b, t) { return a + (b - a) * t }
+// Tuned for dark theme — bleeding from top, muted complementary colors
+const TILT = 0.45
+const FOCAL_X = 0.50
+const FOCAL_Y = 0.12  // top area — bleeds from above
+const SPACING = 10
+const N = 48
+const HALF = (N - 1) / 2
+
+// Dark-theme palette — muted, complementary to our blue/green/purple brand
+const PALETTE = [
+  [70, 100, 200],   // muted blue
+  [85, 120, 220],   // soft blue
+  [60, 140, 200],   // steel blue
+  [50, 170, 160],   // teal
+  [45, 180, 130],   // muted green
+  [60, 160, 110],   // sage
+  [100, 120, 200],  // periwinkle
+  [130, 100, 190],  // soft purple
+  [110, 80, 180],   // muted violet
+  [80, 90, 170],    // deep periwinkle
+  [55, 130, 180],   // ocean
+  [65, 105, 210],   // back to blue
+]
+
+function lerpColor(u) {
+  const scaled = u * (PALETTE.length - 1)
+  const lo = Math.floor(scaled)
+  const hi = Math.min(lo + 1, PALETTE.length - 1)
+  const f = scaled - lo
+  const a = PALETTE[lo], b = PALETTE[hi]
+  return [
+    Math.round(a[0] + (b[0] - a[0]) * f),
+    Math.round(a[1] + (b[1] - a[1]) * f),
+    Math.round(a[2] + (b[2] - a[2]) * f),
+  ]
+}
+
+const RIBBONS = Array.from({ length: N }, (_, i) => {
+  const distFromCenter = Math.abs(i - HALF) / HALF
+  const centerFactor = Math.pow(1 - distFromCenter, 1.6)
+  return {
+    rgb: lerpColor(i / (N - 1)),
+    speed: (i % 2 === 0 ? 1 : -1) * (0.6 + (i % 7) * 0.03),
+    freq: 0.005 + (i % 5) * 0.0003,
+    A: 20 + (i % 3) * 3,
+    th: 32 + (i % 2) * 6,
+    op: 0.04 + centerFactor * 0.14,  // very subtle — max ~0.18
+  }
+})
+
+const MAX_BLUR = 12
+const EDGE_COUNT = 6
+
+function ribbonBlur(index) {
+  const fromEdge = Math.min(index, N - 1 - index)
+  if (fromEdge >= EDGE_COUNT) return 0
+  const u = 1 - fromEdge / EDGE_COUNT
+  return Math.pow(u, 1.8) * MAX_BLUR
+}
+
+const BUNDLE_AMP = 60
+const BUNDLE_CURVE_FREQ = (Math.PI * 0.6) / 1440
+const BUNDLE_CURVE_SPD = 0.00015
+
+const COIL_FREQ = (Math.PI * 1.2) / 1440
+const COIL_SPD = 0.00025
+
+function draw() {
+  if (!ctx) return
+  ctx.clearRect(0, 0, W, H)
+
+  const focalX = W * FOCAL_X
+  const focalY = H * FOCAL_Y
+  const baseCy = focalY - focalX * TILT
+  const gradSpan = (W * TILT + H) * 0.9
+
+  const TWIST_AMP = SPACING * 1.8
+  const twistFreq = (Math.PI * 0.7) / W
+
+  for (let i = 0; i < N; i++) {
+    const r = RIBBONS[i]
+    const ribbonOffset = (i - HALF) * SPACING
+    const half = r.th / 2
+    const animPhase = t * r.speed * 0.003
+    const ribbonAngle = (i / N) * Math.PI * 2
+    const blur = ribbonBlur(i)
+
+    ctx.filter = blur > 0.4 ? `blur(${blur.toFixed(1)}px)` : 'none'
+    ctx.shadowBlur = 0
+    ctx.shadowColor = 'transparent'
+
+    ctx.beginPath()
+    const step = 6
+    for (let x = -step; x <= W + step; x += step) {
+      const bundleCurve = BUNDLE_AMP * Math.sin(x * BUNDLE_CURVE_FREQ + t * BUNDLE_CURVE_SPD)
+      const coilFactor = Math.sin(x * COIL_FREQ + t * COIL_SPD)
+      const twist = TWIST_AMP * Math.sin(x * twistFreq + ribbonAngle)
+      const y = baseCy + ribbonOffset * coilFactor + x * TILT
+                + bundleCurve + r.A * Math.sin(x * r.freq + animPhase) + twist
+      x <= 0 ? ctx.moveTo(x, y - half) : ctx.lineTo(x, y - half)
+    }
+    for (let x = W + step; x >= -step; x -= step) {
+      const bundleCurve = BUNDLE_AMP * Math.sin(x * BUNDLE_CURVE_FREQ + t * BUNDLE_CURVE_SPD)
+      const coilFactor = Math.sin(x * COIL_FREQ + t * COIL_SPD)
+      const twist = TWIST_AMP * Math.sin(x * twistFreq + ribbonAngle)
+      const y = baseCy + ribbonOffset * coilFactor + x * TILT
+                + bundleCurve + r.A * Math.sin(x * r.freq + animPhase) + twist
+      ctx.lineTo(x, y + half)
+    }
+    ctx.closePath()
+
+    const [rv, gv, bv] = r.rgb
+    const c = (a) => `rgba(${rv},${gv},${bv},${a.toFixed(3)})`
+
+    // Gradient fades from top (visible) to bottom (invisible)
+    const grad = ctx.createLinearGradient(0, 0, 0, H)
+    grad.addColorStop(0, c(r.op * 0.6))
+    grad.addColorStop(0.15, c(r.op))
+    grad.addColorStop(0.35, c(r.op * 0.7))
+    grad.addColorStop(0.55, c(r.op * 0.2))
+    grad.addColorStop(0.75, c(0))
+    grad.addColorStop(1, c(0))
+
+    ctx.fillStyle = grad
+    ctx.fill()
+  }
+
+  ctx.filter = 'none'
+  ctx.shadowBlur = 0
+  ctx.shadowColor = 'transparent'
+  t++
+  rafId = requestAnimationFrame(draw)
+}
+
+function resize() {
+  if (!canvas.value) return
+  const dpr = window.devicePixelRatio || 1
+  W = canvas.value.offsetWidth
+  H = canvas.value.offsetHeight
+  canvas.value.width = W * dpr
+  canvas.value.height = H * dpr
+  ctx = canvas.value.getContext('2d')
+  ctx.scale(dpr, dpr)
+}
 
 onMounted(() => {
-  const c = canvas.value
-  if (!c) return
-  const ctx = c.getContext('2d')
-  let w, h
-
-  function resize() {
-    w = c.width = window.innerWidth
-    h = c.height = window.innerHeight
-  }
   resize()
   window.addEventListener('resize', resize)
-
-  // Blob positions — slow drifting
-  const blobs = [
-    { x: 0.2, y: 0.3, r: 0.35, color: [99, 149, 255] },    // blue
-    { x: 0.7, y: 0.2, r: 0.30, color: [52, 211, 153] },     // green
-    { x: 0.5, y: 0.7, r: 0.32, color: [167, 139, 250] },    // purple
-    { x: 0.8, y: 0.6, r: 0.28, color: [251, 191, 36] },     // amber
-  ]
-
-  function draw() {
-    time += 0.003
-    ctx.clearRect(0, 0, w, h)
-
-    for (const blob of blobs) {
-      const bx = (blob.x + Math.sin(time * 0.7 + blob.x * 10) * 0.08) * w
-      const by = (blob.y + Math.cos(time * 0.5 + blob.y * 8) * 0.06) * h
-      const br = blob.r * Math.min(w, h)
-
-      const grad = ctx.createRadialGradient(bx, by, 0, bx, by, br)
-      grad.addColorStop(0, `rgba(${blob.color.join(',')}, 0.08)`)
-      grad.addColorStop(0.5, `rgba(${blob.color.join(',')}, 0.03)`)
-      grad.addColorStop(1, `rgba(${blob.color.join(',')}, 0)`)
-
-      ctx.fillStyle = grad
-      ctx.fillRect(0, 0, w, h)
-    }
-
-    animId = requestAnimationFrame(draw)
-  }
-
   draw()
+})
 
-  onUnmounted(() => {
-    cancelAnimationFrame(animId)
-    window.removeEventListener('resize', resize)
-  })
+onUnmounted(() => {
+  window.removeEventListener('resize', resize)
+  cancelAnimationFrame(rafId)
 })
 </script>
 
-<template>
-  <canvas ref="canvas" class="mesh-canvas" />
-</template>
-
 <style scoped>
-.mesh-canvas {
+.ribbon-canvas {
   position: fixed;
   top: 0;
   left: 0;
