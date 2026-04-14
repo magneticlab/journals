@@ -12,6 +12,12 @@ const loading = ref(true)
 const weather = ref(null)
 const showTimeline = ref(false)
 const perfView = ref('radar') // 'radar' or 'bars'
+const reflection = ref(null)
+
+function loadReflection() {
+  const stored = JSON.parse(localStorage.getItem('reflections') || '{}')
+  reflection.value = stored[props.date] || null
+}
 const scrollY = ref(0)
 function onScroll() { scrollY.value = window.scrollY }
 
@@ -24,6 +30,7 @@ onMounted(async () => {
   window.addEventListener('scroll', onScroll, { passive: true })
   manifest.value = await (await fetch('/manifest.json')).json()
   loadEntry()
+  loadReflection()
   try {
     const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=37.98&longitude=23.73&current=temperature_2m,weather_code,relative_humidity_2m,wind_speed_10m&timezone=auto')
     if (res.ok) weather.value = await res.json()
@@ -31,7 +38,7 @@ onMounted(async () => {
 })
 onUnmounted(() => window.removeEventListener('scroll', onScroll))
 
-watch(() => props.date, loadEntry)
+watch(() => props.date, () => { loadEntry(); loadReflection() })
 async function loadEntry() {
   // Don't clear data — keep old content visible to prevent flicker
   try {
@@ -295,6 +302,53 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
           <p class="section-label">Files Modified</p>
           <div class="files-card"><div v-for="(files, dir) in data.fileGroups" :key="dir" class="fgroup rv"><p class="fdir"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>{{ dir }}/ <span class="fcount">({{ files.length }})</span></p><p v-for="f in files" :key="f" class="fpath">{{ f }}</p></div></div>
         </section>
+
+        <!-- Daily Reflection -->
+        <section v-if="reflection" v-reveal class="section">
+          <p class="section-label" style="color: #34d399">Daily Reflection</p>
+          <div class="reflect-card">
+            <div class="reflect-scores">
+              <div class="rscore" v-for="(val, key) in reflection.scores" :key="key">
+                <div class="rscore-ring">
+                  <svg width="48" height="48" viewBox="0 0 48 48">
+                    <circle cx="24" cy="24" r="20" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="3" />
+                    <circle cx="24" cy="24" r="20" fill="none"
+                      stroke-width="3" stroke-linecap="round"
+                      :stroke="ringScoreColor(val * 10)"
+                      :stroke-dasharray="`${val * 12.566} 200`"
+                      transform="rotate(-90 24 24)" />
+                  </svg>
+                  <span class="rscore-num" :style="{ color: ringScoreColor(val * 10) }">{{ val }}</span>
+                </div>
+                <span class="rscore-label">{{ key }}</span>
+              </div>
+              <div class="rscore rscore-avg">
+                <div class="rscore-ring">
+                  <svg width="48" height="48" viewBox="0 0 48 48">
+                    <circle cx="24" cy="24" r="20" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="3" />
+                    <circle cx="24" cy="24" r="20" fill="none"
+                      stroke-width="3" stroke-linecap="round"
+                      :stroke="ringScoreColor(reflection.average * 10)"
+                      :stroke-dasharray="`${reflection.average * 12.566} 200`"
+                      transform="rotate(-90 24 24)" />
+                  </svg>
+                  <span class="rscore-num" :style="{ color: ringScoreColor(reflection.average * 10) }">{{ reflection.average }}</span>
+                </div>
+                <span class="rscore-label">Average</span>
+              </div>
+            </div>
+            <div class="reflect-text" v-if="reflection.win || reflection.improve">
+              <div v-if="reflection.win" class="rtext-block">
+                <p class="rtext-label">Biggest Win</p>
+                <p class="rtext-content">{{ reflection.win }}</p>
+              </div>
+              <div v-if="reflection.improve" class="rtext-block">
+                <p class="rtext-label" style="color: var(--amber)">What to Improve</p>
+                <p class="rtext-content">{{ reflection.improve }}</p>
+              </div>
+            </div>
+          </div>
+        </section>
       </div>
       <div v-if="data?.generatedAt" class="footer"><p class="footer-text">Generated {{ genTime }}</p></div>
     </div>
@@ -545,6 +599,28 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
 .fdir { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; color: var(--text-strong); margin-bottom: 4px; }
 .fcount { font-weight: 400; color: var(--text-muted); }
 .fpath { font-size: 11px; font-family: ui-monospace, 'SF Mono', Consolas, monospace; color: var(--text-muted); padding-left: 18px; line-height: 1.8; }
+
+/* Reflection */
+.reflect-card {
+  background: rgba(12,12,14,0.7); border: 1px solid var(--border);
+  border-radius: 16px; padding: 24px;
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+}
+.reflect-scores { display: flex; gap: 24px; justify-content: center; margin-bottom: 20px; }
+.rscore { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.rscore-ring { position: relative; width: 48px; height: 48px; }
+.rscore-ring svg { display: block; }
+.rscore-num {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 700; font-variant-numeric: tabular-nums;
+}
+.rscore-label { font-size: 9px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); }
+.rscore-avg { margin-left: 8px; padding-left: 16px; border-left: 1px solid var(--border); }
+
+.reflect-text { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding-top: 16px; border-top: 1px solid var(--border); }
+.rtext-block {}
+.rtext-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #34d399; margin-bottom: 6px; }
+.rtext-content { font-size: 13px; line-height: 1.6; color: var(--text); }
 
 /* Footer */
 .footer { border-top: 1px solid var(--border); padding: 12px; text-align: center; }

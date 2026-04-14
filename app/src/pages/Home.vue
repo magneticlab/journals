@@ -1,9 +1,19 @@
 <script setup>
 import { ref, onMounted, onUnmounted, computed } from 'vue'
+import ReflectModal from '../components/ReflectModal.vue'
 
 const manifest = ref({ work: [], daily: [] })
 const weather = ref(null)
 const scrollY = ref(0)
+const showReflect = ref(false)
+const todayReflection = ref(null)
+
+// Check if today already has a reflection
+function loadTodayReflection() {
+  const stored = JSON.parse(localStorage.getItem('reflections') || '{}')
+  const today = new Date().toISOString().slice(0, 10)
+  todayReflection.value = stored[today] || null
+}
 function onScroll() { scrollY.value = window.scrollY }
 
 // Hero parallax: moves slower, fades out
@@ -14,6 +24,7 @@ const heroStyle = computed(() => ({
 
 onMounted(async () => {
   window.addEventListener('scroll', onScroll, { passive: true })
+  loadTodayReflection()
   manifest.value = await (await fetch('/manifest.json')).json()
   // Fetch weather (Athens, Greece — no API key needed)
   try {
@@ -163,7 +174,14 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll))
         <div class="hero" :style="heroStyle">
           <p class="hero-greeting">{{ greeting }}, Alek.</p>
           <p class="hero-date">{{ todayStr }}</p>
+          <button class="reflect-btn" @click="showReflect = true">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+            {{ todayReflection ? 'Update Reflection' : 'Daily Reflect' }}
+          </button>
         </div>
+
+        <!-- Reflect Modal -->
+        <ReflectModal v-if="showReflect" @close="showReflect = false" @submit="loadTodayReflection" />
       </div>
     </div>
 
@@ -310,6 +328,17 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll))
 
 .hero-greeting { font-family: var(--serif); font-size: 42px; font-weight: 400; color: var(--text-heading); line-height: 1.2; margin-top: 8px; }
 .hero-date { font-size: 15px; color: var(--text-muted); margin-top: 10px; }
+.reflect-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  margin-top: 20px; padding: 10px 20px; border-radius: 10px;
+  border: 1px solid rgba(52,211,153,0.2);
+  background: rgba(52,211,153,0.08);
+  color: #34d399; font-size: 13px; font-weight: 600;
+  font-family: inherit; cursor: pointer;
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  transition: all 0.2s var(--ease-spring);
+}
+.reflect-btn:hover { background: rgba(52,211,153,0.15); border-color: rgba(52,211,153,0.35); }
 
 /* BODY ZONE — soft gradient, no hard edge */
 .body-zone {
