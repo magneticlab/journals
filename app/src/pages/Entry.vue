@@ -140,12 +140,12 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
           </div>
 
           <!-- View A: Radar + rings -->
-          <div v-if="perfView === 'radar'" class="perf-card">
-            <div class="perf-radar rv">
+          <div v-show="perfView === 'radar'" class="perf-card">
+            <div class="perf-radar">
               <RadarChart :metrics="data.metrics" :brandColor="brand" :size="280" />
             </div>
             <div class="perf-rings">
-              <div v-for="(m, key) in data.metrics" :key="key" class="ring-item rv">
+              <div v-for="(m, key) in data.metrics" :key="key" class="ring-item">
                 <div class="ring-wrap">
                   <svg width="58" height="58" viewBox="0 0 58 58">
                     <circle cx="29" cy="29" r="24" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="4" />
@@ -165,8 +165,8 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
           </div>
 
           <!-- View B: Horizontal bars -->
-          <div v-else class="perf-bars-card">
-            <div v-for="(m, key) in data.metrics" :key="key" class="bar-row rv">
+          <div v-show="perfView === 'bars'" class="perf-bars-card">
+            <div v-for="(m, key) in data.metrics" :key="key" class="bar-row">
               <div class="bar-info">
                 <span class="bar-label">{{ m.label }}</span>
                 <span class="bar-score" :style="{ color: scoreColor(m.score) }">{{ m.score }}</span>
