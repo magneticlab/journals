@@ -46,6 +46,13 @@ const themeIcons = {
   'File Operations': '◧', 'Other': '◆', 'Docker': '◎', 'Python': '◉', 'HTTP': '◎',
 }
 
+function scoreColor(score) {
+  if (score >= 80) return '#34d399'
+  if (score >= 60) return '#6395ff'
+  if (score >= 40) return '#fbbf24'
+  return '#f87171'
+}
+
 const genTime = computed(() => {
   if (!data.value?.generatedAt) return ''
   return new Date(data.value.generatedAt).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })
@@ -146,6 +153,22 @@ const activeHours = computed(() => {
           </div>
         </div>
       </div>
+
+      <!-- Performance Metrics -->
+      <section v-if="isWork && data.metrics" class="section">
+        <p class="section-label" :style="{ color: brand }">Performance</p>
+        <div class="metrics-grid">
+          <div v-for="(m, key) in data.metrics" :key="key" class="metric-card">
+            <div class="metric-top">
+              <span class="metric-label">{{ m.label }}</span>
+              <span class="metric-score" :style="{ color: scoreColor(m.score) }">{{ m.score }}</span>
+            </div>
+            <div class="metric-bar-bg">
+              <div class="metric-bar" :style="{ width: m.score + '%', background: scoreColor(m.score) }"></div>
+            </div>
+          </div>
+        </div>
+      </section>
 
       <!-- What I Did -->
       <section v-if="isWork && data.whatIDid?.length" class="section">
@@ -349,6 +372,19 @@ const activeHours = computed(() => {
 /* Sections */
 .section { margin-bottom: 32px; }
 .section-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; color: var(--text-muted); margin-bottom: 12px; }
+
+/* Metrics */
+.metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.metric-card {
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px;
+  padding: 14px 16px; transition: border-color 0.15s;
+}
+.metric-card:hover { border-color: var(--border-hover); }
+.metric-top { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 8px; }
+.metric-label { font-size: 11px; font-weight: 500; color: var(--text-muted); }
+.metric-score { font-size: 20px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.metric-bar-bg { height: 4px; background: var(--bg-elevated); border-radius: 2px; overflow: hidden; }
+.metric-bar { height: 100%; border-radius: 2px; transition: width 0.5s ease-out; }
 
 /* What I Did — numbered */
 .did-list { display: flex; flex-direction: column; gap: 4px; }

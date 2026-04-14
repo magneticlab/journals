@@ -2,21 +2,51 @@
   "date": "2026-04-14",
   "day": "Tuesday",
   "display": "April 14, 2026",
-  "generatedAt": "2026-04-14T06:03:27.043067",
+  "generatedAt": "2026-04-14T06:23:38.117056",
+  "metrics": {
+    "volume": {
+      "score": 100,
+      "label": "Output Volume"
+    },
+    "complexity": {
+      "score": 100,
+      "label": "Complexity"
+    },
+    "focus": {
+      "score": 18,
+      "label": "Focus"
+    },
+    "depth": {
+      "score": 58,
+      "label": "Depth"
+    },
+    "craft": {
+      "score": 52,
+      "label": "Craft"
+    },
+    "momentum": {
+      "score": 100,
+      "label": "Momentum"
+    }
+  },
   "stats": {
-    "sessions": 6,
-    "messages": 32,
-    "commits": 10,
+    "sessions": 7,
+    "messages": 37,
+    "commits": 14,
     "repos": 2,
-    "timeRange": "00:24\u201306:02",
+    "timeRange": "00:24\u201306:22",
     "linesAdded": 5789,
     "linesRemoved": 1903,
     "filesChanged": 85
   },
-  "wentRight": "Productive day with 10 commit(s) across 2 repo(s) during 6 Claude session(s) spanning 00:24\u201306:02.",
-  "couldBeBetter": "High session count (6) may indicate context switching \u2014 consider consolidating related work.",
+  "wentRight": "Productive day with 14 commit(s) across 2 repo(s) during 7 Claude session(s) spanning 00:24\u201306:22.",
+  "couldBeBetter": "High session count (7) may indicate context switching \u2014 consider consolidating related work.",
   "whatIDid": [
     "growthmentor-playground: feat: design system restructuring \u2014 split pages, component styling, token migration",
+    "journals: Report page redesign \u2014 hero stats, themed cards, volume bar",
+    "journals: Home redesign: no nav, greeting + weather, immersive landing",
+    "journals: Vibrant nav, themed cards, box shadows, clearer identity",
+    "journals: Featured card redesign, volume metrics, fresher colors",
     "journals: Timeline: calendar stickers, two-column Work/Daily layout",
     "journals: Consolidate timeline: day cards with Work+Daily rows, week/month groups",
     "journals: Color branding, sparklines, timeline polish, hover-to-back",
@@ -26,27 +56,27 @@
     "journals: Add Vue 3 + Vite app for journal browsing",
     "journals: Backfill March + daily cron + zsh extended history",
     "journals: Initial commit \u2014 work journal + daily journal system",
-    "Page Building: 6 interactions across sessions",
-    "Design System: 3 interactions across sessions",
-    "Version Iteration: 3 interactions across sessions",
-    "Content & Copy: 3 interactions across sessions",
-    "Git & Deployment: 1 task(s)"
+    "Page Building: 8 interactions across sessions"
   ],
   "themes": {
-    "General Development": 7,
-    "Page Building": 6,
+    "Page Building": 8,
+    "General Development": 8,
+    "Content & Copy": 5,
     "Design System": 3,
     "Version Iteration": 3,
-    "Content & Copy": 3,
     "Git & Deployment": 1,
     "Bug Fixes": 1
   },
   "projectsWip": [
     "alek \u2014 session work",
     "growthmentor-playground \u2014 1 commit(s)",
-    "journals \u2014 9 commit(s)"
+    "journals \u2014 13 commit(s)"
   ],
   "docsCreated": [
+    {
+      "title": "Report page redesign \u2014 hero stats, themed cards, volume bar",
+      "description": "journals \u00b7 a8fdfc5"
+    },
     {
       "title": "Redesign: dark theme, CEO-style digested reports",
       "description": "journals \u00b7 f1b63f1"
@@ -68,6 +98,30 @@
     {
       "repo": "journals",
       "commits": [
+        {
+          "hash": "a8fdfc5",
+          "author": "Alek Manov",
+          "message": "Report page redesign \u2014 hero stats, themed cards, volume bar",
+          "time": "06:19"
+        },
+        {
+          "hash": "3051150",
+          "author": "Alek Manov",
+          "message": "Home redesign: no nav, greeting + weather, immersive landing",
+          "time": "06:15"
+        },
+        {
+          "hash": "fc57ce2",
+          "author": "Alek Manov",
+          "message": "Vibrant nav, themed cards, box shadows, clearer identity",
+          "time": "06:11"
+        },
+        {
+          "hash": "c4b55a2",
+          "author": "Alek Manov",
+          "message": "Featured card redesign, volume metrics, fresher colors",
+          "time": "06:06"
+        },
         {
           "hash": "a9f2386",
           "author": "Alek Manov",
@@ -126,5 +180,5 @@
       "stat": "36 files changed, 3322 insertions(+)"
     }
   ],
-  "summary": "6 session(s), 32 msgs, 10 commit(s) across 2 repo(s)"
+  "summary": "7 session(s), 37 msgs, 14 commit(s) across 2 repo(s)"
 }

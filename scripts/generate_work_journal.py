@@ -164,6 +164,76 @@ def derive_projects_wip(git_activity, entries):
     return sorted(projects)
 
 
+def compute_metrics(sessions, messages, commits, insertions, deletions,
+                     files_changed, themes, entries, bug_count):
+    """
+    Evaluate the day's work across multiple dimensions.
+    Each metric is 0-100 with a short rationale.
+
+    Dimensions:
+    - Output Volume: raw productivity — lines shipped, commits made
+    - Complexity: variety of themes, files touched, multi-repo work
+    - Focus: inverse of context switching — fewer sessions = more focus
+    - Depth: messages per session — longer sessions = deeper engagement
+    - Craft: ratio of feature/design work vs bug fixes
+    - Momentum: commits relative to a strong baseline day (~10)
+    """
+    m = {}
+
+    # Output Volume — based on insertions (log scale, 500+ is max)
+    if insertions > 0:
+        import math
+        vol = min(int(math.log(insertions, 1.8) / math.log(3000, 1.8) * 100), 100)
+    elif commits > 0:
+        vol = min(commits * 15, 60)
+    else:
+        vol = 0
+    m["volume"] = {"score": vol, "label": "Output Volume"}
+
+    # Complexity — theme diversity + files + repos
+    theme_count = len([t for t in themes if t != "General Development"])
+    complexity = min(int((theme_count * 12 + files_changed * 2 + commits * 5) / 1.2), 100)
+    m["complexity"] = {"score": complexity, "label": "Complexity"}
+
+    # Focus — fewer sessions with more messages each = higher focus
+    if sessions > 0:
+        avg_msgs = messages / sessions
+        # Sweet spot: 1-3 sessions with 20+ msgs each
+        focus_raw = min(avg_msgs / 20 * 70 + max(0, (4 - sessions)) * 10, 100)
+        focus = max(int(focus_raw), 10) if messages > 0 else 0
+    else:
+        focus = 0
+    m["focus"] = {"score": focus, "label": "Focus"}
+
+    # Depth — longest session length, message density
+    if entries:
+        session_lengths = {}
+        for e in entries:
+            sid = e.get("sessionId", "")
+            if sid not in session_lengths:
+                session_lengths[sid] = 0
+            session_lengths[sid] += 1
+        longest = max(session_lengths.values()) if session_lengths else 0
+        depth = min(int(longest / 30 * 80 + theme_count * 3), 100)
+    else:
+        depth = 0
+    m["depth"] = {"score": depth, "label": "Depth"}
+
+    # Craft — feature + design work vs bugs and fixes
+    craft_themes = sum(len(themes.get(t, [])) for t in
+                       ["Design System", "Design & Layout", "Page Building",
+                        "Animation & Effects", "Planning & Strategy"])
+    total_themed = sum(len(v) for v in themes.values()) or 1
+    craft = min(int((craft_themes / total_themed) * 100 + (0 if bug_count > 2 else 15)), 100)
+    m["craft"] = {"score": craft, "label": "Craft"}
+
+    # Momentum — commits vs a baseline of 8-10/day
+    momentum = min(int(commits / 8 * 100), 100) if commits > 0 else 0
+    m["momentum"] = {"score": momentum, "label": "Momentum"}
+
+    return m
+
+
 def generate_report(target_date):
     dt = datetime.strptime(target_date, "%Y-%m-%d")
     day_name = WEEKDAYS[dt.weekday()]
@@ -240,11 +310,18 @@ def generate_report(target_date):
     elif total_commits == 0 and sessions_count > 0:
         could_be_better = "Sessions ran but no commits — work may be exploratory or incomplete."
 
+    # Evaluation metrics — scored 0-100
+    metrics = compute_metrics(
+        sessions_count, total_messages, total_commits, total_insertions,
+        total_deletions, total_files_changed, themes, entries, bug_count
+    )
+
     return {
         "date": target_date,
         "day": day_name,
         "display": dt.strftime("%B %d, %Y"),
         "generatedAt": datetime.now().isoformat(),
+        "metrics": metrics,
         "stats": {
             "sessions": sessions_count,
             "messages": total_messages,

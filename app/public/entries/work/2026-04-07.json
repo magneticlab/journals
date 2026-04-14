@@ -2,7 +2,33 @@
   "date": "2026-04-07",
   "day": "Tuesday",
   "display": "April 07, 2026",
-  "generatedAt": "2026-04-14T06:03:25.553172",
+  "generatedAt": "2026-04-14T06:23:36.549773",
+  "metrics": {
+    "volume": {
+      "score": 60,
+      "label": "Output Volume"
+    },
+    "complexity": {
+      "score": 60,
+      "label": "Complexity"
+    },
+    "focus": {
+      "score": 48,
+      "label": "Focus"
+    },
+    "depth": {
+      "score": 68,
+      "label": "Depth"
+    },
+    "craft": {
+      "score": 70,
+      "label": "Craft"
+    },
+    "momentum": {
+      "score": 50,
+      "label": "Momentum"
+    }
+  },
   "stats": {
     "sessions": 3,
     "messages": 33,
