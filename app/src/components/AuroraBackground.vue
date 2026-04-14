@@ -9,57 +9,55 @@ const props = defineProps({ palette: { type: String, default: 'midnight' } })
 const canvas = ref(null)
 let ctx, W = 0, H = 0, rafId, t = 0
 
-// Stars
-const STAR_COUNT = 180
+// Stars — sparse, only in the dark areas
+const STAR_COUNT = 120
 let stars = []
 
 function buildStars() {
   stars = Array.from({ length: STAR_COUNT }, () => ({
     x: Math.random(),
-    y: Math.random() * 0.7, // upper 70%
-    r: 0.4 + Math.random() * 1.2,
-    twinkleFreq: 0.002 + Math.random() * 0.006,
-    twinklePhase: Math.random() * Math.PI * 2,
-    brightness: 0.3 + Math.random() * 0.7,
+    y: Math.random() * 0.6,
+    r: 0.3 + Math.random() * 1.0,
+    freq: 0.001 + Math.random() * 0.004,
+    phase: Math.random() * Math.PI * 2,
+    bright: 0.15 + Math.random() * 0.5,
   }))
 }
 
-// Aurora curtain colors per theme
-const CURTAINS = {
+// Aurora bands — concentrated on the right side
+const PALETTES = {
   midnight: [
-    { color: [80, 220, 140], y: 0.18, amp: 40, freq: 0.003, speed: 0.0008, opacity: 0.12 },
-    { color: [110, 160, 255], y: 0.25, amp: 50, freq: 0.0025, speed: 0.0006, opacity: 0.10 },
-    { color: [180, 100, 240], y: 0.22, amp: 35, freq: 0.0035, speed: 0.001, opacity: 0.08 },
-    { color: [255, 140, 80], y: 0.30, amp: 30, freq: 0.002, speed: 0.0007, opacity: 0.06 },
+    [60, 240, 130], [40, 200, 160], [80, 255, 140],
+    [50, 180, 220], [100, 220, 180], [70, 255, 160],
   ],
   dawn: [
-    { color: [240, 160, 50], y: 0.20, amp: 45, freq: 0.003, speed: 0.0008, opacity: 0.14 },
-    { color: [230, 120, 80], y: 0.28, amp: 40, freq: 0.0025, speed: 0.0006, opacity: 0.10 },
-    { color: [200, 150, 90], y: 0.24, amp: 35, freq: 0.0035, speed: 0.001, opacity: 0.08 },
-    { color: [180, 100, 60], y: 0.32, amp: 30, freq: 0.002, speed: 0.0007, opacity: 0.06 },
+    [240, 160, 60], [220, 130, 80], [255, 180, 50],
+    [200, 140, 100], [230, 150, 70], [255, 170, 40],
   ],
   daylight: [
-    { color: [70, 200, 200], y: 0.18, amp: 40, freq: 0.003, speed: 0.0008, opacity: 0.10 },
-    { color: [90, 150, 255], y: 0.25, amp: 50, freq: 0.0025, speed: 0.0006, opacity: 0.08 },
-    { color: [80, 210, 160], y: 0.22, amp: 35, freq: 0.0035, speed: 0.001, opacity: 0.07 },
-    { color: [120, 190, 130], y: 0.30, amp: 30, freq: 0.002, speed: 0.0007, opacity: 0.05 },
+    [60, 200, 200], [80, 220, 180], [50, 240, 160],
+    [70, 180, 220], [90, 210, 190], [60, 230, 170],
   ],
   dusk: [
-    { color: [140, 80, 220], y: 0.18, amp: 45, freq: 0.003, speed: 0.0008, opacity: 0.14 },
-    { color: [200, 50, 160], y: 0.25, amp: 40, freq: 0.0025, speed: 0.0006, opacity: 0.10 },
-    { color: [100, 60, 200], y: 0.22, amp: 35, freq: 0.0035, speed: 0.001, opacity: 0.09 },
-    { color: [220, 70, 120], y: 0.30, amp: 30, freq: 0.002, speed: 0.0007, opacity: 0.06 },
+    [160, 60, 220], [200, 40, 180], [140, 80, 255],
+    [180, 50, 200], [220, 70, 160], [130, 60, 240],
   ],
   aurora: [
-    { color: [40, 220, 140], y: 0.15, amp: 55, freq: 0.003, speed: 0.0009, opacity: 0.16 },
-    { color: [50, 160, 220], y: 0.22, amp: 45, freq: 0.0025, speed: 0.0007, opacity: 0.12 },
-    { color: [80, 240, 180], y: 0.20, amp: 40, freq: 0.004, speed: 0.0011, opacity: 0.10 },
-    { color: [100, 80, 240], y: 0.28, amp: 35, freq: 0.002, speed: 0.0006, opacity: 0.08 },
-    { color: [40, 200, 200], y: 0.18, amp: 50, freq: 0.0032, speed: 0.0008, opacity: 0.07 },
+    [40, 255, 140], [30, 220, 160], [60, 240, 120],
+    [50, 200, 180], [80, 255, 100], [40, 230, 150],
   ],
 }
 
-const curtains = CURTAINS[props.palette] || CURTAINS.aurora
+const colors = PALETTES[props.palette] || PALETTES.aurora
+
+// Aurora band definitions — right-side concentrated
+const BANDS = [
+  { cx: 0.65, w: 0.30, y: 0.08, h: 0.55, intensity: 1.0 },
+  { cx: 0.72, w: 0.25, y: 0.05, h: 0.60, intensity: 0.8 },
+  { cx: 0.58, w: 0.22, y: 0.12, h: 0.45, intensity: 0.7 },
+  { cx: 0.78, w: 0.18, y: 0.10, h: 0.50, intensity: 0.5 },
+  { cx: 0.50, w: 0.20, y: 0.15, h: 0.40, intensity: 0.4 },
+]
 
 function draw() {
   if (!ctx) return
@@ -67,74 +65,81 @@ function draw() {
 
   // Stars
   for (const s of stars) {
-    const twinkle = 0.3 + 0.7 * (0.5 + 0.5 * Math.sin(t * s.twinkleFreq + s.twinklePhase))
-    const alpha = s.brightness * twinkle
+    const tw = 0.5 + 0.5 * Math.sin(t * s.freq + s.phase)
+    const a = s.bright * tw
+    if (a < 0.05) continue
     ctx.beginPath()
     ctx.arc(s.x * W, s.y * H, s.r, 0, Math.PI * 2)
-    ctx.fillStyle = `rgba(220,225,240,${alpha.toFixed(2)})`
+    ctx.fillStyle = `rgba(200,210,230,${a.toFixed(2)})`
     ctx.fill()
   }
 
-  // Aurora curtains — vertical light columns that wave
-  for (const c of curtains) {
-    const [r, g, b] = c.color
-    const baseY = c.y * H
+  // Aurora bands — each is a vertical curtain with wavy horizontal structure
+  for (let b = 0; b < BANDS.length; b++) {
+    const band = BANDS[b]
+    const col = colors[b % colors.length]
+    const bandX = band.cx * W
+    const bandW = band.w * W
+    const bandY = band.y * H
+    const bandH = band.h * H
 
-    // Draw multiple vertical strips across the width
-    const strips = 60
+    // Draw vertical strips (curtain columns)
+    const cols = 40
+    for (let i = 0; i < cols; i++) {
+      const u = i / cols
+      const x = bandX - bandW / 2 + u * bandW
+
+      // Horizontal wave — each column shifts up/down
+      const wave1 = 25 * Math.sin(u * 8 + t * 0.0012 + b * 1.7)
+      const wave2 = 15 * Math.sin(u * 12 + t * 0.0018 + b * 2.3)
+      const wave3 = 8 * Math.sin(u * 20 + t * 0.003 + b * 0.9)
+      const yOff = wave1 + wave2 + wave3
+
+      // Intensity varies along the band — brighter in center
+      const centerDist = Math.abs(u - 0.5) * 2
+      const hFade = 1 - centerDist * centerDist
+
+      // Temporal shimmer — columns pulse independently
+      const shimmer = 0.6 + 0.4 * Math.sin(t * 0.002 + u * 15 + b * 3.1)
+      const pulse = 0.7 + 0.3 * Math.sin(t * 0.0008 + b * 2.7)
+
+      const alpha = band.intensity * hFade * shimmer * pulse * 0.18
+      if (alpha < 0.005) continue
+
+      const colW = bandW / cols + 2
+      const colH = bandH * (0.6 + hFade * 0.4)
+      const colY = bandY + yOff
+
+      // Vertical gradient per column — bright core fading top and bottom
+      const grad = ctx.createLinearGradient(x, colY, x, colY + colH)
+      grad.addColorStop(0, `rgba(${col[0]},${col[1]},${col[2]},0)`)
+      grad.addColorStop(0.15, `rgba(${col[0]},${col[1]},${col[2]},${(alpha * 0.3).toFixed(3)})`)
+      grad.addColorStop(0.3, `rgba(${col[0]},${col[1]},${col[2]},${(alpha * 0.8).toFixed(3)})`)
+      grad.addColorStop(0.5, `rgba(${col[0]},${col[1]},${col[2]},${alpha.toFixed(3)})`)
+      grad.addColorStop(0.7, `rgba(${col[0]},${col[1]},${col[2]},${(alpha * 0.6).toFixed(3)})`)
+      grad.addColorStop(0.9, `rgba(${col[0]},${col[1]},${col[2]},${(alpha * 0.15).toFixed(3)})`)
+      grad.addColorStop(1, `rgba(${col[0]},${col[1]},${col[2]},0)`)
+
+      ctx.fillStyle = grad
+      ctx.fillRect(x, colY, colW, colH)
+    }
+
+    // Bright core line — the sharp edge at the top of the curtain
     ctx.beginPath()
-
-    // Top edge — wavy
-    for (let i = 0; i <= strips; i++) {
-      const x = (i / strips) * W
-      const wave = c.amp * Math.sin(x * c.freq + t * c.speed)
-        + c.amp * 0.5 * Math.sin(x * c.freq * 1.7 + t * c.speed * 1.3 + 2.1)
-        + c.amp * 0.3 * Math.sin(x * c.freq * 0.6 + t * c.speed * 0.7 + 4.2)
-      const y = baseY + wave
+    for (let i = 0; i <= cols; i++) {
+      const u = i / cols
+      const x = bandX - bandW / 2 + u * bandW
+      const wave = 25 * Math.sin(u * 8 + t * 0.0012 + b * 1.7) + 15 * Math.sin(u * 12 + t * 0.0018 + b * 2.3)
+      const y = bandY + wave + bandH * 0.28
       i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y)
     }
-
-    // Bottom edge — wider wave, fades down
-    const curtainHeight = H * 0.35
-    for (let i = strips; i >= 0; i--) {
-      const x = (i / strips) * W
-      const wave = c.amp * 0.6 * Math.sin(x * c.freq * 0.8 + t * c.speed * 0.9 + 1.5)
-      const y = baseY + curtainHeight + wave
-      ctx.lineTo(x, y)
-    }
-    ctx.closePath()
-
-    // Vertical gradient — bright at top, fading down
-    const grad = ctx.createLinearGradient(0, baseY - c.amp, 0, baseY + curtainHeight)
-    grad.addColorStop(0, `rgba(${r},${g},${b},0)`)
-    grad.addColorStop(0.1, `rgba(${r},${g},${b},${c.opacity * 0.4})`)
-    grad.addColorStop(0.25, `rgba(${r},${g},${b},${c.opacity})`)
-    grad.addColorStop(0.5, `rgba(${r},${g},${b},${c.opacity * 0.6})`)
-    grad.addColorStop(0.75, `rgba(${r},${g},${b},${c.opacity * 0.2})`)
-    grad.addColorStop(1, `rgba(${r},${g},${b},0)`)
-
-    ctx.fillStyle = grad
-    ctx.fill()
-  }
-
-  // Bright column highlights — vertical light rays
-  for (let i = 0; i < 8; i++) {
-    const phase = i * 1.37 + t * 0.0003
-    const x = W * (0.1 + 0.8 * ((Math.sin(phase) + 1) / 2))
-    const intensity = 0.5 + 0.5 * Math.sin(t * 0.001 + i * 2.3)
-    const c = curtains[i % curtains.length]
-    const [r, g, b] = c.color
-    const colH = H * 0.5
-    const colY = H * 0.05
-
-    const ray = ctx.createLinearGradient(x, colY, x, colY + colH)
-    ray.addColorStop(0, `rgba(${r},${g},${b},0)`)
-    ray.addColorStop(0.2, `rgba(${r},${g},${b},${0.04 * intensity})`)
-    ray.addColorStop(0.5, `rgba(${r},${g},${b},${0.02 * intensity})`)
-    ray.addColorStop(1, `rgba(${r},${g},${b},0)`)
-
-    ctx.fillStyle = ray
-    ctx.fillRect(x - 20, colY, 40, colH)
+    const coreAlpha = band.intensity * 0.12 * (0.7 + 0.3 * Math.sin(t * 0.001 + b * 1.5))
+    ctx.strokeStyle = `rgba(${Math.min(255, col[0] + 60)},${Math.min(255, col[1] + 40)},${Math.min(255, col[2] + 30)},${coreAlpha.toFixed(3)})`
+    ctx.lineWidth = 2
+    ctx.shadowBlur = 12
+    ctx.shadowColor = `rgba(${col[0]},${col[1]},${col[2]},${(coreAlpha * 0.6).toFixed(3)})`
+    ctx.stroke()
+    ctx.shadowBlur = 0
   }
 
   t++
