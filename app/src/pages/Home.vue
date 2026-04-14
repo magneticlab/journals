@@ -122,68 +122,78 @@ const dailySpark = computed(() => spark7(manifest.value.daily, 'commits'))
 
 <template>
   <div class="page">
-    <div class="mx content">
+    <!-- TOP ZONE — transparent, animation visible -->
+    <div class="top-zone">
+      <div class="mx">
+        <!-- Hero -->
+        <div class="hero">
+          <div class="hero-top">
+            <h1 class="hero-logo">Journals</h1>
+            <div v-if="weather" class="weather">
+              <span class="wx-icon">{{ wxLabel?.icon }}</span>
+              <span class="wx-temp">{{ wxTemp }}°</span>
+              <span class="wx-label">{{ wxLabel?.label }}</span>
+              <span class="wx-sep">·</span>
+              <span class="wx-detail">{{ wxHumidity }}% humidity</span>
+              <span class="wx-sep">·</span>
+              <span class="wx-detail">{{ wxWind }} km/h</span>
+            </div>
+          </div>
+          <p class="hero-greeting">{{ greeting }}, Alek.</p>
+          <p class="hero-date">{{ todayStr }}</p>
+        </div>
+      </div>
+    </div>
 
-      <!-- Hero: Logo + Greeting + Weather -->
-      <div class="hero">
-        <div class="hero-top">
-          <h1 class="hero-logo">Journals</h1>
-          <div v-if="weather" class="weather">
-            <span class="wx-icon">{{ wxLabel?.icon }}</span>
-            <span class="wx-temp">{{ wxTemp }}°</span>
-            <span class="wx-label">{{ wxLabel?.label }}</span>
-            <span class="wx-sep">·</span>
-            <span class="wx-detail">{{ wxHumidity }}% humidity</span>
-            <span class="wx-sep">·</span>
-            <span class="wx-detail">{{ wxWind }} km/h</span>
+    <!-- BODY ZONE — dark panel with gradient fade-in at top -->
+    <div class="body-zone">
+      <div class="body-fade"></div>
+      <div class="body-solid">
+        <!-- Cards straddling the boundary — pulled up into the fade -->
+        <div class="mx cards-wrap">
+          <div class="cards">
+            <router-link to="/work" class="card card-work">
+              <div class="card-head">
+                <div class="card-icon icon-work">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+                </div>
+                <span class="card-count">{{ manifest.work.length }}</span>
+              </div>
+              <h2 class="card-label">Work Journal</h2>
+              <p class="card-desc">Claude Code sessions, git commits, project work.</p>
+              <div class="card-bottom">
+                <div class="card-stats">
+                  <div class="cstat"><span class="cstat-val">{{ manifest.work.reduce((s, e) => s + (e.stats?.sessions || 0), 0) }}</span><span class="cstat-label">Sessions</span></div>
+                  <div class="cstat"><span class="cstat-val">{{ manifest.work.reduce((s, e) => s + (e.stats?.commits || 0), 0) }}</span><span class="cstat-label">Commits</span></div>
+                </div>
+                <div class="mini-spark"><div class="spark-bars"><div v-for="(h, i) in workSpark" :key="i" class="spark-bar bar-work" :style="{ height: h + '%' }"></div></div></div>
+              </div>
+            </router-link>
+
+            <router-link to="/daily" class="card card-daily">
+              <div class="card-head">
+                <div class="card-icon icon-daily">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                </div>
+                <span class="card-count">{{ manifest.daily.length }}</span>
+              </div>
+              <h2 class="card-label">Daily Journal</h2>
+              <p class="card-desc">Terminal activity, file changes, development.</p>
+              <div class="card-bottom">
+                <div class="card-stats">
+                  <div class="cstat"><span class="cstat-val">{{ manifest.daily.reduce((s, e) => s + (e.stats?.commands || 0), 0) }}</span><span class="cstat-label">Commands</span></div>
+                  <div class="cstat"><span class="cstat-val">{{ manifest.daily.reduce((s, e) => s + (e.stats?.commits || 0), 0) }}</span><span class="cstat-label">Commits</span></div>
+                </div>
+                <div class="mini-spark"><div class="spark-bars"><div v-for="(h, i) in dailySpark" :key="i" class="spark-bar bar-daily" :style="{ height: h + '%' }"></div></div></div>
+              </div>
+            </router-link>
           </div>
         </div>
-        <p class="hero-greeting">{{ greeting }}, Alek.</p>
-        <p class="hero-date">{{ todayStr }}</p>
-      </div>
 
-      <!-- Journal Cards -->
-      <div class="cards">
-        <router-link to="/work" class="card card-work">
-          <div class="card-head">
-            <div class="card-icon icon-work">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
-            </div>
-            <span class="card-count">{{ manifest.work.length }}</span>
-          </div>
-          <h2 class="card-label">Work Journal</h2>
-          <p class="card-desc">Claude Code sessions, git commits, project work.</p>
-          <div class="card-bottom">
-            <div class="card-stats">
-              <div class="cstat"><span class="cstat-val">{{ manifest.work.reduce((s, e) => s + (e.stats?.sessions || 0), 0) }}</span><span class="cstat-label">Sessions</span></div>
-              <div class="cstat"><span class="cstat-val">{{ manifest.work.reduce((s, e) => s + (e.stats?.commits || 0), 0) }}</span><span class="cstat-label">Commits</span></div>
-            </div>
-            <div class="mini-spark"><div class="spark-bars"><div v-for="(h, i) in workSpark" :key="i" class="spark-bar bar-work" :style="{ height: h + '%' }"></div></div></div>
-          </div>
-        </router-link>
-
-        <router-link to="/daily" class="card card-daily">
-          <div class="card-head">
-            <div class="card-icon icon-daily">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-            </div>
-            <span class="card-count">{{ manifest.daily.length }}</span>
-          </div>
-          <h2 class="card-label">Daily Journal</h2>
-          <p class="card-desc">Terminal activity, file changes, development.</p>
-          <div class="card-bottom">
-            <div class="card-stats">
-              <div class="cstat"><span class="cstat-val">{{ manifest.daily.reduce((s, e) => s + (e.stats?.commands || 0), 0) }}</span><span class="cstat-label">Commands</span></div>
-              <div class="cstat"><span class="cstat-val">{{ manifest.daily.reduce((s, e) => s + (e.stats?.commits || 0), 0) }}</span><span class="cstat-label">Commits</span></div>
-            </div>
-            <div class="mini-spark"><div class="spark-bars"><div v-for="(h, i) in dailySpark" :key="i" class="spark-bar bar-daily" :style="{ height: h + '%' }"></div></div></div>
-          </div>
-        </router-link>
-      </div>
-
-      <!-- Timeline -->
-      <section class="recent-section">
-        <p class="section-label">Recent Activity</p>
+        <!-- Timeline -->
+        <div class="mx timeline-wrap">
+          <section class="recent-section">
+            <p class="section-label">Recent Activity</p>
         <div class="timeline">
           <div v-for="group in grouped" :key="group.key" class="tl-group">
             <div class="group-header">
@@ -217,20 +227,23 @@ const dailySpark = computed(() => spark7(manifest.value.daily, 'commits'))
             </div>
           </div>
         </div>
-      </section>
-
+          </section>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <style scoped>
-.page { min-height: 100vh; }
+.page { min-height: 100vh; position: relative; z-index: 1; }
 .mx { max-width: 880px; margin: 0 auto; padding: 0 24px; }
-.content { padding: 48px 0 64px; position: relative; z-index: 1; }
+
+/* TOP ZONE — transparent, animation shows through */
+.top-zone { padding: 48px 0 0; }
 
 /* Hero */
-.hero { margin-bottom: 48px; }
-.hero-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 16px; }
+.hero { margin-bottom: 0; padding-bottom: 60px; }
+.hero-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 24px; }
 .hero-logo { font-family: var(--serif); font-size: 20px; font-weight: 400; color: var(--text-heading); }
 .weather {
   display: flex; align-items: center; gap: 6px;
@@ -244,10 +257,25 @@ const dailySpark = computed(() => spark7(manifest.value.daily, 'commits'))
 .wx-sep { color: var(--border-hover); }
 .wx-detail { color: var(--text-muted); }
 
-.hero-greeting { font-family: var(--serif); font-size: 40px; font-weight: 400; color: var(--text-heading); line-height: 1.2; margin-top: 8px; }
-.hero-date { font-size: 14px; color: var(--text-muted); margin-top: 8px; }
+.hero-greeting { font-family: var(--serif); font-size: 42px; font-weight: 400; color: var(--text-heading); line-height: 1.2; margin-top: 8px; }
+.hero-date { font-size: 15px; color: var(--text-muted); margin-top: 10px; }
 
-/* Cards */
+/* BODY ZONE — dark panel */
+.body-zone { position: relative; }
+.body-fade {
+  position: absolute; top: 0; left: 0; width: 100%;
+  height: 120px; pointer-events: none;
+  background: linear-gradient(to bottom, transparent 0%, #0c0c0e 100%);
+  z-index: 0;
+}
+.body-solid {
+  position: relative; z-index: 1;
+  background: #0c0c0e;
+  padding-bottom: 64px;
+}
+
+/* Cards — pulled up into the fade zone */
+.cards-wrap { position: relative; margin-top: -40px; z-index: 2; }
 .cards { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 40px; }
 .card {
   border-radius: 14px; padding: 24px; transition: all 0.2s; display: block;
@@ -282,10 +310,11 @@ const dailySpark = computed(() => spark7(manifest.value.daily, 'commits'))
 .bar-daily { background: rgba(52,211,153,0.5); }
 
 /* Timeline */
+.timeline-wrap { }
 .section-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; color: var(--text-muted); margin-bottom: 16px; }
 .timeline { position: relative; }
 .tl-group { margin-bottom: 4px; }
-.group-header { display: flex; align-items: center; gap: 12px; padding: 10px 0; position: sticky; top: 0; background: var(--bg); z-index: 10; }
+.group-header { display: flex; align-items: center; gap: 12px; padding: 10px 0; position: sticky; top: 0; background: #0c0c0e; z-index: 10; }
 .group-dot { width: 10px; height: 10px; border-radius: 50%; border: 2px solid var(--border-hover); background: var(--bg); flex-shrink: 0; }
 .group-label { font-family: var(--serif); font-size: 15px; color: var(--text-heading); }
 
@@ -327,5 +356,7 @@ const dailySpark = computed(() => spark7(manifest.value.daily, 'commits'))
   .day-col:first-child { border-right: none; border-bottom: 1px solid var(--border); }
   .hero-top { flex-direction: column; gap: 12px; }
   .hero-greeting { font-size: 28px; }
+  .cards-wrap { margin-top: -20px; }
+  .body-fade { height: 80px; }
 }
 </style>
