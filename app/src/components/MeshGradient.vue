@@ -5,6 +5,10 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
 
+const props = defineProps({
+  palette: { type: String, default: 'warm' }
+})
+
 const canvas = ref(null)
 let ctx, W, H, t = 0, rafId
 
@@ -16,21 +20,19 @@ const SPACING = 10
 const N = 48
 const HALF = (N - 1) / 2
 
-// Dark-theme palette — muted, complementary to our blue/green/purple brand
-const PALETTE = [
-  [110, 160, 255],  // vivid blue
-  [140, 120, 255],  // electric violet
-  [180, 100, 240],  // purple
-  [220, 80, 180],   // magenta
-  [255, 100, 130],  // coral
-  [255, 140, 80],   // warm orange
-  [255, 180, 60],   // amber
-  [200, 220, 60],   // lime
-  [80, 220, 140],   // emerald
-  [52, 211, 180],   // teal
-  [60, 180, 255],   // sky
-  [110, 160, 255],  // vivid blue loop
-]
+const PALETTES = {
+  dark: [
+    [110, 160, 255], [140, 120, 255], [180, 100, 240], [220, 80, 180],
+    [255, 100, 130], [255, 140, 80], [255, 180, 60], [200, 220, 60],
+    [80, 220, 140], [52, 211, 180], [60, 180, 255], [110, 160, 255],
+  ],
+  aurora: [
+    [40, 120, 200], [60, 80, 220], [90, 60, 200], [50, 160, 180],
+    [40, 200, 160], [30, 180, 120], [60, 140, 220], [100, 80, 240],
+    [70, 100, 180], [40, 170, 200], [80, 60, 190], [40, 120, 200],
+  ],
+}
+const PALETTE = PALETTES[props.palette] || PALETTES.dark
 
 function lerpColor(u) {
   const scaled = u * (PALETTE.length - 1)

@@ -27,6 +27,29 @@
   --ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+/* Aurora theme — deeper, cooler, more atmospheric */
+[data-theme="aurora"] {
+  --bg: #080b12;
+  --bg-card: #0e1219;
+  --bg-elevated: #141a24;
+  --border: #1c2433;
+  --border-hover: #283040;
+  --text: #8b95a8;
+  --text-muted: #556070;
+  --text-strong: #c8d0de;
+  --text-heading: #e8ecf4;
+  --green: #3ee8b0;
+  --green-bg: rgba(62, 232, 176, 0.08);
+  --red: #ff6b7a;
+  --red-bg: rgba(255, 107, 122, 0.06);
+  --blue: #5b9dff;
+  --blue-bg: rgba(91, 157, 255, 0.08);
+  --purple: #b38aff;
+  --purple-bg: rgba(179, 138, 255, 0.08);
+  --amber: #ffcc42;
+  --amber-bg: rgba(255, 204, 66, 0.08);
+}
+
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {

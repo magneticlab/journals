@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted, onUnmounted, computed } from 'vue'
 import ReflectModal from '../components/ReflectModal.vue'
+import ThemeSwitcher from '../components/ThemeSwitcher.vue'
 
 const manifest = ref({ work: [], daily: [] })
 const weather = ref(null)
@@ -159,6 +160,7 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll))
         <!-- Nav row — stays fixed, doesn't parallax -->
         <div class="nav-row">
           <router-link to="/" class="hero-logo">Journals</router-link>
+          <div class="nav-right">
           <div v-if="weather" class="weather">
             <span class="wx-icon">{{ wxLabel?.icon }}</span>
             <span class="wx-temp">{{ wxTemp }}°</span>
@@ -168,7 +170,8 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll))
             <span class="wx-sep">·</span>
             <span class="wx-detail">{{ wxWind }} km/h</span>
           </div>
-        </div>
+          <ThemeSwitcher />
+          </div>
 
         <!-- Hero — parallax + fade on scroll -->
         <div class="hero" :style="heroStyle">
@@ -314,6 +317,7 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll))
 /* Hero */
 .hero { margin-bottom: 0; padding-bottom: 120px; will-change: transform, opacity; }
 .hero-logo { font-family: var(--serif); font-size: 20px; font-weight: 400; color: var(--text-heading); }
+.nav-right { display: flex; align-items: center; gap: 8px; }
 .weather {
   display: flex; align-items: center; gap: 6px;
   font-size: 12px; color: var(--text-muted);

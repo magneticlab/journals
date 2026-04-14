@@ -3,6 +3,7 @@ import { ref, onMounted, onUnmounted, computed, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import CalendarPicker from '../components/CalendarPicker.vue'
 import RadarChart from '../components/RadarChart.vue'
+import ThemeSwitcher from '../components/ThemeSwitcher.vue'
 
 const props = defineProps({ journal: String, date: String })
 const router = useRouter()
@@ -195,10 +196,13 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
         <!-- Nav: logo + weather -->
         <div class="nav-row">
           <router-link to="/" class="hero-logo">Journals</router-link>
-          <div v-if="wx" class="weather">
-            <span class="wx-i">{{ wx.i }}</span>
-            <span class="wx-t">{{ wx.temp }}°</span>
-            <span class="wx-l">{{ wx.l }}</span>
+          <div class="nav-right">
+            <div v-if="wx" class="weather">
+              <span class="wx-i">{{ wx.i }}</span>
+              <span class="wx-t">{{ wx.temp }}°</span>
+              <span class="wx-l">{{ wx.l }}</span>
+            </div>
+            <ThemeSwitcher />
           </div>
         </div>
 
@@ -483,6 +487,7 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
 .nav-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 32px; min-height: 36px; }
 .hero-logo { font-family: var(--serif); font-size: 20px; color: var(--text-heading); }
 .hero-logo:hover { color: var(--text-muted); }
+.nav-right { display: flex; align-items: center; gap: 8px; }
 .weather { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-muted); background: rgba(12,12,14,0.7); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid var(--border); border-radius: 10px; padding: 6px 14px; }
 .wx-i { font-size: 16px; } .wx-t { font-weight: 600; color: var(--text-strong); font-size: 14px; } .wx-l { color: var(--text); }
 
