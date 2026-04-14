@@ -79,14 +79,6 @@ const uid = 'r' + Math.random().toString(36).slice(2, 6)
           <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
         </filter>
 
-        <!-- Radial gradient for the fill: red center → green edge -->
-        <radialGradient :id="uid + '-fill'" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stop-color="#f87171" stop-opacity="0.3" />
-          <stop offset="35%" stop-color="#fbbf24" stop-opacity="0.2" />
-          <stop offset="65%" stop-color="#6395ff" stop-opacity="0.15" />
-          <stop offset="100%" stop-color="#34d399" stop-opacity="0.12" />
-        </radialGradient>
-
         <!-- Per-edge gradients -->
         <linearGradient v-for="(e, i) in edges" :key="'g'+i" :id="uid + '-eg' + i"
           :x1="e.x1" :y1="e.y1" :x2="e.x2" :y2="e.y2" gradientUnits="userSpaceOnUse">
@@ -105,12 +97,12 @@ const uid = 'r' + Math.random().toString(36).slice(2, 6)
         stroke="rgba(255,255,255,0.07)" stroke-width="0.75" />
 
       <!-- Data fill — glow with radial gradient -->
-      <path :d="dataPath" :fill="`url(#${uid}-fill)`"
+      <path :d="dataPath" :fill="fillColor + '20'"
         stroke="none"
         :filter="`url(#${uid}-glow)`" opacity="0.6" />
 
       <!-- Data fill — crisp with radial gradient -->
-      <path :d="dataPath" :fill="`url(#${uid}-fill)`" stroke="none" />
+      <path :d="dataPath" :fill="fillColor + '20'" stroke="none" />
 
       <!-- Per-edge gradient strokes -->
       <line v-for="(e, i) in edges" :key="'e'+i"

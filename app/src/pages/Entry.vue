@@ -154,26 +154,10 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
               <RadarChart :metrics="data.metrics" :brandColor="brand" :size="280" />
             </div>
             <div class="perf-rings">
-              <div v-for="(m, key, idx) in data.metrics" :key="key" class="ring-item">
+              <div v-for="(m, key) in data.metrics" :key="key" class="ring-item">
                 <div class="ring-wrap">
-                  <svg width="58" height="58" viewBox="0 0 58 58">
-                    <defs>
-                      <linearGradient :id="'rg-' + idx" x1="0" y1="1" x2="1" y2="0">
-                        <stop offset="0%" stop-color="#f87171" />
-                        <stop offset="40%" stop-color="#fbbf24" />
-                        <stop offset="70%" stop-color="#6395ff" />
-                        <stop offset="100%" stop-color="#34d399" />
-                      </linearGradient>
-                    </defs>
-                    <circle cx="29" cy="29" r="24" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="4" />
-                    <circle cx="29" cy="29" r="24" fill="none"
-                      :stroke="`url(#rg-${idx})`" stroke-width="4"
-                      stroke-linecap="round"
-                      :stroke-dasharray="`${m.score * 1.508} 200`"
-                      transform="rotate(-90 29 29)"
-                      class="ring-arc"
-                    />
-                  </svg>
+                  <div class="ring-bg"></div>
+                  <div class="ring-fill" :style="{ background: `conic-gradient(from 0deg, #f87171 0%, #fbbf24 ${m.score * 0.4}%, #6395ff ${m.score * 0.65}%, #34d399 ${m.score * 0.95}%, transparent ${m.score}%, transparent 100%)` }"></div>
                   <span class="ring-score" :style="{ color: ringScoreColor(m.score) }">{{ m.score }}</span>
                 </div>
                 <span class="ring-name">{{ m.label }}</span>
@@ -189,7 +173,7 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
                 <span class="bar-score" :style="{ color: ringScoreColor(m.score) }">{{ m.score }}</span>
               </div>
               <div class="bar-track">
-                <div class="bar-fill" :style="{ width: m.score + '%', background: `linear-gradient(90deg, #f87171, #fbbf24 40%, #6395ff 65%, #34d399)`, backgroundSize: `${100 / (m.score/100)}% 100%` }"></div>
+                <div class="bar-fill" :style="{ width: m.score + '%', background: `linear-gradient(90deg, #f87171, #fbbf24 40%, #6395ff 65%, ${ringScoreColor(m.score)})` }"></div>
               </div>
             </div>
           </div>
@@ -404,12 +388,22 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
 .perf-rings { flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
 .ring-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 10px; transition: background 0.15s; }
 .ring-item:hover { background: rgba(255,255,255,0.03); }
-.ring-wrap { position: relative; width: 58px; height: 58px; flex-shrink: 0; }
-.ring-wrap svg { display: block; }
-.ring-arc { transition: stroke-dasharray 0.8s var(--ease-spring); }
+.ring-wrap { position: relative; width: 56px; height: 56px; flex-shrink: 0; border-radius: 50%; }
+.ring-bg {
+  position: absolute; inset: 0; border-radius: 50%;
+  background: rgba(255,255,255,0.05);
+  mask: radial-gradient(circle, transparent 60%, #000 61%, #000 100%);
+  -webkit-mask: radial-gradient(circle, transparent 60%, #000 61%, #000 100%);
+}
+.ring-fill {
+  position: absolute; inset: 0; border-radius: 50%;
+  mask: radial-gradient(circle, transparent 60%, #000 61%, #000 100%);
+  -webkit-mask: radial-gradient(circle, transparent 60%, #000 61%, #000 100%);
+  transition: background 0.6s var(--ease-spring);
+}
 .ring-score {
   position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
-  font-size: 16px; font-weight: 700; font-variant-numeric: tabular-nums;
+  font-size: 15px; font-weight: 700; font-variant-numeric: tabular-nums;
 }
 .ring-name { font-size: 11px; font-weight: 500; color: var(--text-muted); line-height: 1.3; }
 
