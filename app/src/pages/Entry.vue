@@ -30,8 +30,11 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll))
 
 watch(() => props.date, loadEntry)
 async function loadEntry() {
-  loading.value = true
-  try { const res = await fetch(`/entries/${props.journal}/${props.date}.json`); data.value = res.ok ? await res.json() : null } catch { data.value = null }
+  // Don't clear data — keep old content visible to prevent flicker
+  try {
+    const res = await fetch(`/entries/${props.journal}/${props.date}.json`)
+    data.value = res.ok ? await res.json() : null
+  } catch { data.value = null }
   loading.value = false
 }
 
@@ -227,8 +230,8 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
 .jtab:hover { color: var(--text-strong); background: rgba(255,255,255,0.06); }
 .jtab.active { color: var(--text-heading); background: rgba(255,255,255,0.08); }
 
-/* Body zone */
-.body-zone { position: relative; background: linear-gradient(to bottom, transparent 0%, #0c0c0e 150px); margin-top: -60px; padding-top: 60px; }
+/* Body zone — min-height prevents flicker on data reload */
+.body-zone { position: relative; background: linear-gradient(to bottom, transparent 0%, #0c0c0e 150px); margin-top: -60px; padding-top: 60px; min-height: 100vh; }
 .body { padding-bottom: 64px; }
 .empty { padding: 80px 24px; text-align: center; font-size: 14px; color: var(--text-muted); }
 
