@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted, computed, watch } from 'vue'
 import { useRouter } from 'vue-router'
+import CalendarPicker from '../components/CalendarPicker.vue'
 
 const props = defineProps({ journal: String, date: String })
 const router = useRouter()
@@ -30,7 +31,10 @@ const hasPrev = computed(() => idx.value < dates.value.length - 1)
 const hasNext = computed(() => idx.value > 0)
 function goToPrev() { if (hasPrev.value) router.push(`/${props.journal}/${dates.value[idx.value + 1]}`) }
 function goToNext() { if (hasNext.value) router.push(`/${props.journal}/${dates.value[idx.value - 1]}`) }
-function goTo(e) { router.push(`/${props.journal}/${e.target.value}`) }
+function goTo(e) {
+  if (typeof e === 'string') router.push(`/${props.journal}/${e}`)
+  else router.push(`/${props.journal}/${e.target.value}`)
+}
 
 const isWork = computed(() => props.journal === 'work')
 const brand = computed(() => isWork.value ? '#6395ff' : '#34d399')
@@ -107,9 +111,12 @@ const summaryLine = computed(() => {
               <button @click="goToPrev" :disabled="!hasPrev" :class="['nav-btn', { disabled: !hasPrev }]">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
               </button>
-              <select :value="date" @change="goTo" class="date-select">
-                <option v-for="d in dates" :key="d" :value="d">{{ d }}</option>
-              </select>
+              <CalendarPicker
+                :modelValue="date"
+                @update:modelValue="goTo"
+                :availableDates="dates"
+                :brandColor="brand"
+              />
               <button @click="goToNext" :disabled="!hasNext" :class="['nav-btn', { disabled: !hasNext }]">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
               </button>
@@ -257,12 +264,6 @@ const summaryLine = computed(() => {
 .nav-btn { padding: 6px; border-radius: 8px; border: none; background: none; cursor: pointer; color: var(--text-muted); transition: all 0.15s; display: flex; }
 .nav-btn:hover { background: rgba(255,255,255,0.05); color: var(--text-strong); }
 .nav-btn.disabled { color: var(--border); cursor: not-allowed; }
-.date-select {
-  appearance: none; border: 1px solid var(--border); border-radius: 8px;
-  padding: 5px 10px; font-size: 12px; font-weight: 500; font-variant-numeric: tabular-nums;
-  color: var(--text); background: transparent; cursor: pointer; outline: none; font-family: inherit; text-align: center;
-}
-.date-select:hover { border-color: var(--border-hover); }
 
 .hero-content {}
 .hero-title-row { display: flex; align-items: center; gap: 14px; margin-bottom: 6px; }
