@@ -18,6 +18,31 @@ function loadReflection() {
   const stored = JSON.parse(localStorage.getItem('reflections') || '{}')
   reflection.value = stored[props.date] || null
 }
+
+// Generate evaluation insights from reflection scores
+const reflectEval = computed(() => {
+  if (!reflection.value) return null
+  const { energy, focus, mood } = reflection.value.scores
+  const avg = reflection.value.average
+  const tags = []
+  const summary = []
+
+  // Overall assessment
+  if (avg >= 8) { tags.push({ label: 'Peak Day', color: '#34d399' }); summary.push('Outstanding day across all dimensions — this is your peak performance state.') }
+  else if (avg >= 6) { tags.push({ label: 'Solid Day', color: '#fbbf24' }); summary.push('A productive day with room for optimization in specific areas.') }
+  else if (avg >= 4) { tags.push({ label: 'Mixed Day', color: '#fb923c' }); summary.push('Some friction today — identifying the blockers can help tomorrow.') }
+  else { tags.push({ label: 'Recovery Needed', color: '#f87171' }); summary.push('Tough day. Rest and reset — tomorrow is a fresh start.') }
+
+  // Specific patterns
+  if (energy >= 8 && focus < 6) { tags.push({ label: 'Energy → Focus Gap', color: '#fb923c' }); summary.push('High energy but low focus suggests distractions or unclear priorities.') }
+  if (focus >= 8 && energy < 6) { tags.push({ label: 'Pushing Through', color: '#fbbf24' }); summary.push('Strong focus despite low energy — sustainable short-term, but watch for burnout.') }
+  if (mood >= 8 && energy >= 8) { tags.push({ label: 'Flow State', color: '#34d399' }) }
+  if (energy <= 4) { tags.push({ label: 'Low Battery', color: '#f87171' }) }
+  if (focus >= 9) { tags.push({ label: 'Deep Focus', color: '#34d399' }) }
+  if (mood <= 4 && energy <= 4) { tags.push({ label: 'Burnout Risk', color: '#f87171' }); summary.push('Both mood and energy are low — consider taking a break or changing pace.') }
+
+  return { tags: tags.slice(0, 4), summary: summary[0] || '' }
+})
 const scrollY = ref(0)
 function onScroll() { scrollY.value = window.scrollY }
 
@@ -307,36 +332,41 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
         <section v-if="reflection" v-reveal class="section">
           <p class="section-label" style="color: #34d399">Daily Reflection</p>
           <div class="reflect-card">
-            <div class="reflect-scores">
-              <div class="rscore" v-for="(val, key) in reflection.scores" :key="key">
-                <div class="rscore-ring">
-                  <svg width="48" height="48" viewBox="0 0 48 48">
-                    <circle cx="24" cy="24" r="20" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="3" />
-                    <circle cx="24" cy="24" r="20" fill="none"
-                      stroke-width="3" stroke-linecap="round"
-                      :stroke="ringScoreColor(val * 10)"
-                      :stroke-dasharray="`${val * 12.566} 200`"
-                      transform="rotate(-90 24 24)" />
-                  </svg>
-                  <span class="rscore-num" :style="{ color: ringScoreColor(val * 10) }">{{ val }}</span>
-                </div>
-                <span class="rscore-label">{{ key }}</span>
+            <!-- Evaluation summary + tags at top -->
+            <div v-if="reflectEval" class="reflect-eval">
+              <p class="eval-summary">{{ reflectEval.summary }}</p>
+              <div class="eval-tags">
+                <span v-for="t in reflectEval.tags" :key="t.label" class="eval-tag" :style="{ color: t.color, borderColor: t.color + '30', background: t.color + '10' }">{{ t.label }}</span>
               </div>
-              <div class="rscore rscore-avg">
-                <div class="rscore-ring">
-                  <svg width="48" height="48" viewBox="0 0 48 48">
-                    <circle cx="24" cy="24" r="20" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="3" />
-                    <circle cx="24" cy="24" r="20" fill="none"
-                      stroke-width="3" stroke-linecap="round"
-                      :stroke="ringScoreColor(reflection.average * 10)"
-                      :stroke-dasharray="`${reflection.average * 12.566} 200`"
-                      transform="rotate(-90 24 24)" />
+            </div>
+
+            <!-- Scores: 3 small on left, average large on right -->
+            <div class="reflect-scores">
+              <div class="rscores-left">
+                <div class="rscore" v-for="(val, key) in reflection.scores" :key="key">
+                  <div class="rscore-ring">
+                    <svg width="48" height="48" viewBox="0 0 48 48">
+                      <circle cx="24" cy="24" r="20" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="3" />
+                      <circle cx="24" cy="24" r="20" fill="none" stroke-width="3" stroke-linecap="round" :stroke="ringScoreColor(val * 10)" :stroke-dasharray="`${val * 12.566} 200`" transform="rotate(-90 24 24)" />
+                    </svg>
+                    <span class="rscore-num" :style="{ color: ringScoreColor(val * 10) }">{{ val }}</span>
+                  </div>
+                  <span class="rscore-label">{{ key }}</span>
+                </div>
+              </div>
+              <div class="rscore-avg">
+                <div class="rscore-ring rscore-ring-lg">
+                  <svg width="72" height="72" viewBox="0 0 72 72">
+                    <circle cx="36" cy="36" r="30" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="4" />
+                    <circle cx="36" cy="36" r="30" fill="none" stroke-width="4" stroke-linecap="round" :stroke="ringScoreColor(reflection.average * 10)" :stroke-dasharray="`${reflection.average * 18.85} 250`" transform="rotate(-90 36 36)" />
                   </svg>
-                  <span class="rscore-num" :style="{ color: ringScoreColor(reflection.average * 10) }">{{ reflection.average }}</span>
+                  <span class="rscore-num rscore-num-lg" :style="{ color: ringScoreColor(reflection.average * 10) }">{{ reflection.average }}</span>
                 </div>
                 <span class="rscore-label">Average</span>
               </div>
             </div>
+
+            <!-- Text responses below -->
             <div class="reflect-text" v-if="reflection.win || reflection.improve">
               <div v-if="reflection.win" class="rtext-block">
                 <p class="rtext-label">Biggest Win</p>
@@ -606,7 +636,16 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
   border-radius: 16px; padding: 24px;
   backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
 }
-.reflect-scores { display: flex; gap: 24px; justify-content: center; margin-bottom: 20px; }
+
+/* Evaluation summary */
+.reflect-eval { margin-bottom: 20px; padding-bottom: 18px; border-bottom: 1px solid var(--border); }
+.eval-summary { font-size: 14px; line-height: 1.6; color: var(--text-strong); margin-bottom: 10px; }
+.eval-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+.eval-tag { font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 6px; border: 1px solid; }
+
+/* Scores layout: 3 left, average right */
+.reflect-scores { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+.rscores-left { display: flex; gap: 20px; }
 .rscore { display: flex; flex-direction: column; align-items: center; gap: 6px; }
 .rscore-ring { position: relative; width: 48px; height: 48px; }
 .rscore-ring svg { display: block; }
@@ -615,10 +654,11 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
   font-size: 14px; font-weight: 700; font-variant-numeric: tabular-nums;
 }
 .rscore-label { font-size: 9px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); }
-.rscore-avg { margin-left: 8px; padding-left: 16px; border-left: 1px solid var(--border); }
+.rscore-avg { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.rscore-ring-lg { width: 72px; height: 72px; }
+.rscore-num-lg { font-size: 20px; }
 
-.reflect-text { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding-top: 16px; border-top: 1px solid var(--border); }
-.rtext-block {}
+.reflect-text { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding-top: 18px; border-top: 1px solid var(--border); }
 .rtext-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #34d399; margin-bottom: 6px; }
 .rtext-content { font-size: 13px; line-height: 1.6; color: var(--text); }
 
