@@ -172,6 +172,7 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll))
           </div>
           <ThemeSwitcher />
           </div>
+        </div>
 
         <!-- Hero — parallax + fade on scroll -->
         <div class="hero" :style="heroStyle">
