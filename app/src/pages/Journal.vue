@@ -63,14 +63,18 @@ const themeIcons = {
 }
 
 const featuredThemes = computed(() => {
-  if (!latestData.value?.themes) return []
-  return Object.entries(latestData.value.themes)
-    .filter(([t]) => t !== 'General Development')
+  const source = isWork.value ? latestData.value?.themes : latestData.value?.categories
+  if (!source) return []
+  return Object.entries(source)
+    .filter(([t]) => t !== 'General Development' && t !== 'Other')
     .slice(0, 5)
     .map(([name, count]) => ({ name, count, icon: themeIcons[name] || '◆' }))
 })
 
-const featuredSummary = computed(() => latestData.value?.wentRight || latestData.value?.summary || '')
+const featuredSummary = computed(() => {
+  if (!latestData.value) return latest.value?.summary || ''
+  return latestData.value.wentRight || latestData.value.summary || latest.value?.summary || ''
+})
 const linesAdded = computed(() => latestData.value?.stats?.linesAdded || 0)
 const linesRemoved = computed(() => latestData.value?.stats?.linesRemoved || 0)
 const filesChanged = computed(() => latestData.value?.stats?.filesChanged || 0)
@@ -125,10 +129,10 @@ const brandColor = computed(() => isWork.value ? '#6395ff' : '#34d399')
           <div v-if="featuredThemes.length" class="feat-themes">
             <div v-for="t in featuredThemes" :key="t.name" class="theme-card"><span class="theme-icon">{{ t.icon }}</span><span class="theme-name">{{ t.name }}</span><span class="theme-count">{{ t.count }}</span></div>
           </div>
-          <div class="feat-volume" v-if="isWork && linesAdded">
-            <span class="vol-add">+{{ linesAdded.toLocaleString() }}</span>
-            <span class="vol-del">-{{ linesRemoved.toLocaleString() }}</span>
-            <span class="vol-files">{{ filesChanged }} files</span>
+          <div class="feat-volume" v-if="linesAdded || latest.stats?.filesModified">
+            <span v-if="linesAdded" class="vol-add">+{{ linesAdded.toLocaleString() }}</span>
+            <span v-if="linesRemoved" class="vol-del">-{{ linesRemoved.toLocaleString() }}</span>
+            <span class="vol-files">{{ filesChanged || latest.stats?.filesModified || 0 }} files</span>
           </div>
         </div>
       </div>

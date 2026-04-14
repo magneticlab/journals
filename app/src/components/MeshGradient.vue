@@ -18,18 +18,18 @@ const HALF = (N - 1) / 2
 
 // Dark-theme palette — muted, complementary to our blue/green/purple brand
 const PALETTE = [
-  [70, 100, 200],   // muted blue
-  [85, 120, 220],   // soft blue
-  [60, 140, 200],   // steel blue
-  [50, 170, 160],   // teal
-  [45, 180, 130],   // muted green
-  [60, 160, 110],   // sage
-  [100, 120, 200],  // periwinkle
-  [130, 100, 190],  // soft purple
-  [110, 80, 180],   // muted violet
-  [80, 90, 170],    // deep periwinkle
-  [55, 130, 180],   // ocean
-  [65, 105, 210],   // back to blue
+  [99, 149, 255],   // brand blue
+  [120, 160, 255],  // bright blue
+  [80, 180, 240],   // sky
+  [52, 211, 180],   // teal
+  [52, 211, 153],   // brand green
+  [80, 200, 130],   // emerald
+  [167, 139, 250],  // brand purple
+  [140, 120, 230],  // violet
+  [180, 130, 255],  // lavender
+  [100, 170, 255],  // cornflower
+  [60, 195, 200],   // cyan
+  [99, 149, 255],   // brand blue loop
 ]
 
 function lerpColor(u) {
@@ -54,7 +54,7 @@ const RIBBONS = Array.from({ length: N }, (_, i) => {
     freq: 0.005 + (i % 5) * 0.0003,
     A: 20 + (i % 3) * 3,
     th: 32 + (i % 2) * 6,
-    op: 0.04 + centerFactor * 0.14,  // very subtle — max ~0.18
+    op: 0.05 + centerFactor * 0.18,  // slightly more vibrant — max ~0.23
   }
 })
 
