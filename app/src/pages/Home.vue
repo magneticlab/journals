@@ -119,14 +119,23 @@ function daySummary(d) {
   return parts.join(' · ')
 }
 
-function spark7(list, key) {
-  const slice = list.slice(0, 7).reverse()
-  const vals = slice.map(e => e.stats?.[key] || 0)
-  const max = Math.max(...vals, 1)
-  return vals.map(v => Math.max((v / max) * 100, 4))
-}
-const workSpark = computed(() => spark7(manifest.value.work, 'commits'))
-const dailySpark = computed(() => spark7(manifest.value.daily, 'commits'))
+// Paired activity chart — last 14 days
+const activityBars = computed(() => {
+  const workMap = new Map()
+  const dailyMap = new Map()
+  for (const e of manifest.value.work) workMap.set(e.date, e.stats?.commits || 0)
+  for (const e of manifest.value.daily) dailyMap.set(e.date, e.stats?.commits || 0)
+
+  const allDates = [...new Set([...workMap.keys(), ...dailyMap.keys()])].sort().reverse().slice(0, 14).reverse()
+  const bars = allDates.map(date => ({
+    date: date.slice(8),
+    day: new Date(date + 'T12:00:00').toLocaleDateString('en-US', { weekday: 'short' }).slice(0, 2),
+    work: workMap.get(date) || 0,
+    daily: dailyMap.get(date) || 0,
+  }))
+  return bars
+})
+const barsMax = computed(() => Math.max(...activityBars.value.map(b => Math.max(b.work, b.daily)), 1))
 
 onUnmounted(() => window.removeEventListener('scroll', onScroll))
 </script>
@@ -179,7 +188,6 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll))
                   <div class="cstat"><span class="cstat-val">{{ manifest.work.reduce((s, e) => s + (e.stats?.sessions || 0), 0) }}</span><span class="cstat-label">Sessions</span></div>
                   <div class="cstat"><span class="cstat-val">{{ manifest.work.reduce((s, e) => s + (e.stats?.commits || 0), 0) }}</span><span class="cstat-label">Commits</span></div>
                 </div>
-                <div class="mini-spark"><div class="spark-bars"><div v-for="(h, i) in workSpark" :key="i" class="spark-bar bar-work" :style="{ height: h + '%' }"></div></div></div>
               </div>
             </router-link>
 
@@ -197,9 +205,37 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll))
                   <div class="cstat"><span class="cstat-val">{{ manifest.daily.reduce((s, e) => s + (e.stats?.commands || 0), 0) }}</span><span class="cstat-label">Commands</span></div>
                   <div class="cstat"><span class="cstat-val">{{ manifest.daily.reduce((s, e) => s + (e.stats?.commits || 0), 0) }}</span><span class="cstat-label">Commits</span></div>
                 </div>
-                <div class="mini-spark"><div class="spark-bars"><div v-for="(h, i) in dailySpark" :key="i" class="spark-bar bar-daily" :style="{ height: h + '%' }"></div></div></div>
               </div>
             </router-link>
+          </div>
+        </div>
+
+        <!-- Paired Activity Chart -->
+        <div v-if="activityBars.length" v-reveal class="mx activity-section">
+          <div class="activity-header">
+            <p class="section-label">Daily Commits — Last 14 Days</p>
+            <div class="activity-legend">
+              <span class="legend-item"><span class="legend-dot dot-work"></span>Work</span>
+              <span class="legend-item"><span class="legend-dot dot-daily"></span>Daily</span>
+            </div>
+          </div>
+          <div class="activity-chart">
+            <div v-for="(b, i) in activityBars" :key="i" class="activity-col rv">
+              <div class="bar-pair">
+                <div class="bar-slot">
+                  <div class="bar bar-work" :style="{ height: (b.work / barsMax * 100) + '%' }">
+                    <span v-if="b.work" class="bar-val">{{ b.work }}</span>
+                  </div>
+                </div>
+                <div class="bar-slot">
+                  <div class="bar bar-daily" :style="{ height: (b.daily / barsMax * 100) + '%' }">
+                    <span v-if="b.daily" class="bar-val">{{ b.daily }}</span>
+                  </div>
+                </div>
+              </div>
+              <span class="bar-day">{{ b.day }}</span>
+              <span class="bar-date">{{ b.date }}</span>
+            </div>
           </div>
         </div>
 
@@ -318,14 +354,43 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll))
 .cstat { display: flex; flex-direction: column; gap: 2px; }
 .cstat-val { font-size: 18px; font-weight: 700; color: var(--text-heading); font-variant-numeric: tabular-nums; }
 .cstat-label { font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); }
-.mini-spark { display: flex; align-items: flex-end; }
-.spark-bars { display: flex; align-items: flex-end; gap: 2px; height: 32px; }
-.spark-bar { width: 4px; border-radius: 2px; min-height: 2px; transition: height 0.3s; }
-.bar-work { background: rgba(99,149,255,0.5); }
-.bar-daily { background: rgba(52,211,153,0.5); }
+/* Paired Activity Chart */
+.activity-section { margin-bottom: 48px; }
+.activity-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+.activity-legend { display: flex; gap: 14px; }
+.legend-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--text-muted); }
+.legend-dot { width: 8px; height: 8px; border-radius: 2px; }
+.dot-work { background: #6395ff; }
+.dot-daily { background: #34d399; }
+
+.activity-chart {
+  display: flex; gap: 4px; align-items: flex-end; height: 100px;
+  padding: 0 4px;
+}
+.activity-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 0; }
+.bar-pair { display: flex; gap: 2px; align-items: flex-end; height: 72px; width: 100%; }
+.bar-slot { flex: 1; height: 100%; display: flex; align-items: flex-end; justify-content: center; }
+.bar {
+  width: 100%; min-height: 2px; border-radius: 3px 3px 1px 1px;
+  position: relative; transition: height 0.5s var(--ease-spring);
+}
+.bar.bar-work { background: rgba(99,149,255,0.6); }
+.bar.bar-daily { background: rgba(52,211,153,0.6); }
+.bar-val {
+  position: absolute; top: -15px; left: 50%; transform: translateX(-50%);
+  font-size: 9px; font-weight: 600; color: var(--text-strong);
+  font-variant-numeric: tabular-nums; white-space: nowrap;
+}
+.bar-day { font-size: 9px; color: var(--text-muted); text-transform: uppercase; }
+.bar-date { font-size: 9px; color: var(--border-hover); font-variant-numeric: tabular-nums; }
 
 /* Timeline */
-.timeline-wrap { }
+.timeline-wrap { position: relative; }
+.timeline-wrap::after {
+  content: ''; position: sticky; bottom: 0; display: block;
+  height: 80px; margin-top: -80px; pointer-events: none;
+  background: linear-gradient(to bottom, transparent, #0c0c0e);
+}
 .section-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; color: var(--text-muted); margin-bottom: 16px; }
 .timeline { position: relative; }
 .tl-group { margin-bottom: 4px; }
