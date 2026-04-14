@@ -18,18 +18,18 @@ const HALF = (N - 1) / 2
 
 // Dark-theme palette — muted, complementary to our blue/green/purple brand
 const PALETTE = [
-  [99, 149, 255],   // brand blue
-  [120, 160, 255],  // bright blue
-  [80, 180, 240],   // sky
+  [110, 160, 255],  // vivid blue
+  [140, 120, 255],  // electric violet
+  [180, 100, 240],  // purple
+  [220, 80, 180],   // magenta
+  [255, 100, 130],  // coral
+  [255, 140, 80],   // warm orange
+  [255, 180, 60],   // amber
+  [200, 220, 60],   // lime
+  [80, 220, 140],   // emerald
   [52, 211, 180],   // teal
-  [52, 211, 153],   // brand green
-  [80, 200, 130],   // emerald
-  [167, 139, 250],  // brand purple
-  [140, 120, 230],  // violet
-  [180, 130, 255],  // lavender
-  [100, 170, 255],  // cornflower
-  [60, 195, 200],   // cyan
-  [99, 149, 255],   // brand blue loop
+  [60, 180, 255],   // sky
+  [110, 160, 255],  // vivid blue loop
 ]
 
 function lerpColor(u) {

@@ -333,15 +333,17 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll))
   backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
 }
 .card-work {
-  background: rgba(12,12,14,0.82); border: 1px solid rgba(99,149,255,0.18);
+  background: linear-gradient(135deg, rgba(99,149,255,0.1) 0%, rgba(12,12,14,0.85) 50%);
+  border: 1px solid rgba(99,149,255,0.2);
   box-shadow: 0 4px 16px rgba(0,0,0,0.3), 0 1px 2px rgba(0,0,0,0.2);
 }
-.card-work:hover { border-color: rgba(99,149,255,0.35); box-shadow: 0 8px 28px rgba(0,0,0,0.4), 0 0 20px rgba(99,149,255,0.06); }
+.card-work:hover { border-color: rgba(99,149,255,0.4); box-shadow: 0 8px 28px rgba(0,0,0,0.4), 0 0 24px rgba(99,149,255,0.08); }
 .card-daily {
-  background: rgba(12,12,14,0.82); border: 1px solid rgba(52,211,153,0.18);
+  background: linear-gradient(135deg, rgba(52,211,153,0.1) 0%, rgba(12,12,14,0.85) 50%);
+  border: 1px solid rgba(52,211,153,0.2);
   box-shadow: 0 4px 16px rgba(0,0,0,0.3), 0 1px 2px rgba(0,0,0,0.2);
 }
-.card-daily:hover { border-color: rgba(52,211,153,0.35); box-shadow: 0 8px 28px rgba(0,0,0,0.4), 0 0 20px rgba(52,211,153,0.06); }
+.card-daily:hover { border-color: rgba(52,211,153,0.4); box-shadow: 0 8px 28px rgba(0,0,0,0.4), 0 0 24px rgba(52,211,153,0.08); }
 .card-head { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 16px; }
 .card-icon { display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 10px; }
 .icon-work { background: rgba(99,149,255,0.12); color: #6395ff; }

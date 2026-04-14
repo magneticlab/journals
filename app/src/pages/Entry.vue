@@ -270,11 +270,12 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
 .arrow-btn {
   display: flex; align-items: center; justify-content: center;
   width: 40px; height: 40px; border-radius: 10px; flex-shrink: 0;
-  border: 1px solid var(--border); background: rgba(255,255,255,0.03);
-  color: var(--text-muted); cursor: pointer;
+  border: 1px solid var(--border); background: rgba(12,12,14,0.7);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  color: var(--text); cursor: pointer;
   transition: all 0.2s var(--ease-spring);
 }
-.arrow-btn:hover { border-color: var(--border-hover); color: var(--text-heading); background: rgba(255,255,255,0.06); }
+.arrow-btn:hover { border-color: var(--border-hover); color: var(--text-heading); background: rgba(12,12,14,0.85); }
 .arrow-btn.disabled { color: var(--border); cursor: not-allowed; opacity: 0.4; }
 
 /* Journal tabs — switch work/daily for this day */

@@ -169,12 +169,13 @@ onUnmounted(() => document.removeEventListener('click', onClickOutside))
 .cal-trigger {
   display: flex; align-items: center; justify-content: center;
   width: 40px; height: 40px; border-radius: 10px;
-  border: 1px solid var(--border); background: rgba(255,255,255,0.03);
-  color: var(--text-muted);
+  border: 1px solid var(--border); background: rgba(12,12,14,0.7);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  color: var(--text);
   font-family: inherit; cursor: pointer;
   transition: all 0.2s var(--ease-spring, cubic-bezier(0.16,1,0.3,1));
 }
-.cal-trigger:hover { border-color: var(--border-hover); color: var(--text-heading); background: rgba(255,255,255,0.06); }
+.cal-trigger:hover { border-color: var(--border-hover); color: var(--text-heading); background: rgba(12,12,14,0.85); }
 .cal-date-text { display: none; }
 
 .cal-dropdown {
