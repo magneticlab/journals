@@ -33,64 +33,93 @@ function goToNext() { if (hasNext.value) router.push(`/${props.journal}/${dates.
 function goTo(e) { router.push(`/${props.journal}/${e.target.value}`) }
 
 const isWork = computed(() => props.journal === 'work')
-const title = computed(() => isWork.value ? 'Work Journal' : 'Daily Journal')
+const brand = computed(() => isWork.value ? '#6395ff' : '#34d399')
+const brandBg = computed(() => isWork.value ? 'rgba(99,149,255,' : 'rgba(52,211,153,')
 
-const catIcons = {
-  'Git': 'M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.4 5.4 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65S8.93 17.38 9 18v4',
-  'Claude Code': 'M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z',
-  'Navigation': 'M3 12h18M3 6h18M3 18h18',
-  'File Inspection': 'M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z',
-  'Package Management': 'M16.5 9.4l-9-5.19M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z',
-  'Homebrew': 'M17 8h1a4 4 0 1 1 0 8h-1M3 8h1a4 4 0 0 1 0 8H3zM5 8v8M19 8v8',
-  'Remote': 'M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z',
-  'GitHub CLI': 'M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.4 5.4 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65S8.93 17.38 9 18v4',
-  'File Operations': 'M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z',
-  'Docker': 'M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z',
-  'Python': 'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z',
-  'HTTP': 'M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z',
-  'Other': 'M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z',
-  'Design System': 'M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5',
-  'Design & Layout': 'M5 3a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2H5z',
-  'Page Building': 'M3 9h18M9 21V9',
-  'Animation & Effects': 'M13 2L3 14h9l-1 8 10-12h-9l1-8z',
-  'Bug Fixes': 'M8 2l1.88 1.88M14.12 3.88L16 2M9 7.13v-1a3.003 3.003 0 1 1 6 0v1',
-  'Git & Deployment': 'M6 3v12M18 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM6 21a3 3 0 1 0 0-6 3 3 0 0 0 0 6z',
-  'Version Iteration': 'M21 12a9 9 0 1 1-6.219-8.56',
-  'Refactoring': 'M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8',
-  'Content & Copy': 'M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z',
-  'Planning & Strategy': 'M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2zM22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z',
-  'General Development': 'M16 18l6-6-6-6M8 6l-6 6 6 6',
+const themeIcons = {
+  'Design System': '⬡', 'Design & Layout': '◫', 'Page Building': '▦',
+  'Animation & Effects': '✦', 'Bug Fixes': '⚠', 'Git & Deployment': '⎇',
+  'Version Iteration': '↻', 'Refactoring': '⟲', 'Content & Copy': '¶',
+  'Planning & Strategy': '◈', 'General Development': '⌘',
+  'Git': '⎇', 'Claude Code': '◉', 'Navigation': '≡', 'File Inspection': '◧',
+  'Package Management': '⬢', 'Homebrew': '⚗', 'Remote': '⚡', 'GitHub CLI': '⎇',
+  'File Operations': '◧', 'Other': '◆', 'Docker': '◎', 'Python': '◉', 'HTTP': '◎',
 }
+
 const genTime = computed(() => {
   if (!data.value?.generatedAt) return ''
   return new Date(data.value.generatedAt).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })
+})
+
+// Active hours computed
+const activeHours = computed(() => {
+  const tr = data.value?.stats?.timeRange
+  if (!tr) return null
+  const parts = tr.split('–')
+  if (parts.length !== 2) return null
+  const [h1, m1] = parts[0].split(':').map(Number)
+  const [h2, m2] = parts[1].split(':').map(Number)
+  const mins = (h2 * 60 + m2) - (h1 * 60 + m1)
+  if (mins <= 0) return null
+  const h = Math.floor(mins / 60)
+  const m = mins % 60
+  return h > 0 ? `${h}h ${m}m` : `${m}m`
 })
 </script>
 
 <template>
   <div class="page">
-    <!-- Sub-header -->
-    <div class="header">
-      <div class="mx header-inner">
-        <div class="header-left">
-          <router-link :to="`/${journal}`" class="back-btn">
+    <!-- Hero header -->
+    <div class="hero" :style="{ borderBottomColor: brand + '20' }">
+      <div class="mx">
+        <!-- Nav row -->
+        <div class="nav-row">
+          <router-link :to="`/${journal}`" class="back-link">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+            All entries
           </router-link>
-          <div>
-            <p class="label">{{ title }}</p>
-            <h1 class="htitle">{{ data?.day }}, {{ data?.display || date }}</h1>
+          <div class="date-nav">
+            <button @click="goToPrev" :disabled="!hasPrev" :class="['nav-btn', { disabled: !hasPrev }]">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+            </button>
+            <select :value="date" @change="goTo" class="date-select">
+              <option v-for="d in dates" :key="d" :value="d">{{ d }}</option>
+            </select>
+            <button @click="goToNext" :disabled="!hasNext" :class="['nav-btn', { disabled: !hasNext }]">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+            </button>
           </div>
         </div>
-        <div class="date-nav">
-          <button @click="goToPrev" :disabled="!hasPrev" :class="['nav-btn', { disabled: !hasPrev }]">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
-          </button>
-          <select :value="date" @change="goTo" class="date-select">
-            <option v-for="d in dates" :key="d" :value="d">{{ d }}</option>
-          </select>
-          <button @click="goToNext" :disabled="!hasNext" :class="['nav-btn', { disabled: !hasNext }]">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
-          </button>
+
+        <!-- Title block -->
+        <div v-if="data" class="hero-content">
+          <h1 class="hero-date">{{ data.day }}, {{ data.display }}</h1>
+          <div class="hero-stats">
+            <div class="hstat" v-if="isWork && data.stats?.sessions">
+              <span class="hstat-val">{{ data.stats.sessions }}</span>
+              <span class="hstat-lbl">sessions</span>
+            </div>
+            <div class="hstat" v-if="data.stats?.commits">
+              <span class="hstat-val">{{ data.stats.commits }}</span>
+              <span class="hstat-lbl">commits</span>
+            </div>
+            <div class="hstat" v-if="data.stats?.repos">
+              <span class="hstat-val">{{ data.stats.repos }}</span>
+              <span class="hstat-lbl">repos</span>
+            </div>
+            <div class="hstat" v-if="!isWork && data.stats?.commands">
+              <span class="hstat-val">{{ data.stats.commands }}</span>
+              <span class="hstat-lbl">commands</span>
+            </div>
+            <div class="hstat" v-if="isWork && data.stats?.linesAdded">
+              <span class="hstat-val hstat-add">+{{ data.stats.linesAdded.toLocaleString() }}</span>
+              <span class="hstat-lbl">lines added</span>
+            </div>
+            <div class="hstat" v-if="isWork && activeHours">
+              <span class="hstat-val">{{ activeHours }}</span>
+              <span class="hstat-lbl">active</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -100,74 +129,100 @@ const genTime = computed(() => {
 
     <div v-else class="mx body">
 
-      <!-- Source -->
-      <div class="badge-row">
-        <span :class="['source-badge', isWork ? 'badge-blue' : 'badge-neutral']">
-          {{ isWork ? 'From Claude history + git logs' : 'From shell history + git + filesystem' }}
-        </span>
-      </div>
-
       <!-- Went Right / Could Be Better -->
       <div v-if="data.wentRight || data.couldBeBetter" class="duo-grid">
         <div v-if="data.wentRight" class="duo-card duo-green">
-          <p class="duo-label">Went Right</p>
-          <p class="duo-text">{{ data.wentRight }}</p>
+          <div class="duo-icon">✓</div>
+          <div>
+            <p class="duo-label">Went Right</p>
+            <p class="duo-text">{{ data.wentRight }}</p>
+          </div>
         </div>
         <div v-if="data.couldBeBetter" class="duo-card duo-red">
-          <p class="duo-label">Could Be Better</p>
-          <p class="duo-text">{{ data.couldBeBetter }}</p>
+          <div class="duo-icon duo-icon-red">!</div>
+          <div>
+            <p class="duo-label">Could Be Better</p>
+            <p class="duo-text">{{ data.couldBeBetter }}</p>
+          </div>
         </div>
       </div>
 
-      <!-- What I Did (work) -->
+      <!-- What I Did -->
       <section v-if="isWork && data.whatIDid?.length" class="section">
         <p class="section-label">What I Did</p>
-        <ul class="blist">
-          <li v-for="(item, i) in data.whatIDid" :key="i"><span class="dot"></span><span>{{ item }}</span></li>
-        </ul>
-      </section>
-
-      <!-- Themes (work) -->
-      <section v-if="isWork && data.themes && Object.keys(data.themes).length" class="section">
-        <p class="section-label">Focus Areas</p>
-        <div class="tags">
-          <span v-for="(count, theme) in data.themes" :key="theme" class="tag"><svg v-if="catIcons[theme]" class="tag-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path :d="catIcons[theme]"/></svg>{{ theme }} <span class="tag-n">{{ count }}</span></span>
+        <div class="did-list">
+          <div v-for="(item, i) in data.whatIDid" :key="i" class="did-item">
+            <span class="did-num">{{ i + 1 }}</span>
+            <span class="did-text">{{ item }}</span>
+          </div>
         </div>
       </section>
 
-      <!-- Categories (daily) -->
-      <section v-if="!isWork && data.categories && Object.keys(data.categories).length" class="section">
-        <p class="section-label">Terminal Activity</p>
-        <div class="tags">
-          <span v-for="(count, cat) in data.categories" :key="cat" class="tag"><svg v-if="catIcons[cat]" class="tag-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path :d="catIcons[cat]"/></svg>{{ cat }} <span class="tag-n">{{ count }}</span></span>
+      <!-- Focus Areas / Terminal Activity — as cards -->
+      <section v-if="(isWork && data.themes && Object.keys(data.themes).length) || (!isWork && data.categories && Object.keys(data.categories).length)" class="section">
+        <p class="section-label" :style="{ color: brand }">{{ isWork ? 'Focus Areas' : 'Terminal Activity' }}</p>
+        <div class="theme-grid">
+          <div
+            v-for="(count, name) in (isWork ? data.themes : data.categories)"
+            :key="name"
+            class="theme-card"
+          >
+            <span class="theme-icon">{{ themeIcons[name] || '◆' }}</span>
+            <div class="theme-body">
+              <span class="theme-name">{{ name }}</span>
+              <span class="theme-count">{{ count }} interactions</span>
+            </div>
+          </div>
         </div>
       </section>
 
-      <!-- Activity by Hour (daily) -->
+      <!-- Activity by Hour -->
       <section v-if="!isWork && data.activityByHour && Object.keys(data.activityByHour).length" class="section">
-        <p class="section-label">Activity by Hour</p>
-        <div class="hours">
+        <p class="section-label" :style="{ color: brand }">Activity by Hour</p>
+        <div class="hours-card">
           <div v-for="(count, hour) in data.activityByHour" :key="hour" class="hour-row">
             <span class="hour-label">{{ hour }}:00</span>
-            <div class="hour-track"><div class="hour-fill" :style="{ width: Math.min(count / Math.max(...Object.values(data.activityByHour)) * 100, 100) + '%' }"></div></div>
+            <div class="hour-track">
+              <div class="hour-fill" :style="{ width: Math.min(count / Math.max(...Object.values(data.activityByHour)) * 100, 100) + '%', background: brand }"></div>
+            </div>
             <span class="hour-n">{{ count }}</span>
           </div>
         </div>
       </section>
 
-      <!-- Projects (work) -->
-      <section v-if="isWork && data.projectsWip?.length" class="section">
-        <p class="section-label">Projects</p>
-        <div class="tags">
-          <span v-for="(p, i) in data.projectsWip" :key="i" class="tag">{{ p }}</span>
+      <!-- Volume bar (work) -->
+      <section v-if="isWork && (data.stats?.linesAdded || data.stats?.linesRemoved)" class="section">
+        <p class="section-label">Code Volume</p>
+        <div class="vol-card">
+          <div class="vol-bar">
+            <div class="vol-add-bar" :style="{ flex: data.stats.linesAdded || 1 }"></div>
+            <div class="vol-del-bar" :style="{ flex: data.stats.linesRemoved || 1 }"></div>
+          </div>
+          <div class="vol-labels">
+            <span class="vol-add">+{{ (data.stats.linesAdded || 0).toLocaleString() }} insertions</span>
+            <span class="vol-del">-{{ (data.stats.linesRemoved || 0).toLocaleString() }} deletions</span>
+            <span class="vol-files">{{ data.stats.filesChanged || 0 }} files changed</span>
+          </div>
         </div>
       </section>
 
-      <!-- Docs Created (work) -->
+      <!-- Projects -->
+      <section v-if="isWork && data.projectsWip?.length" class="section">
+        <p class="section-label">Projects</p>
+        <div class="project-tags">
+          <div v-for="(p, i) in data.projectsWip" :key="i" class="project-tag">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+            {{ p }}
+          </div>
+        </div>
+      </section>
+
+      <!-- Docs Created -->
       <section v-if="isWork && data.docsCreated?.length" class="section">
-        <p class="section-label slabel-purple">Docs Created</p>
+        <p class="section-label" style="color: var(--purple)">Docs Created</p>
         <div class="docs-list">
           <div v-for="(doc, i) in data.docsCreated" :key="i" class="doc-row">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
             <span class="doc-title">{{ doc.title }}</span>
             <span class="doc-leader"></span>
             <span class="doc-desc">{{ doc.description }}</span>
@@ -175,10 +230,10 @@ const genTime = computed(() => {
         </div>
       </section>
 
-      <!-- Notable Commands (daily) -->
+      <!-- Notable Commands -->
       <section v-if="!isWork && data.notableCommands?.length" class="section">
-        <p class="section-label slabel-blue">Notable Commands</p>
-        <div class="cmd-list">
+        <p class="section-label" :style="{ color: brand }">Notable Commands</p>
+        <div class="cmd-card">
           <div v-for="(cmd, i) in data.notableCommands.slice(0, 20)" :key="i" class="cmd-row">
             <span class="cmd-time">{{ cmd.time }}</span>
             <code class="cmd-text">{{ cmd.command }}</code>
@@ -188,9 +243,10 @@ const genTime = computed(() => {
 
       <!-- Git Activity -->
       <section v-if="data.gitActivity?.length" class="section">
-        <p class="section-label slabel-green">Git Activity</p>
-        <div v-for="repo in data.gitActivity" :key="repo.repo" class="git-repo">
+        <p class="section-label" style="color: var(--green)">Git Activity</p>
+        <div v-for="repo in data.gitActivity" :key="repo.repo" class="git-card">
           <div class="repo-head">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="1.5"><path d="M6 3v12"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/></svg>
             <span class="repo-name">{{ repo.repo }}</span>
             <span v-if="repo.stat" class="repo-stat">{{ repo.stat }}</span>
           </div>
@@ -200,18 +256,22 @@ const genTime = computed(() => {
               <span class="ctime">{{ c.time }}</span>
               <span class="cleader"></span>
               <span class="cmsg">{{ c.message }}</span>
-              <span class="cauthor">{{ c.author }}</span>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- Files (daily) -->
+      <!-- Files -->
       <section v-if="!isWork && data.fileGroups && Object.keys(data.fileGroups).length" class="section">
         <p class="section-label">Files Modified</p>
-        <div v-for="(files, dir) in data.fileGroups" :key="dir" class="fgroup">
-          <p class="fdir">{{ dir }}/ <span class="fcount">({{ files.length }})</span></p>
-          <p v-for="f in files" :key="f" class="fpath">{{ f }}</p>
+        <div class="files-card">
+          <div v-for="(files, dir) in data.fileGroups" :key="dir" class="fgroup">
+            <p class="fdir">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+              {{ dir }}/ <span class="fcount">({{ files.length }})</span>
+            </p>
+            <p v-for="f in files" :key="f" class="fpath">{{ f }}</p>
+          </div>
         </div>
       </section>
 
@@ -227,19 +287,22 @@ const genTime = computed(() => {
 <style scoped>
 .page { min-height: calc(100vh - 52px); }
 
-/* Header */
-.header { border-bottom: 1px solid var(--border); background: var(--bg-card); padding: 20px 0; }
-.mx { max-width: 880px; margin: 0 auto; padding-left: 24px; padding-right: 24px; }
-.header-inner { display: flex; align-items: center; justify-content: space-between; }
-.header-left { display: flex; align-items: center; gap: 12px; }
-.back-btn {
-  display: flex; align-items: center; justify-content: center;
-  width: 32px; height: 32px; border-radius: 8px; border: 1px solid var(--border);
-  color: var(--text-muted); transition: all 0.15s; flex-shrink: 0;
+/* Hero header */
+.hero {
+  background: var(--bg-card); padding: 20px 0 28px;
+  border-bottom: 2px solid;
 }
-.back-btn:hover { border-color: var(--border-hover); color: var(--text-strong); }
-.label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.2em; color: var(--text-muted); }
-.htitle { margin-top: 2px; font-family: var(--serif); font-size: 22px; font-weight: 400; color: var(--text-heading); }
+.mx { max-width: 880px; margin: 0 auto; padding-left: 24px; padding-right: 24px; }
+
+.nav-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+.back-link {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 12px; color: var(--text-muted);
+  padding: 6px 12px; border-radius: 8px; border: 1px solid var(--border);
+  transition: all 0.15s;
+}
+.back-link:hover { border-color: var(--border-hover); color: var(--text-strong); }
+
 .date-nav { display: flex; align-items: center; gap: 4px; }
 .nav-btn { padding: 6px; border-radius: 8px; border: none; background: none; cursor: pointer; color: var(--text-muted); transition: all 0.15s; display: flex; }
 .nav-btn:hover { background: var(--bg-elevated); color: var(--text-strong); }
@@ -251,91 +314,141 @@ const genTime = computed(() => {
 }
 .date-select:hover { border-color: var(--border-hover); }
 
+.hero-content {}
+.hero-date { font-family: var(--serif); font-size: 32px; font-weight: 400; color: var(--text-heading); margin-bottom: 16px; }
+.hero-stats { display: flex; gap: 20px; flex-wrap: wrap; }
+.hstat { display: flex; align-items: baseline; gap: 5px; }
+.hstat-val { font-size: 20px; font-weight: 700; color: var(--text-heading); font-variant-numeric: tabular-nums; }
+.hstat-add { color: #34d399; }
+.hstat-lbl { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
+
 /* Body */
-.body { padding-top: 24px; padding-bottom: 64px; }
+.body { padding-top: 28px; padding-bottom: 64px; }
 .empty { padding: 80px 24px; text-align: center; font-size: 14px; color: var(--text-muted); }
 
-/* Badge */
-.badge-row { margin-bottom: 24px; }
-.source-badge { display: inline-block; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; padding: 4px 12px; border-radius: 100px; }
-.badge-blue { background: var(--blue-bg); color: var(--blue); }
-.badge-neutral { background: var(--bg-elevated); color: var(--text-muted); }
-
-/* Duo cards (went right / could be better) */
+/* Duo cards */
 .duo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 32px; }
-.duo-card { border-radius: 12px; padding: 16px 20px; }
-.duo-green { background: var(--green-bg); border: 1px solid rgba(34,197,94,0.12); }
-.duo-red { background: var(--red-bg); border: 1px solid rgba(239,68,68,0.12); }
-.duo-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 8px; }
-.duo-green .duo-label { color: var(--green); }
-.duo-red .duo-label { color: var(--red); }
-.duo-text { font-size: 13px; line-height: 1.65; color: var(--text); }
+.duo-card {
+  border-radius: 12px; padding: 16px 18px;
+  display: flex; align-items: flex-start; gap: 12px;
+}
+.duo-green { background: rgba(52,211,153,0.06); border: 1px solid rgba(52,211,153,0.12); }
+.duo-red { background: rgba(248,113,113,0.05); border: 1px solid rgba(248,113,113,0.1); }
+.duo-icon {
+  width: 24px; height: 24px; border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700; flex-shrink: 0;
+  background: rgba(52,211,153,0.15); color: #34d399;
+}
+.duo-icon-red { background: rgba(248,113,113,0.15); color: #f87171; }
+.duo-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 4px; }
+.duo-green .duo-label { color: #34d399; }
+.duo-red .duo-label { color: #f87171; }
+.duo-text { font-size: 13px; line-height: 1.6; color: var(--text); }
 
 /* Sections */
 .section { margin-bottom: 32px; }
 .section-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; color: var(--text-muted); margin-bottom: 12px; }
-.slabel-green { color: var(--green); }
-.slabel-purple { color: var(--purple); }
-.slabel-blue { color: var(--blue); }
 
-/* Bullet list */
-.blist { list-style: none; display: flex; flex-direction: column; gap: 6px; }
-.blist li { display: flex; align-items: flex-start; gap: 10px; font-size: 13px; line-height: 1.5; color: var(--text); }
-.dot { width: 5px; height: 5px; border-radius: 50%; background: var(--border-hover); margin-top: 7px; flex-shrink: 0; }
+/* What I Did — numbered */
+.did-list { display: flex; flex-direction: column; gap: 4px; }
+.did-item { display: flex; align-items: flex-start; gap: 10px; padding: 6px 0; }
+.did-num {
+  width: 22px; height: 22px; border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 600; color: var(--text-muted);
+  background: var(--bg-elevated); flex-shrink: 0; margin-top: 1px;
+}
+.did-text { font-size: 13px; line-height: 1.5; color: var(--text); }
 
-/* Tags */
-.tags { display: flex; flex-wrap: wrap; gap: 6px; }
-.tag { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text); padding: 5px 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-card); }
-.tag-icon { color: var(--text-muted); flex-shrink: 0; }
-.tag-n { color: var(--text-muted); margin-left: 2px; }
+/* Theme cards grid */
+.theme-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 8px; }
+.theme-card {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 14px; border-radius: 10px;
+  background: var(--bg-card); border: 1px solid var(--border);
+  transition: all 0.15s;
+}
+.theme-card:hover { border-color: var(--border-hover); box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
+.theme-icon { font-size: 16px; opacity: 0.5; }
+.theme-body { display: flex; flex-direction: column; }
+.theme-name { font-size: 12px; font-weight: 500; color: var(--text-strong); }
+.theme-count { font-size: 10px; color: var(--text-muted); }
 
-/* Docs created */
-.docs-list { display: flex; flex-direction: column; gap: 2px; }
-.doc-row { display: flex; align-items: baseline; gap: 8px; padding: 4px 0; }
-.doc-title { font-size: 13px; font-weight: 500; color: var(--text-strong); flex-shrink: 0; }
+/* Volume */
+.vol-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; }
+.vol-bar { display: flex; height: 6px; border-radius: 3px; overflow: hidden; gap: 2px; margin-bottom: 10px; }
+.vol-add-bar { background: #34d399; border-radius: 3px; }
+.vol-del-bar { background: #f87171; border-radius: 3px; }
+.vol-labels { display: flex; gap: 16px; }
+.vol-add { font-size: 12px; font-weight: 600; color: #34d399; }
+.vol-del { font-size: 12px; font-weight: 600; color: #f87171; }
+.vol-files { font-size: 12px; color: var(--text-muted); margin-left: auto; }
+
+/* Projects */
+.project-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.project-tag {
+  display: flex; align-items: center; gap: 6px;
+  padding: 6px 12px; border-radius: 8px; font-size: 12px;
+  color: var(--text); background: var(--bg-card);
+  border: 1px solid var(--border);
+}
+.project-tag svg { color: var(--text-muted); }
+
+/* Docs */
+.docs-list { display: flex; flex-direction: column; gap: 4px; }
+.doc-row { display: flex; align-items: center; gap: 8px; padding: 6px 0; }
+.doc-title { font-size: 13px; font-weight: 500; color: var(--text-strong); }
 .doc-leader { flex: 1; height: 1px; background: var(--border); min-width: 12px; }
 .doc-desc { font-size: 11px; color: var(--text-muted); flex-shrink: 0; }
 
-/* Git */
-.git-repo { margin-bottom: 16px; }
-.repo-head { display: flex; align-items: baseline; gap: 8px; margin-bottom: 8px; }
-.repo-name { font-size: 13px; font-weight: 600; color: var(--text-strong); }
-.repo-stat { font-size: 11px; color: var(--text-muted); font-style: italic; }
-.commits { display: flex; flex-direction: column; gap: 2px; }
-.commit { display: flex; align-items: baseline; gap: 8px; padding: 3px 0; }
-.chash { font-size: 11px; font-family: ui-monospace, 'SF Mono', Consolas, monospace; color: var(--purple); background: var(--purple-bg); padding: 1px 6px; border-radius: 4px; flex-shrink: 0; }
-.ctime { font-size: 11px; color: var(--text-muted); font-variant-numeric: tabular-nums; flex-shrink: 0; }
-.cleader { flex: 1; height: 1px; background: var(--border); min-width: 8px; }
-.cmsg { font-size: 12px; color: var(--text); flex-shrink: 0; max-width: 400px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.cauthor { font-size: 11px; color: var(--text-muted); flex-shrink: 0; }
-
-/* Hour chart */
-.hours { display: flex; flex-direction: column; gap: 4px; }
-.hour-row { display: flex; align-items: center; gap: 8px; }
+/* Hours */
+.hours-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; }
+.hours-card .hour-row { display: flex; align-items: center; gap: 8px; }
 .hour-label { font-size: 11px; font-variant-numeric: tabular-nums; color: var(--text-muted); width: 40px; text-align: right; }
 .hour-track { flex: 1; height: 6px; background: var(--bg-elevated); border-radius: 3px; overflow: hidden; }
-.hour-fill { height: 100%; background: var(--blue); border-radius: 3px; transition: width 0.3s; }
+.hour-fill { height: 100%; border-radius: 3px; transition: width 0.3s; }
 .hour-n { font-size: 11px; color: var(--text-muted); width: 24px; font-variant-numeric: tabular-nums; }
 
 /* Commands */
-.cmd-list { display: flex; flex-direction: column; gap: 2px; }
+.cmd-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; }
 .cmd-row { display: flex; align-items: center; gap: 10px; padding: 3px 0; }
 .cmd-time { font-size: 11px; color: var(--text-muted); font-variant-numeric: tabular-nums; flex-shrink: 0; }
-.cmd-text { font-size: 11px; font-family: ui-monospace, 'SF Mono', Consolas, monospace; color: var(--text); background: var(--bg-elevated); padding: 2px 8px; border-radius: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 700px; }
+.cmd-text { font-size: 11px; font-family: ui-monospace, 'SF Mono', Consolas, monospace; color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* Git */
+.git-card {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: 12px; padding: 16px 18px; margin-bottom: 10px;
+}
+.repo-head { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+.repo-name { font-size: 14px; font-weight: 600; color: var(--text-strong); }
+.repo-stat { font-size: 11px; color: var(--text-muted); margin-left: auto; }
+.commits { display: flex; flex-direction: column; gap: 4px; }
+.commit { display: flex; align-items: baseline; gap: 8px; padding: 3px 0; }
+.chash { font-size: 11px; font-family: ui-monospace, 'SF Mono', Consolas, monospace; color: var(--purple); background: var(--purple-bg); padding: 2px 6px; border-radius: 4px; flex-shrink: 0; }
+.ctime { font-size: 11px; color: var(--text-muted); font-variant-numeric: tabular-nums; flex-shrink: 0; }
+.cleader { flex: 1; height: 1px; background: var(--border); min-width: 8px; }
+.cmsg { font-size: 12px; color: var(--text); max-width: 450px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 /* Files */
-.fgroup { margin-bottom: 12px; }
-.fdir { font-size: 13px; font-weight: 600; color: var(--text-strong); margin-bottom: 4px; }
+.files-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; }
+.fgroup { margin-bottom: 10px; }
+.fgroup:last-child { margin-bottom: 0; }
+.fdir { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; color: var(--text-strong); margin-bottom: 4px; }
+.fdir svg { color: var(--text-muted); }
 .fcount { font-weight: 400; color: var(--text-muted); }
-.fpath { font-size: 11px; font-family: ui-monospace, 'SF Mono', Consolas, monospace; color: var(--text-muted); padding-left: 12px; line-height: 1.8; }
+.fpath { font-size: 11px; font-family: ui-monospace, 'SF Mono', Consolas, monospace; color: var(--text-muted); padding-left: 18px; line-height: 1.8; }
 
 /* Footer */
 .footer { border-top: 1px solid var(--border); padding: 12px; text-align: center; }
 .footer-text { font-size: 10px; font-variant-numeric: tabular-nums; color: var(--text-muted); }
 
 @media (max-width: 640px) {
-  .header-inner { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .hero-date { font-size: 24px; }
+  .hero-stats { gap: 12px; }
   .duo-grid { grid-template-columns: 1fr; }
+  .theme-grid { grid-template-columns: 1fr; }
   .commit { flex-wrap: wrap; }
   .cmsg { max-width: 100%; }
 }
