@@ -59,34 +59,30 @@ const uid = 'r' + Math.random().toString(36).slice(2, 6)
   <div class="radar">
     <svg :width="size" :height="size" :viewBox="`0 0 ${size} ${size}`">
       <defs>
-        <radialGradient :id="uid + '-fill'">
-          <stop offset="0%" :stop-color="brandColor" stop-opacity="0.35" />
-          <stop offset="100%" :stop-color="brandColor" stop-opacity="0.06" />
-        </radialGradient>
         <filter :id="uid + '-glow'">
-          <feGaussianBlur stdDeviation="6" result="blur" />
+          <feGaussianBlur stdDeviation="5" result="blur" />
           <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
         </filter>
       </defs>
 
-      <!-- Grid — very subtle -->
+      <!-- Grid framework — visible -->
       <path v-for="ring in [0.25, 0.5, 0.75, 1.0]" :key="ring" :d="hexPath(ring)"
-        fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="0.5" />
+        fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.75" />
 
       <!-- Spokes -->
       <line v-for="i in n" :key="'s'+i"
         :x1="cx" :y1="cy" :x2="pt(i-1,1)[0]" :y2="pt(i-1,1)[1]"
-        stroke="rgba(255,255,255,0.03)" stroke-width="0.5" />
+        stroke="rgba(255,255,255,0.07)" stroke-width="0.75" />
 
-      <!-- Data shape — glow layer -->
-      <path :d="dataPath" :fill="`url(#${uid}-fill)`"
+      <!-- Data shape — glow -->
+      <path :d="dataPath" :fill="brandColor + '18'"
         :stroke="brandColor" stroke-width="1.5" stroke-linejoin="round"
-        :filter="`url(#${uid}-glow)`" opacity="0.5" />
+        :filter="`url(#${uid}-glow)`" opacity="0.4" />
 
-      <!-- Data shape — crisp layer -->
-      <path :d="dataPath" :fill="`url(#${uid}-fill)`"
+      <!-- Data shape — crisp -->
+      <path :d="dataPath" :fill="brandColor + '18'"
         :stroke="brandColor" stroke-width="1.5" stroke-linejoin="round"
-        stroke-opacity="0.8" />
+        stroke-opacity="0.9" />
 
       <!-- Score values at each vertex -->
       <template v-for="(v, i) in values" :key="'v'+i">
