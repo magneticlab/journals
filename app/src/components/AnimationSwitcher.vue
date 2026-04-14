@@ -6,6 +6,12 @@ const { current, ANIMATIONS } = useAnimation()
 const open = ref(false)
 const wrapper = ref(null)
 
+const icons = {
+  ribbons: '<path d="M2 6c4-2 8 2 12 0s8-2 12 0"/><path d="M2 12c4-2 8 2 12 0s8-2 12 0"/><path d="M2 18c4-2 8 2 12 0s8-2 12 0"/>',
+  blob: '<circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 1 0 16"/>',
+  stripes: '<line x1="4" y1="20" x2="20" y2="4"/><line x1="8" y1="20" x2="24" y2="4"/><line x1="0" y1="20" x2="16" y2="4"/>',
+}
+
 function select(id) { current.value = id; open.value = false }
 function onClickOutside(e) { if (wrapper.value && !wrapper.value.contains(e.target)) open.value = false }
 onMounted(() => document.addEventListener('click', onClickOutside))
@@ -23,7 +29,7 @@ onUnmounted(() => document.removeEventListener('click', onClickOutside))
       <div v-if="open" class="anim-dropdown">
         <p class="dropdown-label">Animation</p>
         <button v-for="a in ANIMATIONS" :key="a.id" :class="['anim-option', { active: current === a.id }]" @click="select(a.id)">
-          <span class="option-icon">{{ a.icon }}</span>
+          <svg class="option-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" v-html="icons[a.icon]"></svg>
           <span class="option-label">{{ a.label }}</span>
           <svg v-if="current === a.id" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
         </button>
@@ -61,7 +67,7 @@ onUnmounted(() => document.removeEventListener('click', onClickOutside))
 .anim-option:hover { background: rgba(255,255,255,0.05); color: var(--text-heading); }
 .anim-option.active { color: var(--text-heading); }
 .anim-option.active svg { color: #34d399; }
-.option-icon { font-size: 15px; }
+.option-svg { flex-shrink: 0; color: var(--text-muted); }
 .option-label { flex: 1; }
 
 .fade-enter-active, .fade-leave-active { transition: all 0.15s ease; }

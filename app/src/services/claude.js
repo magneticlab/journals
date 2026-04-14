@@ -33,8 +33,9 @@ Respond in this exact JSON format, nothing else:
     })
 
     if (!res.ok) {
-      console.warn('Claude API error:', res.status)
-      return null
+      const err = await res.json().catch(() => ({}))
+      console.warn('Claude API error:', res.status, err?.error?.message)
+      return { error: err?.error?.message || `API error ${res.status}` }
     }
 
     const data = await res.json()

@@ -18,6 +18,7 @@ const perfView = ref('radar') // 'radar' or 'bars'
 const reflection = ref(null)
 
 const reanalyzing = ref(false)
+const analyzeError = ref('')
 
 function loadReflection() {
   const stored = JSON.parse(localStorage.getItem('reflections') || '{}')
@@ -27,11 +28,17 @@ function loadReflection() {
 async function reanalyze() {
   if (!reflection.value || reanalyzing.value) return
   reanalyzing.value = true
+  analyzeError.value = ''
   const aiResult = await analyzeReflection({
     scores: reflection.value.scores,
     win: reflection.value.win,
     improve: reflection.value.improve,
   })
+  if (aiResult?.error) {
+    analyzeError.value = aiResult.error
+    reanalyzing.value = false
+    return
+  }
   if (aiResult) {
     reflection.value.ai = aiResult
     const stored = JSON.parse(localStorage.getItem('reflections') || '{}')
@@ -271,9 +278,12 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
         <section v-if="!isWork && reflection" v-reveal class="section">
           <div class="reflect-header">
             <p class="section-label" style="color: #34d399">Daily Reflection</p>
-            <button v-if="!reflection.ai" class="reanalyze-btn" @click="reanalyze" :disabled="reanalyzing">
-              {{ reanalyzing ? 'Analyzing...' : '✨ Analyze with AI' }}
-            </button>
+            <div class="reflect-actions">
+              <button v-if="!reflection.ai" class="reanalyze-btn" @click="reanalyze" :disabled="reanalyzing">
+                {{ reanalyzing ? 'Analyzing...' : '✨ Analyze with AI' }}
+              </button>
+              <span v-if="analyzeError" class="analyze-error">{{ analyzeError }}</span>
+            </div>
           </div>
           <div class="reflect-card">
             <!-- AI Analysis -->
@@ -785,6 +795,8 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
 }
 .reanalyze-btn:hover { background: rgba(52,211,153,0.2); }
 .reanalyze-btn:disabled { opacity: 0.5; cursor: wait; }
+.reflect-actions { display: flex; align-items: center; gap: 8px; }
+.analyze-error { font-size: 11px; color: var(--red); }
 
 .reflect-card {
   background: rgba(12,12,14,0.7); border: 1px solid var(--border);

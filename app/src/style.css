@@ -65,10 +65,10 @@
   --purple-bg: rgba(192, 160, 224, 0.08);
   --amber: #e8b44c;
   --amber-bg: rgba(232, 180, 76, 0.08);
-  --brand-work: #d4935a;
-  --brand-daily: #78c9a0;
-  --brand-work-bg: rgba(212, 147, 90, 0.12);
-  --brand-daily-bg: rgba(120, 201, 160, 0.12);
+  --brand-work: #e8a050;
+  --brand-daily: #68b890;
+  --brand-work-bg: rgba(232, 160, 80, 0.15);
+  --brand-daily-bg: rgba(104, 184, 144, 0.15);
 }
 
 /* Daylight — neutral, high contrast, productive */
@@ -119,10 +119,10 @@
   --purple-bg: rgba(180, 128, 240, 0.08);
   --amber: #e8c040;
   --amber-bg: rgba(232, 192, 64, 0.08);
-  --brand-work: #7090e8;
-  --brand-daily: #58d8b0;
-  --brand-work-bg: rgba(112, 144, 232, 0.12);
-  --brand-daily-bg: rgba(88, 216, 176, 0.12);
+  --brand-work: #9070e8;
+  --brand-daily: #d080a0;
+  --brand-work-bg: rgba(144, 112, 232, 0.15);
+  --brand-daily-bg: rgba(208, 128, 160, 0.15);
 }
 
 /* Aurora — deeper, cooler, atmospheric */
