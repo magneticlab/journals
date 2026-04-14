@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Work Journal — Claude Sessions</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #0a0a0a;
+      color: #e5e5e5;
+      min-height: 100vh;
+    }
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    h1 {
+      font-size: 1.75rem;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+      color: #fff;
+    }
+    .subtitle {
+      color: #737373;
+      font-size: 0.875rem;
+      margin-bottom: 2rem;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 2rem;
+    }
+    th {
+      text-align: left;
+      padding: 0.75rem 1rem;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #737373;
+      border-bottom: 1px solid #262626;
+    }
+    td {
+      padding: 0.75rem 1rem;
+      font-size: 0.875rem;
+      border-bottom: 1px solid #171717;
+    }
+    tr:hover td {
+      background: #171717;
+    }
+    .summary {
+      color: #a3a3a3;
+      max-width: 500px;
+    }
+    #entry-viewer {
+      display: none;
+      background: #111;
+      border: 1px solid #262626;
+      border-radius: 8px;
+      padding: 2rem;
+      margin-top: 1rem;
+      line-height: 1.7;
+      font-size: 0.9rem;
+    }
+    #entry-viewer h1 { font-size: 1.5rem; margin-bottom: 1rem; }
+    #entry-viewer h2 { font-size: 1.2rem; margin: 1.5rem 0 0.75rem; color: #d4d4d4; }
+    #entry-viewer h3 { font-size: 1rem; margin: 1.25rem 0 0.5rem; color: #a3a3a3; }
+    #entry-viewer blockquote {
+      border-left: 3px solid #404040;
+      padding-left: 1rem;
+      color: #a3a3a3;
+      margin: 1rem 0;
+      font-style: italic;
+    }
+    #entry-viewer table { margin: 1rem 0; }
+    #entry-viewer ul, #entry-viewer ol { padding-left: 1.5rem; margin: 0.5rem 0; }
+    #entry-viewer li { margin: 0.25rem 0; }
+    #entry-viewer code {
+      background: #1a1a1a;
+      padding: 0.15rem 0.4rem;
+      border-radius: 3px;
+      font-size: 0.85em;
+      color: #e5e5e5;
+    }
+    #entry-viewer hr {
+      border: none;
+      border-top: 1px solid #262626;
+      margin: 2rem 0;
+    }
+    #entry-viewer em { color: #737373; }
+    .back-btn {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      background: #171717;
+      border: 1px solid #262626;
+      border-radius: 6px;
+      color: #a3a3a3;
+      cursor: pointer;
+      font-size: 0.8rem;
+      margin-bottom: 1rem;
+    }
+    .back-btn:hover { background: #262626; color: #fff; }
+    .empty {
+      text-align: center;
+      color: #525252;
+      padding: 3rem;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Work Journal — Claude Sessions</h1>
+    <p class="subtitle">Daily reports from Claude Code sessions, git activity, and project work.</p>
+
+    <div id="table-view">
+      <table><thead><tr><th>Date</th><th>Day</th><th>Summary</th></tr></thead><tbody>
+        <tr onclick="loadEntry('entries/2026-04-14.md')" style="cursor:pointer">
+          <td><strong>2026-04-14</strong></td>
+          <td>Tuesday</td>
+          <td class="summary">6 Claude session(s), 17 messages across 00:24–04:34. Projects touched: alek. 1 git commit(s) across 1 repo(s).</td>
+        </tr>
+        <tr onclick="loadEntry('entries/2026-04-13.md')" style="cursor:pointer">
+          <td><strong>2026-04-13</strong></td>
+          <td>Monday</td>
+          <td class="summary">9 Claude session(s), 126 messages across 00:34–23:54. Projects touched: alek. 3 git commit(s) across 2 repo(s).</td>
+        </tr>
+        <tr onclick="loadEntry('entries/2026-04-12.md')" style="cursor:pointer">
+          <td><strong>2026-04-12</strong></td>
+          <td>Sunday</td>
+          <td class="summary">6 Claude session(s), 92 messages across 00:35–23:13. Projects touched: alek. 9 git commit(s) across 1 repo(s).</td>
+        </tr>
+        <tr onclick="loadEntry('entries/2026-04-11.md')" style="cursor:pointer">
+          <td><strong>2026-04-11</strong></td>
+          <td>Saturday</td>
+          <td class="summary">6 Claude session(s), 77 messages across 00:02–21:57. Projects touched: alek. 1 git commit(s) across 1 repo(s).</td>
+        </tr>
+        <tr onclick="loadEntry('entries/2026-04-10.md')" style="cursor:pointer">
+          <td><strong>2026-04-10</strong></td>
+          <td>Friday</td>
+          <td class="summary">8 Claude session(s), 130 messages across 00:02–23:56. Projects touched: alek. 3 git commit(s) across 1 repo(s).</td>
+        </tr>
+        <tr onclick="loadEntry('entries/2026-04-09.md')" style="cursor:pointer">
+          <td><strong>2026-04-09</strong></td>
+          <td>Thursday</td>
+          <td class="summary">4 Claude session(s), 238 messages across 00:03–23:59. Projects touched: alek. 7 git commit(s) across 1 repo(s).</td>
+        </tr>
+        <tr onclick="loadEntry('entries/2026-04-08.md')" style="cursor:pointer">
+          <td><strong>2026-04-08</strong></td>
+          <td>Wednesday</td>
+          <td class="summary">9 Claude session(s), 103 messages across 00:25–23:59. Projects touched: alek, vesselfront. 11 git commit(s) across 2 rep...</td>
+        </tr>
+        <tr onclick="loadEntry('entries/2026-04-07.md')" style="cursor:pointer">
+          <td><strong>2026-04-07</strong></td>
+          <td>Tuesday</td>
+          <td class="summary">3 Claude session(s), 33 messages across 19:31–22:11. Projects touched: alek. 4 git commit(s) across 1 repo(s).</td>
+        </tr>
+        <tr onclick="loadEntry('entries/2026-04-06.md')" style="cursor:pointer">
+          <td><strong>2026-04-06</strong></td>
+          <td>Monday</td>
+          <td class="summary">0 Claude session(s), 0 messages across N/A. Projects touched: . 1 git commit(s) across 1 repo(s).</td>
+        </tr>
+        <tr onclick="loadEntry('entries/2026-04-05.md')" style="cursor:pointer">
+          <td><strong>2026-04-05</strong></td>
+          <td>Sunday</td>
+          <td class="summary">0 Claude session(s), 0 messages across N/A. Projects touched: . 1 git commit(s) across 1 repo(s).</td>
+        </tr>
+        <tr onclick="loadEntry('entries/2026-04-04.md')" style="cursor:pointer">
+          <td><strong>2026-04-04</strong></td>
+          <td>Saturday</td>
+          <td class="summary">No Claude Code sessions or git activity recorded for this day.</td>
+        </tr>
+        <tr onclick="loadEntry('entries/2026-04-03.md')" style="cursor:pointer">
+          <td><strong>2026-04-03</strong></td>
+          <td>Friday</td>
+          <td class="summary">0 Claude session(s), 0 messages across N/A. Projects touched: . 1 git commit(s) across 1 repo(s).</td>
+        </tr>
+        <tr onclick="loadEntry('entries/2026-04-02.md')" style="cursor:pointer">
+          <td><strong>2026-04-02</strong></td>
+          <td>Thursday</td>
+          <td class="summary">0 Claude session(s), 0 messages across N/A. Projects touched: . 1 git commit(s) across 1 repo(s).</td>
+        </tr>
+        <tr onclick="loadEntry('entries/2026-04-01.md')" style="cursor:pointer">
+          <td><strong>2026-04-01</strong></td>
+          <td>Wednesday</td>
+          <td class="summary">0 Claude session(s), 0 messages across N/A. Projects touched: . 1 git commit(s) across 1 repo(s).</td>
+        </tr></tbody></table>
+    </div>
+
+    <div id="entry-viewer">
+      <span class="back-btn" onclick="closeEntry()">Back to index</span>
+      <div id="entry-content"></div>
+    </div>
+  </div>
+
+  <script>
+    function loadEntry(path) {
+      fetch(path)
+        .then(r => r.text())
+        .then(md => {
+          document.getElementById('entry-content').innerHTML = renderMarkdown(md);
+          document.getElementById('table-view').style.display = 'none';
+          document.getElementById('entry-viewer').style.display = 'block';
+          window.scrollTo(0, 0);
+        })
+        .catch(e => alert('Could not load entry: ' + e));
+    }
+
+    function closeEntry() {
+      document.getElementById('table-view').style.display = 'block';
+      document.getElementById('entry-viewer').style.display = 'none';
+    }
+
+    function renderMarkdown(md) {
+      // Simple markdown renderer
+      let html = md
+        .replace(/^### (.+)$/gm, '<h3>$1</h3>')
+        .replace(/^## (.+)$/gm, '<h2>$1</h2>')
+        .replace(/^# (.+)$/gm, '<h1>$1</h1>')
+        .replace(/^> (.+)$/gm, '<blockquote>$1</blockquote>')
+        .replace(/^---$/gm, '<hr>')
+        .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\*(.+?)\*/g, '<em>$1</em>')
+        .replace(/`([^`]+)`/g, '<code>$1</code>')
+        .replace(/^- (.+)$/gm, '<li>$1</li>')
+        .replace(/^\| (.+)$/gm, (match) => {
+          const cells = match.split('|').filter(c => c.trim());
+          if (cells.some(c => /^[-:]+$/.test(c.trim()))) return '';
+          const tag = 'td';
+          return '<tr>' + cells.map(c => `<${tag}>${c.trim()}</${tag}>`).join('') + '</tr>';
+        });
+
+      // Wrap consecutive <li> in <ul>
+      html = html.replace(/((?:<li>.*<\/li>\n?)+)/g, '<ul>$1</ul>');
+      // Wrap consecutive <tr> in <table>
+      html = html.replace(/((?:<tr>.*<\/tr>\n?)+)/g, '<table>$1</table>');
+      // Paragraphs for remaining text
+      html = html.replace(/^(?!<[hublot]|<\/|$)(.+)$/gm, '<p>$1</p>');
+
+      return html;
+    }
+  </script>
+</body>
+</html>
