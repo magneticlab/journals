@@ -4,125 +4,108 @@ import { computed } from 'vue'
 const props = defineProps({
   metrics: Object,
   brandColor: { type: String, default: '#6395ff' },
-  size: { type: Number, default: 240 },
+  size: { type: Number, default: 260 },
 })
 
 const keys = computed(() => Object.keys(props.metrics || {}))
 const values = computed(() => keys.value.map(k => props.metrics[k].score))
-const labels = computed(() => keys.value.map(k => props.metrics[k].label))
+const labels = computed(() => keys.value.map(k => {
+  const l = props.metrics[k].label
+  // Shorten for display
+  if (l === 'Output Volume') return 'Output'
+  return l
+}))
 const n = computed(() => keys.value.length)
 const cx = computed(() => props.size / 2)
 const cy = computed(() => props.size / 2)
-const radius = computed(() => props.size / 2 - 32)
+const r = computed(() => props.size / 2 - 36)
 
-function point(i, r) {
-  const angle = (Math.PI * 2 * i) / n.value - Math.PI / 2
-  return {
-    x: cx.value + Math.cos(angle) * radius.value * r,
-    y: cy.value + Math.sin(angle) * radius.value * r,
-  }
+function pt(i, ratio) {
+  const a = (Math.PI * 2 * i) / n.value - Math.PI / 2
+  return [cx.value + Math.cos(a) * r.value * ratio, cy.value + Math.sin(a) * r.value * ratio]
 }
 
-const rings = [0.2, 0.4, 0.6, 0.8, 1.0]
-
-function ringPath(r) {
-  const pts = Array.from({ length: n.value }, (_, i) => point(i, r))
-  return pts.map((p, i) => `${i === 0 ? 'M' : 'L'}${p.x},${p.y}`).join(' ') + ' Z'
+function hexPath(ratio) {
+  return Array.from({ length: n.value }, (_, i) => {
+    const [x, y] = pt(i, ratio)
+    return `${i === 0 ? 'M' : 'L'}${x.toFixed(1)},${y.toFixed(1)}`
+  }).join(' ') + ' Z'
 }
 
 const dataPath = computed(() => {
-  const pts = values.value.map((v, i) => point(i, v / 100))
-  return pts.map((p, i) => `${i === 0 ? 'M' : 'L'}${p.x},${p.y}`).join(' ') + ' Z'
+  return values.value.map((v, i) => {
+    const [x, y] = pt(i, v / 100)
+    return `${i === 0 ? 'M' : 'L'}${x.toFixed(1)},${y.toFixed(1)}`
+  }).join(' ') + ' Z'
 })
 
-function labelPos(i) {
-  const angle = (Math.PI * 2 * i) / n.value - Math.PI / 2
-  const lr = radius.value + 22
-  return { x: cx.value + Math.cos(angle) * lr, y: cy.value + Math.sin(angle) * lr }
+function labelXY(i) {
+  const a = (Math.PI * 2 * i) / n.value - Math.PI / 2
+  const lr = r.value + 24
+  return [cx.value + Math.cos(a) * lr, cy.value + Math.sin(a) * lr]
 }
 
-// Average score for stroke color
-const avgScore = computed(() => {
-  const sum = values.value.reduce((a, b) => a + b, 0)
-  return sum / values.value.length
-})
-
-function scoreColor(s) {
-  if (s >= 80) return '#34d399'
-  if (s >= 60) return '#6395ff'
-  if (s >= 40) return '#fbbf24'
-  return '#f87171'
+function scoreXY(i) {
+  const v = values.value[i]
+  const a = (Math.PI * 2 * i) / n.value - Math.PI / 2
+  const sr = r.value * (v / 100) + 14
+  return [cx.value + Math.cos(a) * sr, cy.value + Math.sin(a) * sr]
 }
 
-const strokeColor = computed(() => scoreColor(avgScore.value))
-
-// Unique ID for gradient
-const gradId = computed(() => 'radar-grad-' + Math.random().toString(36).slice(2, 8))
+const uid = 'r' + Math.random().toString(36).slice(2, 6)
 </script>
 
 <template>
-  <div class="radar-wrap">
+  <div class="radar">
     <svg :width="size" :height="size" :viewBox="`0 0 ${size} ${size}`">
       <defs>
-        <!-- Radial gradient: red center → amber → blue → green edge -->
-        <radialGradient :id="gradId" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stop-color="#f87171" stop-opacity="0.25" />
-          <stop offset="30%" stop-color="#fbbf24" stop-opacity="0.18" />
-          <stop offset="60%" stop-color="#6395ff" stop-opacity="0.14" />
-          <stop offset="100%" stop-color="#34d399" stop-opacity="0.12" />
+        <radialGradient :id="uid + '-fill'">
+          <stop offset="0%" :stop-color="brandColor" stop-opacity="0.35" />
+          <stop offset="100%" :stop-color="brandColor" stop-opacity="0.06" />
         </radialGradient>
+        <filter :id="uid + '-glow'">
+          <feGaussianBlur stdDeviation="6" result="blur" />
+          <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
+        </filter>
       </defs>
 
-      <!-- Zone rings with color tint -->
-      <path :d="ringPath(0.4)" fill="rgba(248,113,113,0.04)" stroke="none" />
-      <path :d="ringPath(0.6)" fill="rgba(251,191,36,0.03)" stroke="none" />
-      <path :d="ringPath(0.8)" fill="rgba(99,149,255,0.02)" stroke="none" />
-      <path :d="ringPath(1.0)" fill="rgba(52,211,153,0.02)" stroke="none" />
+      <!-- Grid — very subtle -->
+      <path v-for="ring in [0.25, 0.5, 0.75, 1.0]" :key="ring" :d="hexPath(ring)"
+        fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="0.5" />
 
-      <!-- Grid rings -->
-      <path
-        v-for="r in rings" :key="r"
-        :d="ringPath(r)"
-        fill="none"
-        :stroke="r === 1 ? 'rgba(255,255,255,0.08)' : 'rgba(255,255,255,0.04)'"
-        stroke-width="1"
-      />
+      <!-- Spokes -->
+      <line v-for="i in n" :key="'s'+i"
+        :x1="cx" :y1="cy" :x2="pt(i-1,1)[0]" :y2="pt(i-1,1)[1]"
+        stroke="rgba(255,255,255,0.03)" stroke-width="0.5" />
 
-      <!-- Axis lines -->
-      <line
-        v-for="i in n" :key="'axis-'+i"
-        :x1="cx" :y1="cy"
-        :x2="point(i - 1, 1).x" :y2="point(i - 1, 1).y"
-        stroke="rgba(255,255,255,0.04)" stroke-width="1"
-      />
+      <!-- Data shape — glow layer -->
+      <path :d="dataPath" :fill="`url(#${uid}-fill)`"
+        :stroke="brandColor" stroke-width="1.5" stroke-linejoin="round"
+        :filter="`url(#${uid}-glow)`" opacity="0.5" />
 
-      <!-- Data fill — radial gradient from red center to green edge -->
-      <path
-        :d="dataPath"
-        :fill="`url(#${gradId})`"
-        :stroke="strokeColor"
-        stroke-width="1.5"
-        stroke-linejoin="round"
-        stroke-opacity="0.7"
-      />
+      <!-- Data shape — crisp layer -->
+      <path :d="dataPath" :fill="`url(#${uid}-fill)`"
+        :stroke="brandColor" stroke-width="1.5" stroke-linejoin="round"
+        stroke-opacity="0.8" />
 
-      <!-- Labels -->
-      <text
-        v-for="(label, i) in labels" :key="'lbl-'+i"
-        :x="labelPos(i).x" :y="labelPos(i).y"
+      <!-- Score values at each vertex -->
+      <template v-for="(v, i) in values" :key="'v'+i">
+        <text :x="scoreXY(i)[0]" :y="scoreXY(i)[1]"
+          text-anchor="middle" dominant-baseline="middle"
+          class="score-num" :fill="brandColor">{{ v }}</text>
+      </template>
+
+      <!-- Axis labels -->
+      <text v-for="(label, i) in labels" :key="'l'+i"
+        :x="labelXY(i)[0]" :y="labelXY(i)[1]"
         text-anchor="middle" dominant-baseline="middle"
-        class="radar-label"
-      >{{ label.split(' ')[0] }}</text>
+        class="axis-label">{{ label }}</text>
     </svg>
   </div>
 </template>
 
 <style scoped>
-.radar-wrap {
-  display: flex; align-items: center; justify-content: center;
-}
-.radar-label {
-  font-size: 9px; font-weight: 600; text-transform: uppercase;
-  letter-spacing: 0.06em; fill: var(--text-muted);
-}
+.radar { display: flex; align-items: center; justify-content: center; }
+.axis-label { font-size: 8.5px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; fill: rgba(255,255,255,0.3); }
+.score-num { font-size: 9px; font-weight: 700; font-variant-numeric: tabular-nums; }
 </style>
