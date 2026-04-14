@@ -6,23 +6,78 @@ onMounted(async () => {
   manifest.value = await (await fetch('/manifest.json')).json()
 })
 
-// Merge + sort recent for timeline
-const recent = computed(() => {
-  const all = [
-    ...manifest.value.work.slice(0, 10).map(e => ({ ...e, type: 'work' })),
-    ...manifest.value.daily.slice(0, 10).map(e => ({ ...e, type: 'daily' })),
-  ]
-  all.sort((a, b) => b.date.localeCompare(a.date))
-  // Deduplicate by date — keep work if both exist
-  const seen = new Map()
-  for (const e of all) {
-    const key = e.date + e.type
-    if (!seen.has(key)) seen.set(key, e)
+// Consolidate into day cards
+const days = computed(() => {
+  const map = new Map()
+  for (const e of manifest.value.work) {
+    if (!map.has(e.date)) map.set(e.date, { date: e.date, day: e.day, display: e.display })
+    map.get(e.date).work = e
   }
-  return [...seen.values()].slice(0, 12)
+  for (const e of manifest.value.daily) {
+    if (!map.has(e.date)) map.set(e.date, { date: e.date, day: e.day, display: e.display })
+    map.get(e.date).daily = e
+  }
+  return [...map.values()].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 21)
 })
 
-// Mini sparklines (last 7 days)
+// Group by week (current week) then month
+const grouped = computed(() => {
+  const now = new Date()
+  const groups = []
+  let currentGroup = null
+
+  for (const d of days.value) {
+    const dt = new Date(d.date + 'T12:00:00')
+    const diffDays = Math.floor((now - dt) / 86400000)
+    let groupKey, groupLabel
+
+    if (diffDays < 7) {
+      groupKey = 'this-week'
+      groupLabel = 'This Week'
+    } else if (diffDays < 14) {
+      groupKey = 'last-week'
+      groupLabel = 'Last Week'
+    } else {
+      const m = d.date.slice(0, 7)
+      const months = ['', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+      groupKey = m
+      groupLabel = `${months[parseInt(m.slice(5))]} ${m.slice(0, 4)}`
+    }
+
+    if (!currentGroup || currentGroup.key !== groupKey) {
+      currentGroup = { key: groupKey, label: groupLabel, items: [] }
+      groups.push(currentGroup)
+    }
+    currentGroup.items.push(d)
+  }
+  return groups
+})
+
+// Day label: "Monday" for this week, "Monday 14" for older
+function dayLabel(d, groupKey) {
+  if (groupKey === 'this-week') return d.day
+  return d.day
+}
+function dateNum(d) {
+  return parseInt(d.date.slice(8))
+}
+
+// Quick summary per day
+function daySummary(d) {
+  const parts = []
+  if (d.work) {
+    const s = d.work.stats
+    if (s?.sessions) parts.push(`${s.sessions} session${s.sessions > 1 ? 's' : ''}`)
+    if (s?.commits) parts.push(`${s.commits} commit${s.commits > 1 ? 's' : ''}`)
+  }
+  if (d.daily) {
+    const s = d.daily.stats
+    if (s?.commands) parts.push(`${s.commands} commands`)
+  }
+  return parts.join(' · ')
+}
+
+// Mini sparklines
 function spark7(list, key) {
   const slice = list.slice(0, 7).reverse()
   const vals = slice.map(e => e.stats?.[key] || 0)
@@ -39,7 +94,6 @@ const dailySpark = computed(() => spark7(manifest.value.daily, 'commits'))
 
       <!-- Journal Cards -->
       <div class="cards">
-        <!-- WORK -->
         <router-link to="/work" class="card card-work">
           <div class="card-head">
             <div class="card-icon icon-work">
@@ -69,7 +123,6 @@ const dailySpark = computed(() => spark7(manifest.value.daily, 'commits'))
           </div>
         </router-link>
 
-        <!-- DAILY -->
         <router-link to="/daily" class="card card-daily">
           <div class="card-head">
             <div class="card-icon icon-daily">
@@ -100,26 +153,48 @@ const dailySpark = computed(() => spark7(manifest.value.daily, 'commits'))
         </router-link>
       </div>
 
-      <!-- Recent Timeline -->
+      <!-- Timeline -->
       <section class="recent-section">
         <p class="section-label">Recent Activity</p>
+
         <div class="timeline">
-          <router-link
-            v-for="entry in recent"
-            :key="entry.type + entry.date"
-            :to="`/${entry.type}/${entry.date}`"
-            class="tl-row"
-          >
-            <div class="tl-line"></div>
-            <div :class="['tl-dot', entry.type === 'work' ? 'dot-work' : 'dot-daily']"></div>
-            <div class="tl-content">
-              <div class="tl-top">
-                <span class="tl-date">{{ entry.date }}</span>
-                <span :class="['tl-badge', entry.type === 'work' ? 'badge-work' : 'badge-daily']">{{ entry.type === 'work' ? 'Work' : 'Daily' }}</span>
-              </div>
-              <p class="tl-summary">{{ entry.summary }}</p>
+          <div v-for="group in grouped" :key="group.key" class="tl-group">
+            <!-- Group header -->
+            <div class="group-header">
+              <div class="group-dot"></div>
+              <span class="group-label">{{ group.label }}</span>
             </div>
-          </router-link>
+
+            <!-- Day cards -->
+            <div class="group-entries">
+              <div v-for="d in group.items" :key="d.date" class="day-card">
+                <div class="day-line"></div>
+                <div class="day-dot"></div>
+                <div class="day-content">
+                  <!-- Day heading -->
+                  <div class="day-head">
+                    <div class="day-name-block">
+                      <span class="day-name">{{ d.day }}</span>
+                      <span class="day-num">{{ dateNum(d) }}</span>
+                    </div>
+                    <span class="day-summary-text">{{ daySummary(d) }}</span>
+                  </div>
+
+                  <!-- Work + Daily rows inside the card -->
+                  <div class="day-rows">
+                    <router-link v-if="d.work" :to="`/work/${d.date}`" class="day-row row-work">
+                      <span class="row-badge badge-work">Work</span>
+                      <span class="row-summary">{{ d.work.summary }}</span>
+                    </router-link>
+                    <router-link v-if="d.daily" :to="`/daily/${d.date}`" class="day-row row-daily">
+                      <span class="row-badge badge-daily">Daily</span>
+                      <span class="row-summary">{{ d.daily.summary }}</span>
+                    </router-link>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -134,29 +209,23 @@ const dailySpark = computed(() => spark7(manifest.value.daily, 'commits'))
 
 /* Cards */
 .cards { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 40px; }
-.card {
-  border-radius: 14px; padding: 24px; transition: border-color 0.2s; display: block;
-}
+.card { border-radius: 14px; padding: 24px; transition: border-color 0.2s; display: block; }
 .card-work { background: rgba(59,130,246,0.04); border: 1px solid rgba(59,130,246,0.15); }
 .card-work:hover { border-color: rgba(59,130,246,0.3); }
 .card-daily { background: rgba(34,197,94,0.04); border: 1px solid rgba(34,197,94,0.15); }
 .card-daily:hover { border-color: rgba(34,197,94,0.3); }
-
 .card-head { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 16px; }
 .card-icon { display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 10px; }
 .icon-work { background: rgba(59,130,246,0.1); color: var(--blue); }
 .icon-daily { background: rgba(34,197,94,0.1); color: var(--green); }
 .card-count { font-size: 12px; font-weight: 600; color: var(--text-muted); background: var(--bg-elevated); padding: 3px 10px; border-radius: 6px; }
-
 .card-label { font-family: var(--serif); font-size: 24px; font-weight: 400; color: var(--text-heading); margin-bottom: 4px; }
 .card-desc { font-size: 13px; color: var(--text-muted); line-height: 1.5; margin-bottom: 20px; }
-
 .card-bottom { display: flex; align-items: flex-end; justify-content: space-between; padding-top: 16px; border-top: 1px solid var(--border); }
 .card-stats { display: flex; gap: 24px; }
 .cstat { display: flex; flex-direction: column; gap: 2px; }
 .cstat-val { font-size: 18px; font-weight: 700; color: var(--text-heading); font-variant-numeric: tabular-nums; }
 .cstat-label { font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); }
-
 .mini-spark { display: flex; align-items: flex-end; gap: 4px; }
 .spark-hint { font-size: 9px; color: var(--text-muted); writing-mode: vertical-rl; transform: rotate(180deg); margin-bottom: 2px; }
 .spark-bars { display: flex; align-items: flex-end; gap: 2px; height: 32px; }
@@ -164,26 +233,60 @@ const dailySpark = computed(() => spark7(manifest.value.daily, 'commits'))
 .bar-work { background: rgba(59,130,246,0.5); }
 .bar-daily { background: rgba(34,197,94,0.5); }
 
-/* Recent Timeline */
-.section-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; color: var(--text-muted); margin-bottom: 12px; }
-.timeline { position: relative; padding-left: 4px; }
-.tl-row {
-  display: flex; align-items: stretch; position: relative;
-  border-radius: 8px; transition: background 0.1s; margin-left: 1px;
+/* Timeline */
+.section-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; color: var(--text-muted); margin-bottom: 16px; }
+.timeline { position: relative; }
+
+/* Group header */
+.tl-group { margin-bottom: 4px; }
+.group-header {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 0; position: sticky; top: 52px;
+  background: var(--bg); z-index: 10;
 }
-.tl-row:hover { background: var(--bg-card); }
-.tl-row:hover .tl-dot { transform: scale(1.3); }
-.tl-line { position: absolute; left: 4px; top: 0; bottom: 0; width: 1px; background: var(--border); }
-.tl-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; margin-top: 14px; margin-right: 14px; position: relative; z-index: 1; transition: all 0.15s; }
-.dot-work { background: var(--blue); border: 2px solid rgba(59,130,246,0.3); }
-.dot-daily { background: var(--green); border: 2px solid rgba(34,197,94,0.3); }
-.tl-content { flex: 1; padding: 8px 12px 8px 0; }
-.tl-top { display: flex; align-items: center; gap: 8px; margin-bottom: 2px; }
-.tl-date { font-size: 13px; font-weight: 500; color: var(--text-strong); font-variant-numeric: tabular-nums; }
-.tl-badge { font-size: 9px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; padding: 2px 7px; border-radius: 4px; }
+.group-dot { width: 10px; height: 10px; border-radius: 50%; border: 2px solid var(--border-hover); background: var(--bg); flex-shrink: 0; }
+.group-label { font-family: var(--serif); font-size: 15px; color: var(--text-heading); }
+
+/* Day card */
+.group-entries { padding-left: 4px; }
+.day-card { display: flex; align-items: stretch; position: relative; margin-left: 1px; }
+.day-line { position: absolute; left: 4px; top: 0; bottom: 0; width: 1px; background: var(--border); }
+.day-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--border-hover); border: 1.5px solid var(--border); flex-shrink: 0; margin-top: 18px; margin-right: 14px; position: relative; z-index: 1; transition: all 0.15s; }
+.day-card:hover .day-dot { background: var(--text-muted); transform: scale(1.3); }
+
+.day-content {
+  flex: 1; margin: 4px 0;
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px;
+  overflow: hidden; transition: border-color 0.15s;
+}
+.day-card:hover .day-content { border-color: var(--border-hover); }
+
+.day-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 14px; border-bottom: 1px solid var(--border);
+}
+.day-name-block { display: flex; align-items: baseline; gap: 6px; }
+.day-name { font-size: 13px; font-weight: 600; color: var(--text-strong); }
+.day-num { font-size: 11px; color: var(--text-muted); font-variant-numeric: tabular-nums; }
+.day-summary-text { font-size: 11px; color: var(--text-muted); }
+
+.day-rows { display: flex; flex-direction: column; }
+.day-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 14px; transition: background 0.1s;
+  border-bottom: 1px solid var(--border);
+}
+.day-row:last-child { border-bottom: none; }
+.day-row:hover { background: var(--bg-elevated); }
+
+.row-badge { font-size: 9px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; padding: 2px 7px; border-radius: 4px; flex-shrink: 0; }
 .badge-work { color: var(--blue); background: var(--blue-bg); }
 .badge-daily { color: var(--green); background: var(--green-bg); }
-.tl-summary { font-size: 12px; color: var(--text-muted); line-height: 1.5; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-@media (max-width: 640px) { .cards { grid-template-columns: 1fr; } }
+.row-summary { font-size: 12px; color: var(--text-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; line-height: 1.4; }
+
+@media (max-width: 640px) {
+  .cards { grid-template-columns: 1fr; }
+  .day-head { flex-direction: column; align-items: flex-start; gap: 2px; }
+}
 </style>
