@@ -2,6 +2,7 @@
 import { ref, onMounted, onUnmounted, computed, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import CalendarPicker from '../components/CalendarPicker.vue'
+import RadarChart from '../components/RadarChart.vue'
 
 const props = defineProps({ journal: String, date: String })
 const router = useRouter()
@@ -126,8 +127,23 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
         <!-- Performance -->
         <section v-if="isWork && data.metrics" v-reveal class="section section-tint" :style="{ '--tint': brand + '06' }">
           <p class="section-label" :style="{ color: brand }">Performance</p>
-          <div class="metrics-grid">
-            <div v-for="(m, key) in data.metrics" :key="key" class="metric-card rv"><div class="metric-top"><span class="metric-label">{{ m.label }}</span><span class="metric-score" :style="{ color: scoreColor(m.score) }">{{ m.score }}</span></div><div class="metric-bar-bg"><div class="metric-bar" :style="{ width: m.score + '%', background: scoreColor(m.score) }"></div></div></div>
+          <div class="perf-layout">
+            <!-- Radar chart -->
+            <div class="perf-radar rv">
+              <RadarChart :metrics="data.metrics" :brandColor="brand" :size="240" />
+            </div>
+            <!-- Metric cards -->
+            <div class="perf-cards">
+              <div v-for="(m, key) in data.metrics" :key="key" class="metric-card rv">
+                <div class="metric-top">
+                  <span class="metric-label">{{ m.label }}</span>
+                  <span class="metric-score" :style="{ color: scoreColor(m.score) }">{{ m.score }}</span>
+                </div>
+                <div class="metric-bar-bg">
+                  <div class="metric-bar" :style="{ width: m.score + '%', background: scoreColor(m.score) }"></div>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -316,9 +332,21 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
 .duo-green .duo-label { color: #34d399; } .duo-red .duo-label { color: #f87171; }
 .duo-text { font-size: 13px; line-height: 1.6; color: var(--text); }
 
-/* Metrics */
-.metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-.metric-card { background: rgba(12,12,14,0.7); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+/* Performance layout */
+.perf-layout { display: grid; grid-template-columns: 240px 1fr; gap: 20px; align-items: start; }
+.perf-radar {
+  background: rgba(12,12,14,0.5); border: 1px solid var(--border);
+  border-radius: 14px; padding: 16px;
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  display: flex; align-items: center; justify-content: center;
+}
+.perf-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+
+.metric-card {
+  background: rgba(12,12,14,0.7); border: 1px solid var(--border);
+  border-radius: 10px; padding: 14px 16px;
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+}
 .metric-top { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 8px; }
 .metric-label { font-size: 11px; font-weight: 500; color: var(--text-muted); }
 .metric-score { font-size: 20px; font-weight: 700; font-variant-numeric: tabular-nums; }
@@ -444,7 +472,8 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
   .hero-h1 { font-size: 24px; }
   .hero-title-row { flex-direction: column; align-items: flex-start; gap: 12px; }
   .duo-grid { grid-template-columns: 1fr; }
-  .metrics-grid { grid-template-columns: 1fr 1fr; }
+  .perf-layout { grid-template-columns: 1fr; }
+  .perf-cards { grid-template-columns: 1fr 1fr; }
   .theme-grid { grid-template-columns: 1fr; }
 }
 </style>
