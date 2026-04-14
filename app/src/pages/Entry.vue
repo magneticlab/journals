@@ -11,6 +11,7 @@ const manifest = ref({ work: [], daily: [] })
 const loading = ref(true)
 const weather = ref(null)
 const showTimeline = ref(false)
+const perfView = ref('radar') // 'radar' or 'bars'
 const scrollY = ref(0)
 function onScroll() { scrollY.value = window.scrollY }
 
@@ -126,28 +127,52 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
 
         <!-- Performance -->
         <section v-if="isWork && data.metrics" v-reveal class="section">
-          <p class="section-label" :style="{ color: brand }">Performance</p>
-          <div class="perf-card">
-            <!-- Radar -->
+          <div class="perf-header">
+            <p class="section-label" :style="{ color: brand }">Performance</p>
+            <div class="perf-toggle">
+              <button :class="{ active: perfView === 'radar' }" @click="perfView = 'radar'">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5"/></svg>
+              </button>
+              <button :class="{ active: perfView === 'bars' }" @click="perfView = 'bars'">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="12" width="4" height="9" rx="1"/><rect x="10" y="5" width="4" height="16" rx="1"/><rect x="17" y="8" width="4" height="13" rx="1"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- View A: Radar + rings -->
+          <div v-if="perfView === 'radar'" class="perf-card">
             <div class="perf-radar rv">
               <RadarChart :metrics="data.metrics" :brandColor="brand" :size="280" />
             </div>
-            <!-- Stats ring grid -->
-            <div class="perf-stats">
-              <div v-for="(m, key) in data.metrics" :key="key" class="stat-ring rv">
-                <div class="ring-visual">
-                  <svg width="52" height="52" viewBox="0 0 52 52">
-                    <circle cx="26" cy="26" r="22" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="3" />
-                    <circle cx="26" cy="26" r="22" fill="none"
-                      :stroke="scoreColor(m.score)" stroke-width="3"
+            <div class="perf-rings">
+              <div v-for="(m, key) in data.metrics" :key="key" class="ring-item rv">
+                <div class="ring-wrap">
+                  <svg width="58" height="58" viewBox="0 0 58 58">
+                    <circle cx="29" cy="29" r="24" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="4" />
+                    <circle cx="29" cy="29" r="24" fill="none"
+                      :stroke="scoreColor(m.score)" stroke-width="4"
                       stroke-linecap="round"
-                      :stroke-dasharray="`${m.score * 1.382} 200`"
-                      transform="rotate(-90 26 26)"
+                      :stroke-dasharray="`${m.score * 1.508} 200`"
+                      transform="rotate(-90 29 29)"
+                      class="ring-arc"
                     />
                   </svg>
-                  <span class="ring-num" :style="{ color: scoreColor(m.score) }">{{ m.score }}</span>
+                  <span class="ring-score" :style="{ color: scoreColor(m.score) }">{{ m.score }}</span>
                 </div>
-                <span class="ring-label">{{ m.label }}</span>
+                <span class="ring-name">{{ m.label }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- View B: Horizontal bars -->
+          <div v-else class="perf-bars-card">
+            <div v-for="(m, key) in data.metrics" :key="key" class="bar-row rv">
+              <div class="bar-info">
+                <span class="bar-label">{{ m.label }}</span>
+                <span class="bar-score" :style="{ color: scoreColor(m.score) }">{{ m.score }}</span>
+              </div>
+              <div class="bar-track">
+                <div class="bar-fill" :style="{ width: m.score + '%', background: `linear-gradient(90deg, ${scoreColor(m.score)}40, ${scoreColor(m.score)})` }"></div>
               </div>
             </div>
           </div>
@@ -338,29 +363,52 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
 .duo-green .duo-label { color: #34d399; } .duo-red .duo-label { color: #f87171; }
 .duo-text { font-size: 13px; line-height: 1.6; color: var(--text); }
 
-/* Performance — athlete card */
+/* Performance */
+.perf-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.perf-toggle { display: flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+.perf-toggle button {
+  display: flex; align-items: center; justify-content: center;
+  width: 36px; height: 32px; border: none; cursor: pointer;
+  background: transparent; color: var(--text-muted);
+  transition: all 0.15s; font-family: inherit;
+}
+.perf-toggle button:first-child { border-right: 1px solid var(--border); }
+.perf-toggle button.active { background: var(--bg-elevated); color: var(--text-heading); }
+.perf-toggle button:hover:not(.active) { color: var(--text-strong); }
+
+/* View A: Radar + rings */
 .perf-card {
-  display: flex; align-items: center; gap: 16px;
+  display: flex; align-items: center; gap: 8px;
   background: rgba(12,12,14,0.7); border: 1px solid var(--border);
-  border-radius: 16px; padding: 20px;
+  border-radius: 16px; padding: 16px;
   backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
 }
 .perf-radar { flex-shrink: 0; }
-.perf-stats {
-  flex: 1; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;
-}
-.stat-ring {
-  display: flex; flex-direction: column; align-items: center; gap: 6px;
-  padding: 12px 4px;
-}
-.ring-visual { position: relative; width: 52px; height: 52px; }
-.ring-visual svg { display: block; }
-.ring-visual circle:last-child { transition: stroke-dasharray 0.8s var(--ease-spring); }
-.ring-num {
+.perf-rings { flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
+.ring-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 10px; transition: background 0.15s; }
+.ring-item:hover { background: rgba(255,255,255,0.03); }
+.ring-wrap { position: relative; width: 58px; height: 58px; flex-shrink: 0; }
+.ring-wrap svg { display: block; }
+.ring-arc { transition: stroke-dasharray 0.8s var(--ease-spring); }
+.ring-score {
   position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
-  font-size: 14px; font-weight: 700; font-variant-numeric: tabular-nums;
+  font-size: 16px; font-weight: 700; font-variant-numeric: tabular-nums;
 }
-.ring-label { font-size: 9px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); text-align: center; }
+.ring-name { font-size: 11px; font-weight: 500; color: var(--text-muted); line-height: 1.3; }
+
+/* View B: Horizontal bars */
+.perf-bars-card {
+  background: rgba(12,12,14,0.7); border: 1px solid var(--border);
+  border-radius: 16px; padding: 20px 24px;
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  display: flex; flex-direction: column; gap: 14px;
+}
+.bar-row { display: flex; flex-direction: column; gap: 6px; }
+.bar-info { display: flex; align-items: baseline; justify-content: space-between; }
+.bar-label { font-size: 12px; font-weight: 500; color: var(--text-muted); }
+.bar-score { font-size: 18px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.bar-track { height: 6px; background: rgba(255,255,255,0.04); border-radius: 3px; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 3px; transition: width 0.6s var(--ease-spring); }
 
 /* Did */
 .did-list { display: flex; flex-direction: column; gap: 4px; }
@@ -482,7 +530,7 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
   .hero-title-row { flex-direction: column; align-items: flex-start; gap: 12px; }
   .duo-grid { grid-template-columns: 1fr; }
   .perf-card { flex-direction: column; }
-  .perf-stats { grid-template-columns: 1fr 1fr 1fr; }
+  .perf-rings { grid-template-columns: 1fr 1fr; }
   .theme-grid { grid-template-columns: 1fr; }
 }
 </style>
