@@ -4,6 +4,7 @@ import { useRouter } from 'vue-router'
 import CalendarPicker from '../components/CalendarPicker.vue'
 import RadarChart from '../components/RadarChart.vue'
 import ThemeSwitcher from '../components/ThemeSwitcher.vue'
+import { analyzeReflection } from '../services/claude'
 
 const props = defineProps({ journal: String, date: String })
 const router = useRouter()
@@ -15,9 +16,28 @@ const showTimeline = ref(false)
 const perfView = ref('radar') // 'radar' or 'bars'
 const reflection = ref(null)
 
+const reanalyzing = ref(false)
+
 function loadReflection() {
   const stored = JSON.parse(localStorage.getItem('reflections') || '{}')
   reflection.value = stored[props.date] || null
+}
+
+async function reanalyze() {
+  if (!reflection.value || reanalyzing.value) return
+  reanalyzing.value = true
+  const aiResult = await analyzeReflection({
+    scores: reflection.value.scores,
+    win: reflection.value.win,
+    improve: reflection.value.improve,
+  })
+  if (aiResult) {
+    reflection.value.ai = aiResult
+    const stored = JSON.parse(localStorage.getItem('reflections') || '{}')
+    stored[props.date] = reflection.value
+    localStorage.setItem('reflections', JSON.stringify(stored))
+  }
+  reanalyzing.value = false
 }
 
 // Extract concise highlights — max ~80 chars each
@@ -244,7 +264,12 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
 
         <!-- Daily Reflection — top of daily journal only -->
         <section v-if="!isWork && reflection" v-reveal class="section">
-          <p class="section-label" style="color: #34d399">Daily Reflection</p>
+          <div class="reflect-header">
+            <p class="section-label" style="color: #34d399">Daily Reflection</p>
+            <button v-if="!reflection.ai" class="reanalyze-btn" @click="reanalyze" :disabled="reanalyzing">
+              {{ reanalyzing ? 'Analyzing...' : '✨ Analyze with AI' }}
+            </button>
+          </div>
           <div class="reflect-card">
             <!-- AI Analysis -->
             <div v-if="reflection.ai" class="reflect-eval">
@@ -745,6 +770,17 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
 .fpath { font-size: 11px; font-family: ui-monospace, 'SF Mono', Consolas, monospace; color: var(--text-muted); padding-left: 18px; line-height: 1.8; }
 
 /* Reflection */
+.reflect-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.reflect-header .section-label { margin-bottom: 0; }
+.reanalyze-btn {
+  font-size: 11px; font-weight: 600; font-family: inherit;
+  padding: 6px 12px; border-radius: 7px; border: none;
+  background: rgba(52,211,153,0.12); color: #34d399;
+  cursor: pointer; transition: all 0.15s;
+}
+.reanalyze-btn:hover { background: rgba(52,211,153,0.2); }
+.reanalyze-btn:disabled { opacity: 0.5; cursor: wait; }
+
 .reflect-card {
   background: rgba(12,12,14,0.7); border: 1px solid var(--border);
   border-radius: 16px; padding: 24px;
