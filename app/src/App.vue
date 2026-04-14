@@ -1,9 +1,12 @@
 <script setup>
 import { ref, onMounted, onUnmounted, computed } from 'vue'
 import MeshGradient from './components/MeshGradient.vue'
+import BlobBackground from './components/BlobBackground.vue'
 import { useTheme } from './composables/useTheme'
+import { useAnimation } from './composables/useAnimation'
 
 const { current: theme } = useTheme()
+const { current: animation } = useAnimation()
 
 const scrollY = ref(0)
 function onScroll() { scrollY.value = window.scrollY }
@@ -16,7 +19,8 @@ const fadeBg = computed(() => theme.value === 'aurora' ? '#080b12' : '#0c0c0e')
 <template>
   <div class="layout">
     <div class="parallax-bg" :style="{ transform: `translateY(${scrollY * -0.3}px)` }">
-      <MeshGradient :key="theme" :palette="theme" />
+      <MeshGradient v-if="animation === 'ribbons'" :key="'r-'+theme" :palette="theme" />
+      <BlobBackground v-else-if="animation === 'blob'" :key="'b-'+theme" :palette="theme" />
       <div class="ribbon-fade" :style="{ background: `linear-gradient(to bottom, transparent 0%, ${fadeBg} 80%)` }"></div>
     </div>
     <div class="foreground">

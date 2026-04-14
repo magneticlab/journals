@@ -2,6 +2,7 @@
 import { ref, onMounted, onUnmounted, computed, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import ThemeSwitcher from '../components/ThemeSwitcher.vue'
+import AnimationSwitcher from '../components/AnimationSwitcher.vue'
 
 const props = defineProps({ journal: String })
 const router = useRouter()
@@ -93,6 +94,7 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
               <span class="wx-t">{{ wx.temp }}°</span>
               <span class="wx-l">{{ wx.l }}</span>
             </div>
+            <AnimationSwitcher />
             <ThemeSwitcher />
           </div>
         </div>

@@ -4,6 +4,7 @@ import { useRouter } from 'vue-router'
 import CalendarPicker from '../components/CalendarPicker.vue'
 import RadarChart from '../components/RadarChart.vue'
 import ThemeSwitcher from '../components/ThemeSwitcher.vue'
+import AnimationSwitcher from '../components/AnimationSwitcher.vue'
 import { analyzeReflection } from '../services/claude'
 
 const props = defineProps({ journal: String, date: String })
@@ -222,6 +223,7 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
               <span class="wx-t">{{ wx.temp }}°</span>
               <span class="wx-l">{{ wx.l }}</span>
             </div>
+            <AnimationSwitcher />
             <ThemeSwitcher />
           </div>
         </div>

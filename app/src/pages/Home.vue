@@ -2,6 +2,7 @@
 import { ref, onMounted, onUnmounted, computed } from 'vue'
 import ReflectModal from '../components/ReflectModal.vue'
 import ThemeSwitcher from '../components/ThemeSwitcher.vue'
+import AnimationSwitcher from '../components/AnimationSwitcher.vue'
 
 const manifest = ref({ work: [], daily: [] })
 const weather = ref(null)
@@ -171,6 +172,7 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll))
             <span class="wx-sep">·</span>
             <span class="wx-detail">{{ wxWind }} km/h</span>
           </div>
+          <AnimationSwitcher />
           <ThemeSwitcher />
           </div>
         </div>
