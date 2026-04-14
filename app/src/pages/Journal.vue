@@ -152,8 +152,8 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
         <div class="timeline">
           <div v-for="(items, month) in grouped" :key="month" class="month-group">
             <div class="month-header"><div class="month-dot" :style="{ background: brandColor, borderColor: brandColor + '40' }"></div><span class="month-label">{{ monthLabel(month) }}</span><span class="month-count">{{ items.length }}</span></div>
-            <div class="month-entries">
-              <div v-for="e in items" :key="e.date" class="entry-row" @click="router.push(`/${journal}/${e.date}`)">
+            <div v-reveal class="month-entries">
+              <div v-for="e in items" :key="e.date" class="entry-row rv" @click="router.push(`/${journal}/${e.date}`)">
                 <div class="entry-line"></div><div class="entry-dot" :style="{ background: brandColor + '60', borderColor: brandColor + '30' }"></div>
                 <div class="entry-content">
                   <div class="entry-top"><span class="entry-date">{{ e.date.slice(8) }}</span><span class="entry-day">{{ e.day?.slice(0, 3) }}</span>
@@ -191,7 +191,7 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
 .hero-sub { font-size: 14px; color: var(--text-muted); margin-left: 62px; }
 
 /* Body zone */
-.body-zone { position: relative; background: linear-gradient(to bottom, transparent 0%, #0c0c0e 150px); margin-top: -60px; padding-top: 60px; }
+.body-zone { position: relative; background: linear-gradient(to bottom, transparent 0%, #0c0c0e 120px); padding-top: 20px; min-height: 100vh; }
 .body { padding-bottom: 64px; }
 
 /* Featured */

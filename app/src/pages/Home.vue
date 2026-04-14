@@ -213,8 +213,8 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll))
               <div class="group-dot"></div>
               <span class="group-label">{{ group.label }}</span>
             </div>
-            <div class="group-entries">
-              <div v-for="d in group.items" :key="d.date" class="day-card">
+            <div v-reveal class="group-entries">
+              <div v-for="d in group.items" :key="d.date" class="day-card rv">
                 <div class="day-line"></div>
                 <div class="cal-sticker">
                   <span class="cal-day">{{ d.day?.slice(0, 3) }}</span>
@@ -281,6 +281,7 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll))
   background: linear-gradient(to bottom, transparent 0%, #0c0c0e 150px);
   margin-top: -80px;
   padding-top: 80px;
+  min-height: 100vh;
 }
 .body-fade { display: none; }
 .body-solid {

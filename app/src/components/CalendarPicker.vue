@@ -110,15 +110,13 @@ onUnmounted(() => document.removeEventListener('click', onClickOutside))
 <template>
   <div class="cal-wrapper" ref="wrapper">
     <!-- Trigger button -->
-    <button class="cal-trigger" @click="toggle">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <button class="cal-trigger" @click="toggle" title="Pick date">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
         <rect x="3" y="4" width="18" height="18" rx="2"/>
         <line x1="16" y1="2" x2="16" y2="6"/>
         <line x1="8" y1="2" x2="8" y2="6"/>
         <line x1="3" y1="10" x2="21" y2="10"/>
       </svg>
-      <span class="cal-date-text">{{ modelValue }}</span>
-      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
     </button>
 
     <!-- Dropdown -->
@@ -169,15 +167,15 @@ onUnmounted(() => document.removeEventListener('click', onClickOutside))
 .cal-wrapper { position: relative; }
 
 .cal-trigger {
-  display: flex; align-items: center; gap: 6px;
-  padding: 5px 10px; border-radius: 8px;
-  border: 1px solid var(--border); background: transparent;
-  color: var(--text); font-size: 12px; font-weight: 500;
-  font-family: inherit; font-variant-numeric: tabular-nums;
-  cursor: pointer; transition: all 0.15s;
+  display: flex; align-items: center; justify-content: center;
+  width: 40px; height: 40px; border-radius: 10px;
+  border: 1px solid var(--border); background: rgba(255,255,255,0.03);
+  color: var(--text-muted);
+  font-family: inherit; cursor: pointer;
+  transition: all 0.2s var(--ease-spring, cubic-bezier(0.16,1,0.3,1));
 }
-.cal-trigger:hover { border-color: var(--border-hover); color: var(--text-strong); }
-.cal-date-text { }
+.cal-trigger:hover { border-color: var(--border-hover); color: var(--text-heading); background: rgba(255,255,255,0.06); }
+.cal-date-text { display: none; }
 
 .cal-dropdown {
   position: absolute; top: calc(100% + 8px); right: 0;

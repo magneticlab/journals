@@ -85,16 +85,14 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
         <!-- Hero — parallax + fade -->
         <div v-if="data" class="hero" :style="heroStyle">
           <div class="hero-title-row">
+            <button @click="goToPrev" :disabled="!hasPrev" :class="['arrow-btn', { disabled: !hasPrev }]">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+            </button>
             <h1 class="hero-h1">{{ data.day }}, {{ data.display }}</h1>
-            <div class="date-nav">
-              <button @click="goToPrev" :disabled="!hasPrev" :class="['nav-btn', { disabled: !hasPrev }]">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
-              </button>
-              <CalendarPicker :modelValue="date" @update:modelValue="goTo" :availableDates="dates" :brandColor="brand" />
-              <button @click="goToNext" :disabled="!hasNext" :class="['nav-btn', { disabled: !hasNext }]">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
-              </button>
-            </div>
+            <button @click="goToNext" :disabled="!hasNext" :class="['arrow-btn', { disabled: !hasNext }]">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+            </button>
+            <CalendarPicker :modelValue="date" @update:modelValue="goTo" :availableDates="dates" :brandColor="brand" />
           </div>
           <p class="hero-sub">{{ summaryLine }}</p>
 
@@ -263,16 +261,21 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
 .wx-i { font-size: 16px; } .wx-t { font-weight: 600; color: var(--text-strong); font-size: 14px; } .wx-l { color: var(--text); }
 
 /* Hero */
-.hero { padding-bottom: 100px; will-change: transform, opacity; }
-.hero-title-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
-.hero-h1 { font-family: var(--serif); font-size: 36px; font-weight: 400; color: var(--text-heading); }
+.hero { padding-bottom: 48px; will-change: transform, opacity; }
+.hero-title-row { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+.hero-h1 { font-family: var(--serif); font-size: 36px; font-weight: 400; color: var(--text-heading); flex: 1; }
 .hero-sub { font-size: 14px; color: var(--text-muted); margin-bottom: 16px; }
 
-/* Date nav */
-.date-nav { display: flex; align-items: center; gap: 4px; }
-.nav-btn { padding: 6px; border-radius: 8px; border: none; background: none; cursor: pointer; color: var(--text-muted); transition: all 0.15s; display: flex; }
-.nav-btn:hover { background: rgba(255,255,255,0.05); color: var(--text-strong); }
-.nav-btn.disabled { color: var(--border); cursor: not-allowed; }
+/* Arrow buttons */
+.arrow-btn {
+  display: flex; align-items: center; justify-content: center;
+  width: 40px; height: 40px; border-radius: 10px; flex-shrink: 0;
+  border: 1px solid var(--border); background: rgba(255,255,255,0.03);
+  color: var(--text-muted); cursor: pointer;
+  transition: all 0.2s var(--ease-spring);
+}
+.arrow-btn:hover { border-color: var(--border-hover); color: var(--text-heading); background: rgba(255,255,255,0.06); }
+.arrow-btn.disabled { color: var(--border); cursor: not-allowed; opacity: 0.4; }
 
 /* Journal tabs — switch work/daily for this day */
 .journal-tabs { display: flex; gap: 4px; }
@@ -286,8 +289,8 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
 .jtab:hover { color: var(--text-strong); background: rgba(255,255,255,0.06); }
 .jtab.active { color: var(--text-heading); background: rgba(255,255,255,0.08); }
 
-/* Body zone — min-height prevents flicker on data reload */
-.body-zone { position: relative; background: linear-gradient(to bottom, transparent 0%, #0c0c0e 150px); margin-top: -60px; padding-top: 60px; min-height: 100vh; }
+/* Body zone */
+.body-zone { position: relative; background: linear-gradient(to bottom, transparent 0%, #0c0c0e 120px); padding-top: 20px; min-height: 100vh; }
 .body { padding-bottom: 64px; }
 .empty { padding: 80px 24px; text-align: center; font-size: 14px; color: var(--text-muted); }
 
