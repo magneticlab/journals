@@ -132,11 +132,12 @@ function daySummary(d) {
 }
 
 // Paired activity chart — last 14 days
+// Work = sessions, Daily = commands (different metrics, not duplicated)
 const activityBars = computed(() => {
   const workMap = new Map()
   const dailyMap = new Map()
-  for (const e of manifest.value.work) workMap.set(e.date, e.stats?.commits || 0)
-  for (const e of manifest.value.daily) dailyMap.set(e.date, e.stats?.commits || 0)
+  for (const e of manifest.value.work) workMap.set(e.date, e.stats?.sessions || 0)
+  for (const e of manifest.value.daily) dailyMap.set(e.date, e.stats?.commands || 0)
 
   const allDates = [...new Set([...workMap.keys(), ...dailyMap.keys()])].sort().reverse().slice(0, 14).reverse()
   const bars = allDates.map(date => ({
@@ -235,10 +236,10 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll))
         <!-- Paired Activity Chart -->
         <div v-if="activityBars.length" v-reveal class="mx activity-section">
           <div class="activity-header">
-            <p class="section-label">Daily Commits — Last 14 Days</p>
+            <p class="section-label">Activity — Last 14 Days</p>
             <div class="activity-legend">
-              <span class="legend-item"><span class="legend-dot dot-work"></span>Work</span>
-              <span class="legend-item"><span class="legend-dot dot-daily"></span>Daily</span>
+              <span class="legend-item"><span class="legend-dot dot-work"></span>Sessions</span>
+              <span class="legend-item"><span class="legend-dot dot-daily"></span>Commands</span>
             </div>
           </div>
           <div class="activity-chart">
