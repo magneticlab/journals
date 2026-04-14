@@ -111,7 +111,7 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
     <div class="body-zone">
       <div class="mx body">
         <!-- Featured -->
-        <div v-if="latest" class="featured" @click="router.push(`/${journal}/${latest.date}`)">
+        <div v-if="latest" v-reveal class="featured" @click="router.push(`/${journal}/${latest.date}`)">
           <div class="feat-row-top">
             <p class="feat-label" :style="{ color: brandColor }">Latest Report</p>
             <div class="feat-stats">
@@ -136,7 +136,7 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
         </div>
 
         <!-- Sparkline -->
-        <div class="spark-card">
+        <div v-reveal class="spark-card">
           <div class="spark-header"><p class="section-label">Commits</p>
             <div class="range-toggle"><button :class="{ active: sparkRange === 30 }" @click="sparkRange = 30">30d</button><button :class="{ active: sparkRange === 90 }" @click="sparkRange = 90">90d</button><button :class="{ active: sparkRange === 0 }" @click="sparkRange = 0">All</button></div>
           </div>
@@ -220,7 +220,11 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
 .range-toggle button { font-size: 11px; font-weight: 500; font-family: inherit; padding: 4px 12px; border: none; cursor: pointer; background: transparent; color: var(--text-muted); transition: all 0.15s; }
 .range-toggle button:not(:last-child) { border-right: 1px solid var(--border); }
 .range-toggle button.active { background: var(--bg-elevated); color: var(--text-heading); }
-.spark-chart { display: flex; gap: 2px; align-items: flex-end; height: 80px; }
+.spark-chart {
+  display: flex; gap: 2px; align-items: flex-end; height: 80px;
+  mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+}
 .spark-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 0; }
 .spark-bar-wrap { width: 100%; height: 64px; display: flex; align-items: flex-end; justify-content: center; }
 .spark-bar { width: 100%; min-height: 2px; border-radius: 2px 2px 1px 1px; position: relative; transition: height 0.3s; }

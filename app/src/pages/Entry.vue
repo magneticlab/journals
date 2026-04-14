@@ -116,71 +116,74 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
       <div v-else class="mx body">
 
         <!-- Went Right / Could Be Better -->
-        <div v-if="data.wentRight || data.couldBeBetter" class="duo-grid">
-          <div v-if="data.wentRight" class="duo-card duo-green"><div class="duo-icon">✓</div><div><p class="duo-label">Went Right</p><p class="duo-text">{{ data.wentRight }}</p></div></div>
-          <div v-if="data.couldBeBetter" class="duo-card duo-red"><div class="duo-icon duo-icon-red">!</div><div><p class="duo-label">Could Be Better</p><p class="duo-text">{{ data.couldBeBetter }}</p></div></div>
+        <div v-if="data.wentRight || data.couldBeBetter" v-reveal class="duo-grid">
+          <div v-if="data.wentRight" class="duo-card duo-green rv"><div class="duo-accent accent-green"></div><div class="duo-icon">✓</div><div><p class="duo-label">Went Right</p><p class="duo-text">{{ data.wentRight }}</p></div></div>
+          <div v-if="data.couldBeBetter" class="duo-card duo-red rv"><div class="duo-accent accent-red"></div><div class="duo-icon duo-icon-red">!</div><div><p class="duo-label">Could Be Better</p><p class="duo-text">{{ data.couldBeBetter }}</p></div></div>
         </div>
 
         <!-- Performance -->
-        <section v-if="isWork && data.metrics" class="section">
+        <section v-if="isWork && data.metrics" v-reveal class="section section-tint" :style="{ '--tint': brand + '06' }">
           <p class="section-label" :style="{ color: brand }">Performance</p>
           <div class="metrics-grid">
-            <div v-for="(m, key) in data.metrics" :key="key" class="metric-card"><div class="metric-top"><span class="metric-label">{{ m.label }}</span><span class="metric-score" :style="{ color: scoreColor(m.score) }">{{ m.score }}</span></div><div class="metric-bar-bg"><div class="metric-bar" :style="{ width: m.score + '%', background: scoreColor(m.score) }"></div></div></div>
+            <div v-for="(m, key) in data.metrics" :key="key" class="metric-card rv"><div class="metric-top"><span class="metric-label">{{ m.label }}</span><span class="metric-score" :style="{ color: scoreColor(m.score) }">{{ m.score }}</span></div><div class="metric-bar-bg"><div class="metric-bar" :style="{ width: m.score + '%', background: scoreColor(m.score) }"></div></div></div>
           </div>
         </section>
 
         <!-- What I Did -->
-        <section v-if="isWork && data.whatIDid?.length" class="section">
+        <section v-if="isWork && data.whatIDid?.length" v-reveal class="section">
           <p class="section-label">What I Did</p>
-          <div class="did-list"><div v-for="(item, i) in data.whatIDid" :key="i" class="did-item"><span class="did-num">{{ i + 1 }}</span><span class="did-text">{{ item }}</span></div></div>
+          <div class="did-list"><div v-for="(item, i) in data.whatIDid" :key="i" class="did-item rv"><span class="did-num">{{ i + 1 }}</span><span class="did-text">{{ item }}</span></div></div>
         </section>
 
         <!-- Focus Areas / Terminal Activity -->
-        <section v-if="(isWork && data.themes && Object.keys(data.themes).length) || (!isWork && data.categories && Object.keys(data.categories).length)" class="section">
+        <section v-if="(isWork && data.themes && Object.keys(data.themes).length) || (!isWork && data.categories && Object.keys(data.categories).length)" v-reveal class="section section-tint" :style="{ '--tint': brand + '04' }">
           <p class="section-label" :style="{ color: brand }">{{ isWork ? 'Focus Areas' : 'Terminal Activity' }}</p>
-          <div class="theme-grid"><div v-for="(count, name) in (isWork ? data.themes : data.categories)" :key="name" class="theme-card"><span class="theme-icon">{{ themeIcons[name] || '◆' }}</span><div class="theme-body"><span class="theme-name">{{ name }}</span><span class="theme-count">{{ count }} interactions</span></div></div></div>
+          <div class="theme-grid"><div v-for="(count, name) in (isWork ? data.themes : data.categories)" :key="name" class="theme-card rv"><span class="theme-icon">{{ themeIcons[name] || '◆' }}</span><div class="theme-body"><span class="theme-name">{{ name }}</span><span class="theme-count">{{ count }} interactions</span></div></div></div>
         </section>
 
         <!-- Activity by Hour -->
-        <section v-if="!isWork && data.activityByHour && Object.keys(data.activityByHour).length" class="section">
+        <section v-if="!isWork && data.activityByHour && Object.keys(data.activityByHour).length" v-reveal class="section">
           <p class="section-label" :style="{ color: brand }">Activity by Hour</p>
           <div class="hours-card"><div v-for="(count, hour) in data.activityByHour" :key="hour" class="hour-row"><span class="hour-label">{{ hour }}:00</span><div class="hour-track"><div class="hour-fill" :style="{ width: Math.min(count / Math.max(...Object.values(data.activityByHour)) * 100, 100) + '%', background: brand }"></div></div><span class="hour-n">{{ count }}</span></div></div>
         </section>
 
         <!-- Volume -->
-        <section v-if="isWork && (data.stats?.linesAdded || data.stats?.linesRemoved)" class="section">
+        <section v-if="isWork && (data.stats?.linesAdded || data.stats?.linesRemoved)" v-reveal class="section section-tint" style="--tint: rgba(52,211,153,0.04)">
           <p class="section-label">Code Volume</p>
-          <div class="vol-card"><div class="vol-bar"><div class="vol-add-bar" :style="{ flex: data.stats.linesAdded || 1 }"></div><div class="vol-del-bar" :style="{ flex: data.stats.linesRemoved || 1 }"></div></div><div class="vol-labels"><span class="vol-add">+{{ (data.stats.linesAdded||0).toLocaleString() }}</span><span class="vol-del">-{{ (data.stats.linesRemoved||0).toLocaleString() }}</span><span class="vol-files">{{ data.stats.filesChanged||0 }} files</span></div></div>
+          <div class="vol-card"><div class="vol-accent accent-green"></div><div class="vol-bar"><div class="vol-add-bar" :style="{ flex: data.stats.linesAdded || 1 }"></div><div class="vol-del-bar" :style="{ flex: data.stats.linesRemoved || 1 }"></div></div><div class="vol-labels"><span class="vol-add">+{{ (data.stats.linesAdded||0).toLocaleString() }}</span><span class="vol-del">-{{ (data.stats.linesRemoved||0).toLocaleString() }}</span><span class="vol-files">{{ data.stats.filesChanged||0 }} files</span></div></div>
         </section>
 
         <!-- Projects -->
-        <section v-if="isWork && data.projectsWip?.length" class="section">
+        <section v-if="isWork && data.projectsWip?.length" v-reveal class="section">
           <p class="section-label">Projects</p>
-          <div class="project-tags"><div v-for="(p, i) in data.projectsWip" :key="i" class="project-tag"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>{{ p }}</div></div>
+          <div class="project-tags"><div v-for="(p, i) in data.projectsWip" :key="i" class="project-tag rv"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>{{ p }}</div></div>
         </section>
 
         <!-- Docs -->
-        <section v-if="isWork && data.docsCreated?.length" class="section">
+        <section v-if="isWork && data.docsCreated?.length" v-reveal class="section section-tint" style="--tint: rgba(167,139,250,0.04)">
           <p class="section-label" style="color: var(--purple)">Docs Created</p>
-          <div class="docs-list"><div v-for="(doc, i) in data.docsCreated" :key="i" class="doc-row"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg><span class="doc-title">{{ doc.title }}</span><span class="doc-leader"></span><span class="doc-desc">{{ doc.description }}</span></div></div>
+          <div class="docs-list"><div v-for="(doc, i) in data.docsCreated" :key="i" class="doc-row rv"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg><span class="doc-title">{{ doc.title }}</span><span class="doc-leader"></span><span class="doc-desc">{{ doc.description }}</span></div></div>
         </section>
 
         <!-- Commands -->
-        <section v-if="!isWork && data.notableCommands?.length" class="section">
+        <section v-if="!isWork && data.notableCommands?.length" v-reveal class="section">
           <p class="section-label" :style="{ color: brand }">Notable Commands</p>
-          <div class="cmd-card"><div v-for="(cmd, i) in data.notableCommands.slice(0, 20)" :key="i" class="cmd-row"><span class="cmd-time">{{ cmd.time }}</span><code class="cmd-text">{{ cmd.command }}</code></div></div>
+          <div class="cmd-card"><div v-for="(cmd, i) in data.notableCommands.slice(0, 20)" :key="i" class="cmd-row rv"><span class="cmd-time">{{ cmd.time }}</span><code class="cmd-text">{{ cmd.command }}</code></div></div>
         </section>
 
         <!-- Git -->
-        <section v-if="data.gitActivity?.length" class="section">
+        <section v-if="data.gitActivity?.length" v-reveal class="section section-tint" style="--tint: rgba(52,211,153,0.03)">
           <p class="section-label" style="color: var(--green)">Git Activity</p>
-          <div v-for="repo in data.gitActivity" :key="repo.repo" class="git-card"><div class="repo-head"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="1.5"><path d="M6 3v12"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/></svg><span class="repo-name">{{ repo.repo }}</span><span v-if="repo.stat" class="repo-stat">{{ repo.stat }}</span></div><div class="commits"><div v-for="c in repo.commits" :key="c.hash" class="commit"><code class="chash">{{ c.hash }}</code><span class="ctime">{{ c.time }}</span><span class="cleader"></span><span class="cmsg">{{ c.message }}</span></div></div></div>
+          <div v-for="repo in data.gitActivity" :key="repo.repo" class="git-card rv">
+            <div class="git-accent"></div>
+            <div class="git-inner"><div class="repo-head"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="1.5"><path d="M6 3v12"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/></svg><span class="repo-name">{{ repo.repo }}</span><span v-if="repo.stat" class="repo-stat">{{ repo.stat }}</span></div><div class="commits"><div v-for="c in repo.commits" :key="c.hash" class="commit"><code class="chash">{{ c.hash }}</code><span class="ctime">{{ c.time }}</span><span class="cleader"></span><span class="cmsg">{{ c.message }}</span></div></div></div>
+          </div>
         </section>
 
         <!-- Files -->
-        <section v-if="!isWork && data.fileGroups && Object.keys(data.fileGroups).length" class="section">
+        <section v-if="!isWork && data.fileGroups && Object.keys(data.fileGroups).length" v-reveal class="section">
           <p class="section-label">Files Modified</p>
-          <div class="files-card"><div v-for="(files, dir) in data.fileGroups" :key="dir" class="fgroup"><p class="fdir"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>{{ dir }}/ <span class="fcount">({{ files.length }})</span></p><p v-for="f in files" :key="f" class="fpath">{{ f }}</p></div></div>
+          <div class="files-card"><div v-for="(files, dir) in data.fileGroups" :key="dir" class="fgroup rv"><p class="fdir"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>{{ dir }}/ <span class="fcount">({{ files.length }})</span></p><p v-for="f in files" :key="f" class="fpath">{{ f }}</p></div></div>
         </section>
       </div>
       <div v-if="data?.generatedAt" class="footer"><p class="footer-text">Generated {{ genTime }}</p></div>
@@ -233,9 +236,15 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
 .section { margin-bottom: 32px; }
 .section-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; color: var(--text-muted); margin-bottom: 12px; }
 
+/* Section tinting */
+.section-tint { background: var(--tint, transparent); border-radius: 14px; padding: 20px; margin-left: -20px; margin-right: -20px; }
+
 /* Duo */
 .duo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 32px; }
-.duo-card { border-radius: 12px; padding: 16px 18px; display: flex; align-items: flex-start; gap: 12px; }
+.duo-card { border-radius: 12px; padding: 16px 18px; display: flex; align-items: flex-start; gap: 12px; position: relative; overflow: hidden; }
+.duo-accent { position: absolute; left: 0; top: 0; bottom: 0; width: 3px; }
+.accent-green { background: #34d399; }
+.accent-red { background: #f87171; }
 .duo-green { background: rgba(52,211,153,0.06); border: 1px solid rgba(52,211,153,0.12); }
 .duo-red { background: rgba(248,113,113,0.05); border: 1px solid rgba(248,113,113,0.1); }
 .duo-icon { width: 24px; height: 24px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; background: rgba(52,211,153,0.15); color: #34d399; }
@@ -301,7 +310,9 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
 .cmd-text { font-size: 11px; font-family: ui-monospace, 'SF Mono', Consolas, monospace; color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 /* Git */
-.git-card { background: rgba(12,12,14,0.6); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; margin-bottom: 10px; backdrop-filter: blur(8px); }
+.git-card { background: rgba(12,12,14,0.6); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 10px; backdrop-filter: blur(8px); display: flex; overflow: hidden; }
+.git-accent { width: 3px; background: var(--green); flex-shrink: 0; }
+.git-inner { flex: 1; padding: 16px 18px; }
 .repo-head { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
 .repo-name { font-size: 14px; font-weight: 600; color: var(--text-strong); } .repo-stat { font-size: 11px; color: var(--text-muted); margin-left: auto; }
 .commits { display: flex; flex-direction: column; gap: 4px; }
