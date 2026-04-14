@@ -172,7 +172,7 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
                 <span class="bar-score" :style="{ color: scoreColor(m.score) }">{{ m.score }}</span>
               </div>
               <div class="bar-track">
-                <div class="bar-fill" :style="{ width: m.score + '%', background: `linear-gradient(90deg, ${scoreColor(m.score)}40, ${scoreColor(m.score)})` }"></div>
+                <div class="bar-fill" :style="{ width: m.score + '%', background: scoreColor(m.score) }"></div>
               </div>
             </div>
           </div>
