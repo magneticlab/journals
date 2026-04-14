@@ -92,7 +92,7 @@ onMounted(async () => {
 .card:hover { border-color: var(--border-hover); }
 .card-icon { color: var(--text-muted); margin-bottom: 16px; }
 .card-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
-.card-label { font-size: 16px; font-weight: 700; color: var(--text-heading); letter-spacing: -0.01em; }
+.card-label { font-family: var(--serif); font-size: 20px; font-weight: 400; color: var(--text-heading); }
 .badge { font-size: 11px; font-weight: 600; color: var(--text-muted); background: var(--bg-elevated); padding: 3px 10px; border-radius: 6px; }
 .card-desc { font-size: 13px; color: var(--text-muted); line-height: 1.5; margin-bottom: 20px; }
 .card-stats { display: flex; gap: 24px; padding-top: 16px; border-top: 1px solid var(--border); }

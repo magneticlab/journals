@@ -34,6 +34,33 @@ function goTo(e) { router.push(`/${props.journal}/${e.target.value}`) }
 
 const isWork = computed(() => props.journal === 'work')
 const title = computed(() => isWork.value ? 'Work Journal' : 'Daily Journal')
+
+const catIcons = {
+  'Git': 'M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.4 5.4 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65S8.93 17.38 9 18v4',
+  'Claude Code': 'M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z',
+  'Navigation': 'M3 12h18M3 6h18M3 18h18',
+  'File Inspection': 'M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z',
+  'Package Management': 'M16.5 9.4l-9-5.19M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z',
+  'Homebrew': 'M17 8h1a4 4 0 1 1 0 8h-1M3 8h1a4 4 0 0 1 0 8H3zM5 8v8M19 8v8',
+  'Remote': 'M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z',
+  'GitHub CLI': 'M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.4 5.4 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65S8.93 17.38 9 18v4',
+  'File Operations': 'M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z',
+  'Docker': 'M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z',
+  'Python': 'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z',
+  'HTTP': 'M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z',
+  'Other': 'M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z',
+  'Design System': 'M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5',
+  'Design & Layout': 'M5 3a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2H5z',
+  'Page Building': 'M3 9h18M9 21V9',
+  'Animation & Effects': 'M13 2L3 14h9l-1 8 10-12h-9l1-8z',
+  'Bug Fixes': 'M8 2l1.88 1.88M14.12 3.88L16 2M9 7.13v-1a3.003 3.003 0 1 1 6 0v1',
+  'Git & Deployment': 'M6 3v12M18 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM6 21a3 3 0 1 0 0-6 3 3 0 0 0 0 6z',
+  'Version Iteration': 'M21 12a9 9 0 1 1-6.219-8.56',
+  'Refactoring': 'M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8',
+  'Content & Copy': 'M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z',
+  'Planning & Strategy': 'M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2zM22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z',
+  'General Development': 'M16 18l6-6-6-6M8 6l-6 6 6 6',
+}
 const genTime = computed(() => {
   if (!data.value?.generatedAt) return ''
   return new Date(data.value.generatedAt).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })
@@ -104,7 +131,7 @@ const genTime = computed(() => {
       <section v-if="isWork && data.themes && Object.keys(data.themes).length" class="section">
         <p class="section-label">Focus Areas</p>
         <div class="tags">
-          <span v-for="(count, theme) in data.themes" :key="theme" class="tag">{{ theme }} <span class="tag-n">{{ count }}</span></span>
+          <span v-for="(count, theme) in data.themes" :key="theme" class="tag"><svg v-if="catIcons[theme]" class="tag-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path :d="catIcons[theme]"/></svg>{{ theme }} <span class="tag-n">{{ count }}</span></span>
         </div>
       </section>
 
@@ -112,7 +139,7 @@ const genTime = computed(() => {
       <section v-if="!isWork && data.categories && Object.keys(data.categories).length" class="section">
         <p class="section-label">Terminal Activity</p>
         <div class="tags">
-          <span v-for="(count, cat) in data.categories" :key="cat" class="tag">{{ cat }} <span class="tag-n">{{ count }}</span></span>
+          <span v-for="(count, cat) in data.categories" :key="cat" class="tag"><svg v-if="catIcons[cat]" class="tag-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path :d="catIcons[cat]"/></svg>{{ cat }} <span class="tag-n">{{ count }}</span></span>
         </div>
       </section>
 
@@ -212,7 +239,7 @@ const genTime = computed(() => {
 }
 .back-btn:hover { border-color: var(--border-hover); color: var(--text-strong); }
 .label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.2em; color: var(--text-muted); }
-.htitle { margin-top: 2px; font-size: 16px; font-weight: 700; letter-spacing: -0.02em; color: var(--text-heading); }
+.htitle { margin-top: 2px; font-family: var(--serif); font-size: 22px; font-weight: 400; color: var(--text-heading); }
 .date-nav { display: flex; align-items: center; gap: 4px; }
 .nav-btn { padding: 6px; border-radius: 8px; border: none; background: none; cursor: pointer; color: var(--text-muted); transition: all 0.15s; display: flex; }
 .nav-btn:hover { background: var(--bg-elevated); color: var(--text-strong); }
@@ -258,7 +285,8 @@ const genTime = computed(() => {
 
 /* Tags */
 .tags { display: flex; flex-wrap: wrap; gap: 6px; }
-.tag { font-size: 12px; color: var(--text); padding: 4px 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-card); }
+.tag { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text); padding: 5px 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-card); }
+.tag-icon { color: var(--text-muted); flex-shrink: 0; }
 .tag-n { color: var(--text-muted); margin-left: 2px; }
 
 /* Docs created */

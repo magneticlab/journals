@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Gloock&family=Inter:wght@400;500;600;700&display=swap');
 
 :root {
   --bg: #0c0c0e;
@@ -22,12 +22,14 @@
   --purple-bg: rgba(139, 92, 246, 0.08);
   --amber: #f59e0b;
   --amber-bg: rgba(245, 158, 11, 0.08);
+  --serif: 'Gloock', Georgia, serif;
+  --sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: var(--sans);
   background: var(--bg);
   color: var(--text);
   min-height: 100vh;
