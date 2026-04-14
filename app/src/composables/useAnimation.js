@@ -5,6 +5,7 @@ const ANIMATIONS = [
   { id: 'blob', label: 'Amoeba', icon: 'blob' },
   { id: 'diagonal', label: 'Stripes', icon: 'stripes' },
   { id: 'spikes', label: 'Spikes', icon: 'spikes' },
+  { id: 'aurora', label: 'Borealis', icon: 'aurora' },
 ]
 
 const current = ref(localStorage.getItem('journal-animation') || 'ribbons')

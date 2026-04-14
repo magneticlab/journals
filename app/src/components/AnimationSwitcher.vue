@@ -11,6 +11,7 @@ const icons = {
   blob: '<circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 1 0 16"/>',
   stripes: '<line x1="4" y1="20" x2="20" y2="4"/><line x1="8" y1="20" x2="24" y2="4"/><line x1="0" y1="20" x2="16" y2="4"/>',
   spikes: '<line x1="12" y1="2" x2="12" y2="10"/><line x1="5" y1="5" x2="9" y2="11"/><line x1="19" y1="5" x2="15" y2="11"/><line x1="2" y1="12" x2="8" y2="13"/><line x1="22" y1="12" x2="16" y2="13"/><circle cx="12" cy="16" r="3"/>',
+  aurora: '<path d="M2 20c2-8 4-14 8-16s6 2 8 8 2 8 4 8"/><circle cx="5" cy="4" r="0.8"/><circle cx="15" cy="3" r="0.6"/><circle cx="20" cy="6" r="0.5"/><circle cx="9" cy="2" r="0.7"/><circle cx="18" cy="2" r="0.4"/>',
 }
 
 function select(id) { current.value = id; open.value = false }
