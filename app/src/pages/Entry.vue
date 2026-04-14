@@ -42,26 +42,28 @@ const genTime = computed(() => {
 
 <template>
   <div class="page">
-    <!-- Header -->
+    <!-- Sub-header -->
     <div class="header">
       <div class="mx header-inner">
-        <div>
-          <p class="label">{{ title }}</p>
-          <h1 class="htitle">{{ data?.day }}, {{ data?.display || date }}</h1>
-        </div>
-        <div class="nav-controls">
-          <router-link :to="`/${journal}`" class="nav-link">All Entries</router-link>
-          <div class="date-nav">
-            <button @click="goToPrev" :disabled="!hasPrev" :class="['nav-btn', { disabled: !hasPrev }]">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
-            </button>
-            <select :value="date" @change="goTo" class="date-select">
-              <option v-for="d in dates" :key="d" :value="d">{{ d }}</option>
-            </select>
-            <button @click="goToNext" :disabled="!hasNext" :class="['nav-btn', { disabled: !hasNext }]">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
-            </button>
+        <div class="header-left">
+          <router-link :to="`/${journal}`" class="back-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          </router-link>
+          <div>
+            <p class="label">{{ title }}</p>
+            <h1 class="htitle">{{ data?.day }}, {{ data?.display || date }}</h1>
           </div>
+        </div>
+        <div class="date-nav">
+          <button @click="goToPrev" :disabled="!hasPrev" :class="['nav-btn', { disabled: !hasPrev }]">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          </button>
+          <select :value="date" @change="goTo" class="date-select">
+            <option v-for="d in dates" :key="d" :value="d">{{ d }}</option>
+          </select>
+          <button @click="goToNext" :disabled="!hasNext" :class="['nav-btn', { disabled: !hasNext }]">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+          </button>
         </div>
       </div>
     </div>
@@ -196,17 +198,21 @@ const genTime = computed(() => {
 </template>
 
 <style scoped>
-.page { min-height: 100vh; }
+.page { min-height: calc(100vh - 52px); }
 
 /* Header */
-.header { border-bottom: 1px solid var(--border); background: var(--bg-card); padding: 28px 0 24px; }
+.header { border-bottom: 1px solid var(--border); background: var(--bg-card); padding: 20px 0; }
 .mx { max-width: 880px; margin: 0 auto; padding-left: 24px; padding-right: 24px; }
 .header-inner { display: flex; align-items: center; justify-content: space-between; }
+.header-left { display: flex; align-items: center; gap: 12px; }
+.back-btn {
+  display: flex; align-items: center; justify-content: center;
+  width: 32px; height: 32px; border-radius: 8px; border: 1px solid var(--border);
+  color: var(--text-muted); transition: all 0.15s; flex-shrink: 0;
+}
+.back-btn:hover { border-color: var(--border-hover); color: var(--text-strong); }
 .label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.2em; color: var(--text-muted); }
-.htitle { margin-top: 4px; font-size: 18px; font-weight: 700; letter-spacing: -0.02em; color: var(--text-heading); }
-.nav-controls { display: flex; align-items: center; gap: 12px; }
-.nav-link { font-size: 12px; color: var(--text-muted); padding: 6px 12px; border-radius: 8px; border: 1px solid var(--border); transition: all 0.15s; }
-.nav-link:hover { border-color: var(--border-hover); color: var(--text-strong); }
+.htitle { margin-top: 2px; font-size: 16px; font-weight: 700; letter-spacing: -0.02em; color: var(--text-heading); }
 .date-nav { display: flex; align-items: center; gap: 4px; }
 .nav-btn { padding: 6px; border-radius: 8px; border: none; background: none; cursor: pointer; color: var(--text-muted); transition: all 0.15s; display: flex; }
 .nav-btn:hover { background: var(--bg-elevated); color: var(--text-strong); }
