@@ -100,27 +100,32 @@ const summaryLine = computed(() => {
     <div class="hero">
       <div class="mx">
         <div class="hero-top">
-          <router-link to="/" class="hero-logo">Journals</router-link>
-          <div class="hero-right">
-            <router-link :to="`/${journal}`" class="htab active">
-              <svg v-if="isWork" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
-              <svg v-else width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-              {{ isWork ? 'Work' : 'Daily' }}
-            </router-link>
-            <div class="date-nav">
-              <button @click="goToPrev" :disabled="!hasPrev" :class="['nav-btn', { disabled: !hasPrev }]">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
-              </button>
-              <CalendarPicker
-                :modelValue="date"
-                @update:modelValue="goTo"
-                :availableDates="dates"
-                :brandColor="brand"
-              />
-              <button @click="goToNext" :disabled="!hasNext" :class="['nav-btn', { disabled: !hasNext }]">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
-              </button>
+          <div class="nav-left">
+            <router-link to="/" class="hero-logo">Journals</router-link>
+            <div class="hero-tabs">
+              <router-link to="/work" :class="['htab', { active: journal === 'work' }]">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+                Work
+              </router-link>
+              <router-link to="/daily" :class="['htab', { active: journal === 'daily' }]">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                Daily
+              </router-link>
             </div>
+          </div>
+          <div class="date-nav">
+            <button @click="goToPrev" :disabled="!hasPrev" :class="['nav-btn', { disabled: !hasPrev }]">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+            </button>
+            <CalendarPicker
+              :modelValue="date"
+              @update:modelValue="goTo"
+              :availableDates="dates"
+              :brandColor="brand"
+            />
+            <button @click="goToNext" :disabled="!hasNext" :class="['nav-btn', { disabled: !hasNext }]">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+            </button>
           </div>
         </div>
         <div v-if="data" class="hero-content">
@@ -247,18 +252,25 @@ const summaryLine = computed(() => {
 .page { min-height: 100vh; }
 
 /* Hero — unified */
-.hero { padding: 36px 0 32px; }
+.hero { padding: 48px 0 36px; }
 .mx { max-width: 880px; margin: 0 auto; padding-left: 24px; padding-right: 24px; }
-.hero-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
-.hero-logo { font-family: var(--serif); font-size: 16px; color: var(--text-muted); transition: color 0.15s; }
-.hero-logo:hover { color: var(--text-heading); }
-.hero-right { display: flex; align-items: center; gap: 10px; }
-.htab {
-  display: flex; align-items: center; gap: 5px;
-  padding: 5px 11px; border-radius: 7px;
-  font-size: 12px; font-weight: 500;
-  color: var(--text-muted); background: rgba(255,255,255,0.06);
+.hero-top {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 32px; padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
 }
+.nav-left { display: flex; align-items: center; gap: 12px; }
+.hero-logo { font-family: var(--serif); font-size: 20px; color: var(--text-heading); transition: color 0.15s; }
+.hero-logo:hover { color: var(--text-muted); }
+.hero-tabs { display: flex; gap: 3px; }
+.htab {
+  display: flex; align-items: center; gap: 6px;
+  padding: 6px 14px; border-radius: 8px;
+  font-size: 13px; font-weight: 500;
+  color: var(--text-muted); transition: all 0.15s;
+}
+.htab:hover { color: var(--text-strong); background: rgba(255,255,255,0.04); }
+.htab.active { color: var(--text-heading); background: rgba(255,255,255,0.07); }
 
 .date-nav { display: flex; align-items: center; gap: 4px; }
 .nav-btn { padding: 6px; border-radius: 8px; border: none; background: none; cursor: pointer; color: var(--text-muted); transition: all 0.15s; display: flex; }
@@ -275,7 +287,7 @@ const summaryLine = computed(() => {
 .hero-border { height: 1px; }
 
 /* Body */
-.body { padding-top: 28px; padding-bottom: 64px; }
+.body { padding-top: 32px; padding-bottom: 64px; }
 .empty { padding: 80px 24px; text-align: center; font-size: 14px; color: var(--text-muted); }
 
 /* Duo */

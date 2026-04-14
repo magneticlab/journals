@@ -127,19 +127,7 @@ const dailySpark = computed(() => spark7(manifest.value.daily, 'commits'))
       <!-- Hero: Logo + Greeting + Weather -->
       <div class="hero">
         <div class="hero-top">
-          <div class="hero-nav">
-            <h1 class="hero-logo">Journals</h1>
-            <div class="hero-tabs">
-              <router-link to="/work" class="htab">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
-                Work
-              </router-link>
-              <router-link to="/daily" class="htab">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-                Daily
-              </router-link>
-            </div>
-          </div>
+          <h1 class="hero-logo">Journals</h1>
           <div v-if="weather" class="weather">
             <span class="wx-icon">{{ wxLabel?.icon }}</span>
             <span class="wx-temp">{{ wxTemp }}°</span>
@@ -238,21 +226,12 @@ const dailySpark = computed(() => spark7(manifest.value.daily, 'commits'))
 <style scoped>
 .page { min-height: 100vh; }
 .mx { max-width: 880px; margin: 0 auto; padding: 0 24px; }
-.content { padding: 40px 0 64px; position: relative; z-index: 1; }
+.content { padding: 48px 0 64px; position: relative; z-index: 1; }
 
 /* Hero */
-.hero { margin-bottom: 36px; }
+.hero { margin-bottom: 48px; }
 .hero-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 16px; }
-.hero-nav { display: flex; align-items: center; gap: 12px; }
 .hero-logo { font-family: var(--serif); font-size: 20px; font-weight: 400; color: var(--text-heading); }
-.hero-tabs { display: flex; gap: 2px; }
-.htab {
-  display: flex; align-items: center; gap: 5px;
-  padding: 5px 11px; border-radius: 7px;
-  font-size: 12px; font-weight: 500;
-  color: var(--text-muted); transition: all 0.15s;
-}
-.htab:hover { color: var(--text-strong); background: rgba(255,255,255,0.05); }
 .weather {
   display: flex; align-items: center; gap: 6px;
   font-size: 12px; color: var(--text-muted);
@@ -265,8 +244,8 @@ const dailySpark = computed(() => spark7(manifest.value.daily, 'commits'))
 .wx-sep { color: var(--border-hover); }
 .wx-detail { color: var(--text-muted); }
 
-.hero-greeting { font-family: var(--serif); font-size: 36px; font-weight: 400; color: var(--text-heading); line-height: 1.2; }
-.hero-date { font-size: 14px; color: var(--text-muted); margin-top: 6px; }
+.hero-greeting { font-family: var(--serif); font-size: 40px; font-weight: 400; color: var(--text-heading); line-height: 1.2; margin-top: 8px; }
+.hero-date { font-size: 14px; color: var(--text-muted); margin-top: 8px; }
 
 /* Cards */
 .cards { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 40px; }
