@@ -272,7 +272,7 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
     <div class="body-zone">
       <div v-if="loading" class="mx empty">Loading...</div>
       <div v-else-if="!data" class="mx empty">No entry for this date.</div>
-      <div v-else class="mx body">
+      <div v-else class="mx body" :key="journal + '-' + date">
 
         <!-- Daily Reflection — top of daily journal only -->
         <section v-if="!isWork && reflection" v-reveal class="section">
