@@ -2,7 +2,7 @@
   "date": "2026-04-14",
   "day": "Tuesday",
   "display": "April 14, 2026",
-  "generatedAt": "2026-04-14T06:23:38.117056",
+  "generatedAt": "2026-04-14T07:57:16.669331",
   "metrics": {
     "volume": {
       "score": 100,
@@ -13,15 +13,15 @@
       "label": "Complexity"
     },
     "focus": {
-      "score": 18,
+      "score": 24,
       "label": "Focus"
     },
     "depth": {
-      "score": 58,
+      "score": 100,
       "label": "Depth"
     },
     "craft": {
-      "score": 52,
+      "score": 61,
       "label": "Craft"
     },
     "momentum": {
@@ -30,49 +30,73 @@
     }
   },
   "stats": {
-    "sessions": 7,
-    "messages": 37,
-    "commits": 14,
+    "sessions": 8,
+    "messages": 57,
+    "commits": 30,
     "repos": 2,
-    "timeRange": "00:24\u201306:22",
+    "timeRange": "00:24\u201307:54",
     "linesAdded": 5789,
     "linesRemoved": 1903,
     "filesChanged": 85
   },
-  "wentRight": "Productive day with 14 commit(s) across 2 repo(s) during 7 Claude session(s) spanning 00:24\u201306:22.",
-  "couldBeBetter": "High session count (7) may indicate context switching \u2014 consider consolidating related work.",
+  "wentRight": "Productive day with 30 commit(s) across 2 repo(s) during 8 Claude session(s) spanning 00:24\u201307:54.",
+  "couldBeBetter": "High session count (8) may indicate context switching \u2014 consider consolidating related work.",
   "whatIDid": [
     "growthmentor-playground: feat: design system restructuring \u2014 split pages, component styling, token migration",
+    "journals: 29 commits \u2014 Fix flicker on day navigation: keep body height, no data clear. Also: Fix scroll reveal: elements stuck invisible; Stripe-inspired: scroll reveals, left accents, section tints, fade masks (+26 more)",
+    "Focused on page building with 11 interactions across sessions",
+    "Focused on content & copy with 8 interactions across sessions",
+    "Focused on design system with 7 interactions across sessions"
+  ],
+  "activityTimeline": [
+    "growthmentor-playground: feat: design system restructuring \u2014 split pages, component styling, token migration",
+    "journals: Fix flicker on day navigation: keep body height, no data clear",
+    "journals: Fix scroll reveal: elements stuck invisible",
+    "journals: Stripe-inspired: scroll reveals, left accents, section tints, fade masks",
+    "journals: Audit fixes: z-index, spacing consistency, Stripe spring easing",
+    "journals: Unified inner pages: logo+weather nav, parallax, journal tabs",
+    "journals: Hero parallax layer + higher dark veil",
+    "journals: Fix hard cut: soft gradient transition, more hero breathing room",
+    "journals: More spacing: push hero down, wider fade, gap before timeline",
+    "journals: Two-zone home layout: open top + dark body panel",
+    "journals: Unified nav alignment, gradient fade, breathing room",
+    "journals: Home nav tabs, vibrant ribbons, daily featured card",
+    "journals: Custom calendar date picker dropdown",
+    "journals: Unified hero header + global ribbon parallax",
+    "journals: Solid card backgrounds, unified inline nav across all pages",
+    "journals: Replace mesh gradient with rope bundle animation from playground",
+    "journals: Performance metrics + animated mesh gradient",
     "journals: Report page redesign \u2014 hero stats, themed cards, volume bar",
     "journals: Home redesign: no nav, greeting + weather, immersive landing",
-    "journals: Vibrant nav, themed cards, box shadows, clearer identity",
-    "journals: Featured card redesign, volume metrics, fresher colors",
-    "journals: Timeline: calendar stickers, two-column Work/Daily layout",
-    "journals: Consolidate timeline: day cards with Work+Daily rows, week/month groups",
-    "journals: Color branding, sparklines, timeline polish, hover-to-back",
-    "journals: UI polish: Gloock serif titles, icons on tags, timeline, sparkline",
-    "journals: Navigation polish: persistent topnav, back buttons, improved home",
-    "journals: Redesign: dark theme, CEO-style digested reports",
-    "journals: Add Vue 3 + Vite app for journal browsing",
-    "journals: Backfill March + daily cron + zsh extended history",
-    "journals: Initial commit \u2014 work journal + daily journal system",
-    "Page Building: 8 interactions across sessions"
+    "journals: Vibrant nav, themed cards, box shadows, clearer identity"
+  ],
+  "continuedFromYesterday": [
+    "Page Building work ongoing \u2014 11 interactions in this session, likely a multi-day effort",
+    "Content & Copy work ongoing \u2014 8 interactions in this session, likely a multi-day effort"
+  ],
+  "roadblocks": [
+    "High context switching: 8 separate sessions may indicate difficulty maintaining focus or frequent interruptions"
   ],
   "themes": {
-    "Page Building": 8,
-    "General Development": 8,
-    "Content & Copy": 5,
-    "Design System": 3,
+    "Page Building": 11,
+    "General Development": 9,
+    "Content & Copy": 8,
+    "Design System": 7,
     "Version Iteration": 3,
     "Git & Deployment": 1,
-    "Bug Fixes": 1
+    "Bug Fixes": 1,
+    "Animation & Effects": 1
   },
   "projectsWip": [
     "alek \u2014 session work",
     "growthmentor-playground \u2014 1 commit(s)",
-    "journals \u2014 13 commit(s)"
+    "journals \u2014 29 commit(s)"
   ],
   "docsCreated": [
+    {
+      "title": "Audit fixes: z-index, spacing consistency, Stripe spring easing",
+      "description": "journals \u00b7 5bebfc7"
+    },
     {
       "title": "Report page redesign \u2014 hero stats, themed cards, volume bar",
       "description": "journals \u00b7 a8fdfc5"
@@ -98,6 +122,102 @@
     {
       "repo": "journals",
       "commits": [
+        {
+          "hash": "f9f14df",
+          "author": "Alek Manov",
+          "message": "Fix flicker on day navigation: keep body height, no data clear",
+          "time": "07:52"
+        },
+        {
+          "hash": "4340f68",
+          "author": "Alek Manov",
+          "message": "Fix scroll reveal: elements stuck invisible",
+          "time": "07:49"
+        },
+        {
+          "hash": "b5b4d9d",
+          "author": "Alek Manov",
+          "message": "Stripe-inspired: scroll reveals, left accents, section tints, fade masks",
+          "time": "07:46"
+        },
+        {
+          "hash": "5bebfc7",
+          "author": "Alek Manov",
+          "message": "Audit fixes: z-index, spacing consistency, Stripe spring easing",
+          "time": "07:41"
+        },
+        {
+          "hash": "0e4df3b",
+          "author": "Alek Manov",
+          "message": "Unified inner pages: logo+weather nav, parallax, journal tabs",
+          "time": "07:33"
+        },
+        {
+          "hash": "29edf8e",
+          "author": "Alek Manov",
+          "message": "Hero parallax layer + higher dark veil",
+          "time": "07:26"
+        },
+        {
+          "hash": "a3e21d5",
+          "author": "Alek Manov",
+          "message": "Fix hard cut: soft gradient transition, more hero breathing room",
+          "time": "07:22"
+        },
+        {
+          "hash": "b0ef286",
+          "author": "Alek Manov",
+          "message": "More spacing: push hero down, wider fade, gap before timeline",
+          "time": "07:19"
+        },
+        {
+          "hash": "4e9f9e6",
+          "author": "Alek Manov",
+          "message": "Two-zone home layout: open top + dark body panel",
+          "time": "07:17"
+        },
+        {
+          "hash": "e6617c9",
+          "author": "Alek Manov",
+          "message": "Unified nav alignment, gradient fade, breathing room",
+          "time": "07:06"
+        },
+        {
+          "hash": "c4b7983",
+          "author": "Alek Manov",
+          "message": "Home nav tabs, vibrant ribbons, daily featured card",
+          "time": "07:00"
+        },
+        {
+          "hash": "764b4eb",
+          "author": "Alek Manov",
+          "message": "Custom calendar date picker dropdown",
+          "time": "06:52"
+        },
+        {
+          "hash": "14c4021",
+          "author": "Alek Manov",
+          "message": "Unified hero header + global ribbon parallax",
+          "time": "06:46"
+        },
+        {
+          "hash": "7f021cb",
+          "author": "Alek Manov",
+          "message": "Solid card backgrounds, unified inline nav across all pages",
+          "time": "06:34"
+        },
+        {
+          "hash": "4102ab2",
+          "author": "Alek Manov",
+          "message": "Replace mesh gradient with rope bundle animation from playground",
+          "time": "06:29"
+        },
+        {
+          "hash": "889dc9d",
+          "author": "Alek Manov",
+          "message": "Performance metrics + animated mesh gradient",
+          "time": "06:25"
+        },
         {
           "hash": "a8fdfc5",
           "author": "Alek Manov",
@@ -180,5 +300,5 @@
       "stat": "36 files changed, 3322 insertions(+)"
     }
   ],
-  "summary": "7 session(s), 37 msgs, 14 commit(s) across 2 repo(s)"
+  "summary": "8 session(s), 57 msgs, 30 commit(s) across 2 repo(s)"
 }

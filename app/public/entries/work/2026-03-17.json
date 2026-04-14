@@ -2,7 +2,7 @@
   "date": "2026-03-17",
   "day": "Tuesday",
   "display": "March 17, 2026",
-  "generatedAt": "2026-04-14T06:23:32.245799",
+  "generatedAt": "2026-04-14T07:57:10.742723",
   "metrics": {
     "volume": {
       "score": 56,
@@ -43,6 +43,10 @@
   "couldBeBetter": "",
   "whatIDid": [
     "growthmentor-playground: chore: morning brief 2026-03-17",
+    "shadcnui: 19 commits \u2014 chore(deps-dev): bump turbo in /templates/vite-monorepo. Also: chore(deps-dev): bump vite in /templates/start-monorepo; chore(deps-dev): bump turbo in /templates/next-monorepo (+16 more)"
+  ],
+  "activityTimeline": [
+    "growthmentor-playground: chore: morning brief 2026-03-17",
     "shadcnui: chore(deps-dev): bump turbo in /templates/vite-monorepo",
     "shadcnui: chore(deps-dev): bump vite in /templates/start-monorepo",
     "shadcnui: chore(deps-dev): bump turbo in /templates/next-monorepo",
@@ -56,8 +60,15 @@
     "shadcnui: chore(deps-dev): bump @types/node in /templates/react-router-app",
     "shadcnui: chore(deps): bump vite-tsconfig-paths in /templates/start-app",
     "shadcnui: chore(deps-dev): bump @vitejs/plugin-react in /templates/vite-app",
-    "shadcnui: chore(templates): bump minor dependencies (#10076)"
+    "shadcnui: chore(templates): bump minor dependencies (#10076)",
+    "shadcnui: feat: move base picker to project form (#10077)",
+    "shadcnui: fix: Update import path for Button component in react-router-app template (#10073)",
+    "shadcnui: fix: update skill and add allowed-tools (#10075)",
+    "shadcnui: Add @sabraman ui registry (#10054)",
+    "shadcnui: fix: Update import path for Button component in react-router-app template"
   ],
+  "continuedFromYesterday": [],
+  "roadblocks": [],
   "themes": {},
   "projectsWip": [
     "growthmentor-playground \u2014 1 commit(s)",

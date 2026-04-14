@@ -2,7 +2,7 @@
   "date": "2026-03-23",
   "day": "Monday",
   "display": "March 23, 2026",
-  "generatedAt": "2026-04-14T06:23:33.504239",
+  "generatedAt": "2026-04-14T07:57:11.903080",
   "metrics": {
     "volume": {
       "score": 52,
@@ -43,6 +43,10 @@
   "couldBeBetter": "",
   "whatIDid": [
     "growthmentor-playground: chore: morning brief 2026-03-23",
+    "shadcnui: 22 commits \u2014 feat(registry): add @ramonclaudio-coderabbit to directory (#9331). Also: fix: chart types (#10147); feat: recharts docs (#10146) (+19 more)"
+  ],
+  "activityTimeline": [
+    "growthmentor-playground: chore: morning brief 2026-03-23",
     "shadcnui: feat(registry): add @ramonclaudio-coderabbit to directory (#9331)",
     "shadcnui: fix: chart types (#10147)",
     "shadcnui: feat: recharts docs (#10146)",
@@ -56,8 +60,15 @@
     "shadcnui: chore(registry): add @launchui registry (#9332)",
     "shadcnui: chore: @react-slot added to the list of registries (#9522)",
     "shadcnui: Revert \"Registry: Add @code-blocks to open registry directory (#9639)\" (#10144)",
-    "shadcnui: Registry: Add @code-blocks to open registry directory (#9639)"
+    "shadcnui: Registry: Add @code-blocks to open registry directory (#9639)",
+    "shadcnui: feat: add pulkitxm's components (#9775)",
+    "shadcnui: feat(registry): add @dsikeres1 registry (#10044)",
+    "shadcnui: Add @react-easy-modals registry (#10064)",
+    "shadcnui: feat(registry): add @w3-kit Web3 components registry (#10081)",
+    "shadcnui: Add @odysseyui to directory (#10083)"
   ],
+  "continuedFromYesterday": [],
+  "roadblocks": [],
   "themes": {},
   "projectsWip": [
     "growthmentor-playground \u2014 1 commit(s)",

@@ -2,7 +2,7 @@
   "date": "2026-03-14",
   "day": "Saturday",
   "display": "March 14, 2026",
-  "generatedAt": "2026-04-14T06:23:31.684701",
+  "generatedAt": "2026-04-14T07:57:10.175967",
   "metrics": {
     "volume": {
       "score": 75,
@@ -42,6 +42,10 @@
   "wentRight": "28 commit(s) shipped across 2 repo(s).",
   "couldBeBetter": "",
   "whatIDid": [
+    "growthmentor-playground: 19 commits \u2014 chore: morning brief v2 2026-03-12 (retroactive). Also: Add email templates for roadmap and single-match results; chore: morning brief v2 2026-03-14 (+16 more)",
+    "shadcnui: 9 commits \u2014 chore(release): version packages (#10037). Also: chore: changeset; feat: update schema (+6 more)"
+  ],
+  "activityTimeline": [
     "growthmentor-playground: chore: morning brief v2 2026-03-12 (retroactive)",
     "growthmentor-playground: Add email templates for roadmap and single-match results",
     "growthmentor-playground: chore: morning brief v2 2026-03-14",
@@ -56,8 +60,15 @@
     "growthmentor-playground: chore: morning brief 2026-03-12 (retroactive)",
     "growthmentor-playground: chore: morning brief 2026-03-11 (retroactive)",
     "growthmentor-playground: chore: morning brief 2026-03-09 (retroactive)",
-    "growthmentor-playground: chore: morning brief 2026-03-10 (retroactive)"
+    "growthmentor-playground: chore: morning brief 2026-03-10 (retroactive)",
+    "growthmentor-playground: chore: morning brief 2026-03-08 (retroactive)",
+    "growthmentor-playground: chore: morning brief 2026-03-14",
+    "growthmentor-playground: Add live prototype links to matching V2 overview page",
+    "growthmentor-playground: chore: morning brief 2026-03-14",
+    "shadcnui: chore(release): version packages (#10037)"
   ],
+  "continuedFromYesterday": [],
+  "roadblocks": [],
   "themes": {},
   "projectsWip": [
     "growthmentor-playground \u2014 19 commit(s)",

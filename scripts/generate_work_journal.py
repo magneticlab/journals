@@ -122,28 +122,88 @@ def extract_work_themes(entries):
 
 
 def derive_what_i_did(git_activity, themes, sessions_count):
-    """Derive accomplishments from commits and themes."""
-    items = []
+    """Derive accomplishments — narrative summaries grouped by repo."""
+    summaries = []
 
-    # Lead with commit messages — they're the real accomplishments
     for repo in git_activity:
-        for c in repo["commits"]:
-            msg = c["message"]
-            if msg.startswith("Merge"):
-                continue
-            items.append(f"{repo['repo']}: {msg}")
+        commits = [c for c in repo["commits"] if not c["message"].startswith("Merge")]
+        if not commits:
+            continue
 
-    # Add theme summaries
+        # Group commit messages into a narrative per repo
+        msgs = [c["message"] for c in commits]
+        if len(msgs) == 1:
+            summaries.append(f"{repo['repo']}: {msgs[0]}")
+        else:
+            # Combine into a summary sentence
+            summary = f"{repo['repo']}: {len(msgs)} commits — {msgs[0]}"
+            if len(msgs) > 1:
+                others = [m for m in msgs[1:3]]
+                summary += ". Also: " + "; ".join(others)
+                if len(msgs) > 3:
+                    summary += f" (+{len(msgs) - 3} more)"
+            summaries.append(summary)
+
+    # Add theme summaries for high-activity areas
     for theme, messages in sorted(themes.items(), key=lambda x: -len(x[1])):
         if theme == "General Development":
             continue
         count = len(messages)
-        if count >= 3:
-            items.append(f"{theme}: {count} interactions across sessions")
-        elif count >= 1:
-            items.append(f"{theme}: {count} task(s)")
+        if count >= 5:
+            summaries.append(f"Focused on {theme.lower()} with {count} interactions across sessions")
 
-    return items[:15]
+    return summaries[:8]
+
+
+def derive_activity_timeline(git_activity, themes):
+    """Raw activity list — commits + theme interactions for expandable view."""
+    items = []
+    for repo in git_activity:
+        for c in repo["commits"]:
+            if c["message"].startswith("Merge"):
+                continue
+            items.append(f"{repo['repo']}: {c['message']}")
+
+    for theme, messages in sorted(themes.items(), key=lambda x: -len(x[1])):
+        if theme == "General Development":
+            continue
+        count = len(messages)
+        if count >= 1:
+            items.append(f"{theme}: {count} interaction(s)")
+
+    return items[:20]
+
+
+def derive_continued_and_roadblocks(entries, themes, sessions_count, total_commits, bug_count):
+    """Derive 'Continued From Yesterday' and 'Roadblocks' from session patterns."""
+    continued = []
+    roadblocks = []
+
+    # Continued: detect multi-day themes from session patterns
+    top_themes = sorted(
+        [(k, len(v)) for k, v in themes.items() if k != "General Development"],
+        key=lambda x: -x[1]
+    )
+    for theme, count in top_themes[:2]:
+        if count >= 5:
+            continued.append(f"{theme} work ongoing — {count} interactions in this session, likely a multi-day effort")
+
+    if total_commits == 0 and sessions_count > 0:
+        continued.append("Exploration and research sessions without commits — work may span multiple days before shipping")
+
+    # Roadblocks
+    if bug_count >= 2:
+        roadblocks.append(f"Hit {bug_count} bugs during the session — may indicate fragile areas that need architectural attention")
+
+    if sessions_count >= 6:
+        roadblocks.append(f"High context switching: {sessions_count} separate sessions may indicate difficulty maintaining focus or frequent interruptions")
+
+    if total_commits > 0 and sessions_count > 0:
+        ratio = total_commits / sessions_count
+        if ratio < 0.5:
+            roadblocks.append(f"Low commit-to-session ratio ({total_commits} commits across {sessions_count} sessions) — sessions may be exploratory or blocked")
+
+    return continued, roadblocks
 
 
 def derive_projects_wip(git_activity, entries):
@@ -277,6 +337,7 @@ def generate_report(target_date):
     # Derive structured content
     themes = extract_work_themes(entries)
     what_i_did = derive_what_i_did(git_activity, themes, sessions_count)
+    activity_timeline = derive_activity_timeline(git_activity, themes)
     projects_wip = derive_projects_wip(git_activity, entries)
 
     # Docs created — from commit messages containing "doc", "plan", "audit", "report"
@@ -310,6 +371,11 @@ def generate_report(target_date):
     elif total_commits == 0 and sessions_count > 0:
         could_be_better = "Sessions ran but no commits — work may be exploratory or incomplete."
 
+    # Continued from yesterday + roadblocks
+    continued, roadblocks = derive_continued_and_roadblocks(
+        entries, themes, sessions_count, total_commits, bug_count
+    )
+
     # Evaluation metrics — scored 0-100
     metrics = compute_metrics(
         sessions_count, total_messages, total_commits, total_insertions,
@@ -335,6 +401,9 @@ def generate_report(target_date):
         "wentRight": went_right,
         "couldBeBetter": could_be_better,
         "whatIDid": what_i_did,
+        "activityTimeline": activity_timeline,
+        "continuedFromYesterday": continued,
+        "roadblocks": roadblocks,
         "themes": {k: len(v) for k, v in sorted(themes.items(), key=lambda x: -len(x[1]))},
         "projectsWip": projects_wip,
         "docsCreated": docs_created,

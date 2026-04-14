@@ -2,7 +2,7 @@
   "date": "2026-03-02",
   "day": "Monday",
   "display": "March 02, 2026",
-  "generatedAt": "2026-04-14T06:23:29.262768",
+  "generatedAt": "2026-04-14T07:57:07.709513",
   "metrics": {
     "volume": {
       "score": 63,
@@ -42,6 +42,9 @@
   "wentRight": "29 commit(s) shipped across 1 repo(s).",
   "couldBeBetter": "",
   "whatIDid": [
+    "shadcnui: 29 commits \u2014 fix. Also: fix; refactor: use twmerge for css (+26 more)"
+  ],
+  "activityTimeline": [
     "shadcnui: fix",
     "shadcnui: fix",
     "shadcnui: refactor: use twmerge for css",
@@ -56,8 +59,15 @@
     "shadcnui: fix",
     "shadcnui: fix",
     "shadcnui: fix",
-    "shadcnui: style: run format on all components"
+    "shadcnui: style: run format on all components",
+    "shadcnui: fix: handling of fonts",
+    "shadcnui: refactor: theme colors",
+    "shadcnui: fix",
+    "shadcnui: refactor: presets",
+    "shadcnui: fix: esling config for start-monorepo"
   ],
+  "continuedFromYesterday": [],
+  "roadblocks": [],
   "themes": {},
   "projectsWip": [
     "shadcnui \u2014 29 commit(s)"

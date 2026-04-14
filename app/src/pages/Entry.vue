@@ -9,6 +9,7 @@ const data = ref(null)
 const manifest = ref({ work: [], daily: [] })
 const loading = ref(true)
 const weather = ref(null)
+const showTimeline = ref(false)
 const scrollY = ref(0)
 function onScroll() { scrollY.value = window.scrollY }
 
@@ -132,11 +133,38 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
           </div>
         </section>
 
-        <!-- What I Did -->
+        <!-- What I Did — narrative summaries -->
         <section v-if="isWork && data.whatIDid?.length" v-reveal class="section">
           <p class="section-label">What I Did</p>
-          <div class="did-list"><div v-for="(item, i) in data.whatIDid" :key="i" class="did-item rv"><span class="did-num">{{ i + 1 }}</span><span class="did-text">{{ item }}</span></div></div>
+          <ul class="narrative-list">
+            <li v-for="(item, i) in data.whatIDid" :key="i" class="narrative-item rv">
+              <span class="narrative-dot" :style="{ background: brand }"></span>
+              <span class="narrative-text">{{ item }}</span>
+            </li>
+          </ul>
         </section>
+
+        <!-- Continued From Yesterday + Roadblocks -->
+        <div v-if="isWork && (data.continuedFromYesterday?.length || data.roadblocks?.length)" v-reveal class="cont-grid">
+          <section v-if="data.continuedFromYesterday?.length" class="cont-card rv">
+            <p class="section-label">Continued From Yesterday</p>
+            <ul class="cont-list">
+              <li v-for="(item, i) in data.continuedFromYesterday" :key="i">
+                <span class="cont-dot"></span>
+                <span>{{ item }}</span>
+              </li>
+            </ul>
+          </section>
+          <section v-if="data.roadblocks?.length" class="cont-card rv">
+            <p class="section-label" style="color: var(--amber)">Roadblocks</p>
+            <ul class="cont-list">
+              <li v-for="(item, i) in data.roadblocks" :key="i">
+                <span class="cont-dot dot-amber"></span>
+                <span>{{ item }}</span>
+              </li>
+            </ul>
+          </section>
+        </div>
 
         <!-- Focus Areas / Terminal Activity -->
         <section v-if="(isWork && data.themes && Object.keys(data.themes).length) || (!isWork && data.categories && Object.keys(data.categories).length)" v-reveal class="section section-tint" :style="{ '--tint': brand + '04' }">
@@ -160,6 +188,23 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
         <section v-if="isWork && data.projectsWip?.length" v-reveal class="section">
           <p class="section-label">Projects</p>
           <div class="project-tags"><div v-for="(p, i) in data.projectsWip" :key="i" class="project-tag rv"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>{{ p }}</div></div>
+        </section>
+
+        <!-- Expandable Activity Timeline -->
+        <section v-if="isWork && data.activityTimeline?.length" class="section">
+          <button class="timeline-toggle" @click="showTimeline = !showTimeline">
+            <svg :class="['toggle-chevron', { open: showTimeline }]" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+            <span>Explore Activity</span>
+            <span class="toggle-count">{{ data.activityTimeline.length }} items</span>
+          </button>
+          <Transition name="expand">
+            <div v-if="showTimeline" class="timeline-list">
+              <div v-for="(item, i) in data.activityTimeline" :key="i" class="tl-item">
+                <span class="tl-num">{{ i + 1 }}</span>
+                <span class="tl-text">{{ item }}</span>
+              </div>
+            </div>
+          </Transition>
         </section>
 
         <!-- Docs -->
@@ -270,6 +315,43 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
 .did-item { display: flex; align-items: flex-start; gap: 10px; padding: 6px 0; }
 .did-num { width: 22px; height: 22px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 600; color: var(--text-muted); background: var(--bg-elevated); flex-shrink: 0; margin-top: 1px; }
 .did-text { font-size: 13px; line-height: 1.5; color: var(--text); }
+
+/* Narrative What I Did */
+.narrative-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+.narrative-item { display: flex; align-items: flex-start; gap: 12px; }
+.narrative-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; margin-top: 8px; }
+.narrative-text { font-size: 14px; line-height: 1.7; color: var(--text-strong); }
+
+/* Continued + Roadblocks */
+.cont-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 32px; }
+.cont-card { padding: 18px 20px; border-radius: 12px; background: rgba(12,12,14,0.5); border: 1px solid var(--border); backdrop-filter: blur(8px); }
+.cont-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.cont-list li { display: flex; align-items: flex-start; gap: 10px; font-size: 13px; line-height: 1.6; color: var(--text); }
+.cont-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--text-muted); flex-shrink: 0; margin-top: 7px; }
+.dot-amber { background: var(--amber); }
+
+/* Activity Timeline toggle */
+.timeline-toggle {
+  display: flex; align-items: center; gap: 8px; width: 100%;
+  padding: 12px 16px; border-radius: 10px;
+  background: rgba(12,12,14,0.5); border: 1px solid var(--border);
+  color: var(--text-muted); font-size: 13px; font-weight: 500;
+  font-family: inherit; cursor: pointer; transition: all 0.2s;
+}
+.timeline-toggle:hover { border-color: var(--border-hover); color: var(--text-strong); }
+.toggle-chevron { transition: transform 0.3s var(--ease-spring); flex-shrink: 0; }
+.toggle-chevron.open { transform: rotate(90deg); }
+.toggle-count { margin-left: auto; font-size: 11px; color: var(--text-muted); }
+
+.timeline-list { padding: 12px 0 0; display: flex; flex-direction: column; gap: 2px; }
+.tl-item { display: flex; align-items: flex-start; gap: 10px; padding: 6px 16px; }
+.tl-num { width: 22px; height: 22px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 600; color: var(--text-muted); background: var(--bg-elevated); flex-shrink: 0; margin-top: 1px; }
+.tl-text { font-size: 13px; line-height: 1.5; color: var(--text); }
+
+/* Expand transition */
+.expand-enter-active, .expand-leave-active { transition: all 0.3s var(--ease-spring); overflow: hidden; }
+.expand-enter-from, .expand-leave-to { opacity: 0; max-height: 0; }
+.expand-enter-to, .expand-leave-from { opacity: 1; max-height: 1200px; }
 
 /* Themes */
 .theme-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 8px; }

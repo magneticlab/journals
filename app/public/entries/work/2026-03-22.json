@@ -2,7 +2,7 @@
   "date": "2026-03-22",
   "day": "Sunday",
   "display": "March 22, 2026",
-  "generatedAt": "2026-04-14T06:23:33.272700",
+  "generatedAt": "2026-04-14T07:57:11.698914",
   "metrics": {
     "volume": {
       "score": 81,
@@ -44,6 +44,11 @@
   "whatIDid": [
     "growthmentor-playground: chore: morning brief 2026-03-22"
   ],
+  "activityTimeline": [
+    "growthmentor-playground: chore: morning brief 2026-03-22"
+  ],
+  "continuedFromYesterday": [],
+  "roadblocks": [],
   "themes": {},
   "projectsWip": [
     "growthmentor-playground \u2014 1 commit(s)"

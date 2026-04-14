@@ -2,7 +2,7 @@
   "date": "2026-03-24",
   "day": "Tuesday",
   "display": "March 24, 2026",
-  "generatedAt": "2026-04-14T06:23:33.697216",
+  "generatedAt": "2026-04-14T07:57:12.101927",
   "metrics": {
     "volume": {
       "score": 56,
@@ -42,6 +42,10 @@
   "wentRight": "10 commit(s) shipped across 2 repo(s).",
   "couldBeBetter": "",
   "whatIDid": [
+    "growthmentor-playground: 4 commits \u2014 refactor: MentorLive topics page \u2014 reorder sections, cleaner design. Also: chore: content studio, dashboard, mentor mirror updates + startup pages manifesto; feat: MentorLive V5 prototype \u2014 full AI-for-growth workshop platform (+1 more)",
+    "shadcnui: 6 commits \u2014 fix: button. Also: fix: navigation menu (#10162); fix: radial charts for v3 (+3 more)"
+  ],
+  "activityTimeline": [
     "growthmentor-playground: refactor: MentorLive topics page \u2014 reorder sections, cleaner design",
     "growthmentor-playground: chore: content studio, dashboard, mentor mirror updates + startup pages manifesto",
     "growthmentor-playground: feat: MentorLive V5 prototype \u2014 full AI-for-growth workshop platform",
@@ -53,6 +57,8 @@
     "shadcnui: feat: update colors for popovers (#10155)",
     "shadcnui: feat: replace \"Add a block\" button with \"View Components\" linking to /docs/components (#10154)"
   ],
+  "continuedFromYesterday": [],
+  "roadblocks": [],
   "themes": {},
   "projectsWip": [
     "growthmentor-playground \u2014 4 commit(s)",

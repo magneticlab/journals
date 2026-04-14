@@ -2,11 +2,11 @@
   "date": "2026-04-14",
   "day": "Tuesday",
   "display": "April 14, 2026",
-  "generatedAt": "2026-04-14T06:23:38.188470",
-  "summary": "69 terminal commands, 14 commits across 2 repos, 1 files modified.",
+  "generatedAt": "2026-04-14T07:57:16.744504",
+  "summary": "69 terminal commands, 30 commits across 2 repos, 1 files modified.",
   "stats": {
     "commands": 69,
-    "commits": 14,
+    "commits": 30,
     "repos": 2,
     "filesModified": 1
   },
@@ -162,6 +162,102 @@
     {
       "repo": "journals",
       "commits": [
+        {
+          "hash": "f9f14df",
+          "author": "Alek Manov",
+          "message": "Fix flicker on day navigation: keep body height, no data clear",
+          "time": "07:52"
+        },
+        {
+          "hash": "4340f68",
+          "author": "Alek Manov",
+          "message": "Fix scroll reveal: elements stuck invisible",
+          "time": "07:49"
+        },
+        {
+          "hash": "b5b4d9d",
+          "author": "Alek Manov",
+          "message": "Stripe-inspired: scroll reveals, left accents, section tints, fade masks",
+          "time": "07:46"
+        },
+        {
+          "hash": "5bebfc7",
+          "author": "Alek Manov",
+          "message": "Audit fixes: z-index, spacing consistency, Stripe spring easing",
+          "time": "07:41"
+        },
+        {
+          "hash": "0e4df3b",
+          "author": "Alek Manov",
+          "message": "Unified inner pages: logo+weather nav, parallax, journal tabs",
+          "time": "07:33"
+        },
+        {
+          "hash": "29edf8e",
+          "author": "Alek Manov",
+          "message": "Hero parallax layer + higher dark veil",
+          "time": "07:26"
+        },
+        {
+          "hash": "a3e21d5",
+          "author": "Alek Manov",
+          "message": "Fix hard cut: soft gradient transition, more hero breathing room",
+          "time": "07:22"
+        },
+        {
+          "hash": "b0ef286",
+          "author": "Alek Manov",
+          "message": "More spacing: push hero down, wider fade, gap before timeline",
+          "time": "07:19"
+        },
+        {
+          "hash": "4e9f9e6",
+          "author": "Alek Manov",
+          "message": "Two-zone home layout: open top + dark body panel",
+          "time": "07:17"
+        },
+        {
+          "hash": "e6617c9",
+          "author": "Alek Manov",
+          "message": "Unified nav alignment, gradient fade, breathing room",
+          "time": "07:06"
+        },
+        {
+          "hash": "c4b7983",
+          "author": "Alek Manov",
+          "message": "Home nav tabs, vibrant ribbons, daily featured card",
+          "time": "07:00"
+        },
+        {
+          "hash": "764b4eb",
+          "author": "Alek Manov",
+          "message": "Custom calendar date picker dropdown",
+          "time": "06:52"
+        },
+        {
+          "hash": "14c4021",
+          "author": "Alek Manov",
+          "message": "Unified hero header + global ribbon parallax",
+          "time": "06:46"
+        },
+        {
+          "hash": "7f021cb",
+          "author": "Alek Manov",
+          "message": "Solid card backgrounds, unified inline nav across all pages",
+          "time": "06:34"
+        },
+        {
+          "hash": "4102ab2",
+          "author": "Alek Manov",
+          "message": "Replace mesh gradient with rope bundle animation from playground",
+          "time": "06:29"
+        },
+        {
+          "hash": "889dc9d",
+          "author": "Alek Manov",
+          "message": "Performance metrics + animated mesh gradient",
+          "time": "06:25"
+        },
         {
           "hash": "a8fdfc5",
           "author": "Alek Manov",
