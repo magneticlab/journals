@@ -341,7 +341,7 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll))
   margin-top: 20px; padding: 10px 20px; border-radius: 10px;
   border: 1px solid rgba(52,211,153,0.2);
   background: rgba(52,211,153,0.08);
-  color: #34d399; font-size: 13px; font-weight: 600;
+  color: var(--brand-daily); font-size: 13px; font-weight: 600;
   font-family: inherit; cursor: pointer;
   backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
   transition: all 0.2s var(--ease-spring);
@@ -383,8 +383,8 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll))
 .card-daily:hover { border-color: rgba(52,211,153,0.4); box-shadow: 0 8px 28px rgba(0,0,0,0.4), 0 0 24px rgba(52,211,153,0.08); }
 .card-head { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 16px; }
 .card-icon { display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 10px; }
-.icon-work { background: rgba(99,149,255,0.12); color: #6395ff; }
-.icon-daily { background: rgba(52,211,153,0.12); color: #34d399; }
+.icon-work { background: var(--brand-work-bg); color: var(--brand-work); }
+.icon-daily { background: var(--brand-daily-bg); color: var(--brand-daily); }
 .card-count { font-size: 12px; font-weight: 600; color: var(--text-muted); background: var(--bg-elevated); padding: 3px 10px; border-radius: 6px; }
 .card-label { font-family: var(--serif); font-size: 24px; font-weight: 400; color: var(--text-heading); margin-bottom: 4px; }
 .card-desc { font-size: 13px; color: var(--text-muted); line-height: 1.5; margin-bottom: 20px; }
@@ -461,8 +461,8 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll))
 .day-col:first-child { border-right: 1px solid var(--border); }
 .day-col:hover { background: var(--bg-elevated); }
 .col-head { display: flex; align-items: center; gap: 5px; }
-.col-work .col-head { color: #6395ff; }
-.col-daily .col-head { color: #34d399; }
+.col-work .col-head { color: var(--brand-work); }
+.col-daily .col-head { color: var(--brand-daily); }
 .col-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; }
 .col-summary { font-size: 11px; color: var(--text-muted); line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .col-meta { display: flex; gap: 8px; font-size: 10px; color: var(--text-muted); font-variant-numeric: tabular-nums; margin-top: auto; }

@@ -74,7 +74,10 @@ const featuredSummary = computed(() => latestData.value?.wentRight || latestData
 const linesAdded = computed(() => latestData.value?.stats?.linesAdded || 0)
 const linesRemoved = computed(() => latestData.value?.stats?.linesRemoved || 0)
 const filesChanged = computed(() => latestData.value?.stats?.filesChanged || 0)
-const brandColor = computed(() => isWork.value ? '#6395ff' : '#34d399')
+const brandColor = computed(() => {
+  const style = getComputedStyle(document.documentElement)
+  return isWork.value ? (style.getPropertyValue('--brand-work').trim() || '#6395ff') : (style.getPropertyValue('--brand-daily').trim() || '#34d399')
+})
 
 const wxCodes = { 0: { l: 'Clear', i: '☀' }, 1: { l: 'Mostly clear', i: '🌤' }, 2: { l: 'Partly cloudy', i: '⛅' }, 3: { l: 'Overcast', i: '☁' }, 45: { l: 'Foggy', i: '🌫' }, 51: { l: 'Drizzle', i: '🌦' }, 61: { l: 'Rain', i: '🌧' }, 63: { l: 'Rain', i: '🌧' }, 80: { l: 'Showers', i: '🌦' }, 95: { l: 'Storm', i: '⛈' } }
 const wx = computed(() => { if (!weather.value?.current) return null; const c = weather.value.current; const w = wxCodes[c.weather_code] || { l: '—', i: '🌡' }; return { ...w, temp: c.temperature_2m, hum: c.relative_humidity_2m, wind: c.wind_speed_10m } })
@@ -192,8 +195,8 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
 .hero { padding-bottom: 48px; will-change: transform, opacity; }
 .hero-title-row { display: flex; align-items: center; gap: 14px; margin-bottom: 6px; }
 .hero-icon { display: flex; align-items: center; justify-content: center; width: 48px; height: 48px; border-radius: 14px; flex-shrink: 0; }
-.hicon-work { background: rgba(99,149,255,0.12); color: #6395ff; }
-.hicon-daily { background: rgba(52,211,153,0.12); color: #34d399; }
+.hicon-work { background: var(--brand-work-bg); color: var(--brand-work); }
+.hicon-daily { background: var(--brand-daily-bg); color: var(--brand-daily); }
 .hero-h1 { font-family: var(--serif); font-size: 36px; font-weight: 400; color: var(--text-heading); }
 .hero-sub { font-size: 14px; color: var(--text-muted); margin-left: 62px; }
 
@@ -217,7 +220,7 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
 .theme-card { display: flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 8px; background: var(--bg-elevated); border: 1px solid var(--border); }
 .theme-icon { font-size: 12px; opacity: 0.5; } .theme-name { font-size: 12px; color: var(--text-strong); font-weight: 500; } .theme-count { font-size: 11px; color: var(--text-muted); }
 .feat-volume { display: flex; gap: 10px; }
-.vol-add { font-size: 12px; font-weight: 600; color: #34d399; } .vol-del { font-size: 12px; font-weight: 600; color: #f87171; } .vol-files { font-size: 12px; color: var(--text-muted); }
+.vol-add { font-size: 12px; font-weight: 600; color: var(--brand-daily); } .vol-del { font-size: 12px; font-weight: 600; color: #f87171; } .vol-files { font-size: 12px; color: var(--text-muted); }
 
 /* Sparkline */
 .spark-card { background: rgba(12,12,14,0.7); border: 1px solid var(--border); border-radius: 14px; padding: 20px 24px; margin-bottom: 24px; backdrop-filter: blur(12px); }
@@ -266,7 +269,7 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
 .entry-date { font-size: 14px; font-weight: 600; color: var(--text-strong); font-variant-numeric: tabular-nums; }
 .entry-day { font-size: 12px; color: var(--text-muted); }
 .entry-meta { display: flex; align-items: center; gap: 8px; margin-left: auto; font-size: 11px; color: var(--text-muted); font-variant-numeric: tabular-nums; }
-.meta-add { color: #34d399; font-weight: 500; }
+.meta-add { color: var(--brand-daily); font-weight: 500; }
 .entry-summary { font-size: 12px; color: var(--text-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 @media (max-width: 640px) { .hero-h1 { font-size: 28px; } .feat-row-top { flex-direction: column; gap: 12px; } .entry-meta { display: none; } }

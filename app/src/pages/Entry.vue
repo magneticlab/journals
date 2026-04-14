@@ -182,7 +182,10 @@ const today = computed(() => new Date().toISOString().slice(0, 10))
 const isToday = computed(() => props.date === today.value)
 const hasTodayEntry = computed(() => dates.value.includes(today.value))
 function goToday() { if (hasTodayEntry.value) router.push(`/${props.journal}/${today.value}`) }
-const brand = computed(() => isWork.value ? '#6395ff' : '#34d399')
+const brand = computed(() => {
+  const style = getComputedStyle(document.documentElement)
+  return isWork.value ? (style.getPropertyValue('--brand-work').trim() || '#6395ff') : (style.getPropertyValue('--brand-daily').trim() || '#34d399')
+})
 
 // Check if the other journal has an entry for this date
 const hasOtherJournal = computed(() => {
@@ -558,7 +561,7 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
 
 .today-btn {
   padding: 8px 14px; border-radius: 8px; border: none;
-  background: rgba(52,211,153,0.15); color: #34d399;
+  background: rgba(52,211,153,0.15); color: var(--green);
   font-size: 12px; font-weight: 600; font-family: inherit;
   cursor: pointer; transition: all 0.2s var(--ease-spring);
   backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
@@ -593,14 +596,14 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
 .duo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 32px; }
 .duo-card { border-radius: 12px; padding: 16px 18px; display: flex; align-items: flex-start; gap: 12px; position: relative; overflow: hidden; }
 .duo-accent { position: absolute; left: 0; top: 0; bottom: 0; width: 3px; }
-.accent-green { background: #34d399; }
+.accent-green { background: var(--green); }
 .accent-red { background: #f87171; }
 .duo-green { background: linear-gradient(135deg, rgba(52,211,153,0.1) 0%, rgba(12,12,14,0.75) 50%); border: 1px solid rgba(52,211,153,0.15); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
 .duo-red { background: linear-gradient(135deg, rgba(248,113,113,0.08) 0%, rgba(12,12,14,0.75) 50%); border: 1px solid rgba(248,113,113,0.12); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
-.duo-icon { width: 24px; height: 24px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; background: rgba(52,211,153,0.15); color: #34d399; }
+.duo-icon { width: 24px; height: 24px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; background: rgba(52,211,153,0.15); color: var(--green); }
 .duo-icon-red { background: rgba(248,113,113,0.15); color: #f87171; }
 .duo-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 4px; }
-.duo-green .duo-label { color: #34d399; } .duo-red .duo-label { color: #f87171; }
+.duo-green .duo-label { color: var(--green); } .duo-red .duo-label { color: #f87171; }
 .duo-text { font-size: 13px; line-height: 1.6; color: var(--text); }
 
 /* Performance */
@@ -722,9 +725,9 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
 /* Volume */
 .vol-card { background: rgba(12,12,14,0.7); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
 .vol-bar { display: flex; height: 6px; border-radius: 3px; overflow: hidden; gap: 2px; margin-bottom: 10px; }
-.vol-add-bar { background: #34d399; border-radius: 3px; } .vol-del-bar { background: #f87171; border-radius: 3px; }
+.vol-add-bar { background: var(--green); border-radius: 3px; } .vol-del-bar { background: #f87171; border-radius: 3px; }
 .vol-labels { display: flex; gap: 16px; }
-.vol-add { font-size: 12px; font-weight: 600; color: #34d399; } .vol-del { font-size: 12px; font-weight: 600; color: #f87171; } .vol-files { font-size: 12px; color: var(--text-muted); margin-left: auto; }
+.vol-add { font-size: 12px; font-weight: 600; color: var(--green); } .vol-del { font-size: 12px; font-weight: 600; color: #f87171; } .vol-files { font-size: 12px; color: var(--text-muted); margin-left: auto; }
 
 /* Projects */
 .project-tags { display: flex; flex-wrap: wrap; gap: 6px; }
@@ -777,7 +780,7 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
 .reanalyze-btn {
   font-size: 11px; font-weight: 600; font-family: inherit;
   padding: 6px 12px; border-radius: 7px; border: none;
-  background: rgba(52,211,153,0.12); color: #34d399;
+  background: var(--brand-daily-bg); color: var(--green);
   cursor: pointer; transition: all 0.15s;
 }
 .reanalyze-btn:hover { background: rgba(52,211,153,0.2); }
@@ -818,7 +821,7 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
 
 .reflect-text { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding-top: 18px; border-top: 1px solid var(--border); }
 .rtext-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
-.rtext-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #34d399; }
+.rtext-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--green); }
 .rtext-themes { display: flex; gap: 4px; }
 .rtext-theme { font-size: 10px; color: var(--text-muted); background: rgba(255,255,255,0.04); padding: 2px 8px; border-radius: 4px; }
 .rtext-content { font-size: 13px; line-height: 1.6; color: var(--text); margin-bottom: 10px; }
@@ -829,7 +832,7 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
 .hl-green { background: rgba(52,211,153,0.06); border: 1px solid rgba(52,211,153,0.1); }
 .hl-amber { background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.08); }
 .hl-title { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px; }
-.hl-green .hl-title { color: #34d399; }
+.hl-green .hl-title { color: var(--green); }
 .hl-amber .hl-title { color: #fbbf24; }
 .rtext-highlights ul { list-style: none; display: flex; flex-direction: column; gap: 4px; }
 .rtext-highlights li {
@@ -837,7 +840,7 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
   padding-left: 12px; position: relative;
 }
 .rtext-highlights li::before { content: '•'; position: absolute; left: 0; }
-.hl-green li::before { color: #34d399; }
+.hl-green li::before { color: var(--green); }
 .hl-amber li::before { color: #fbbf24; }
 
 /* Footer */
