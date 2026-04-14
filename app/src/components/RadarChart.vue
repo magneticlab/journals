@@ -38,7 +38,6 @@ const dataPath = computed(() => {
   }).join(' ') + ' Z'
 })
 
-// Each edge of the polygon as a separate line with gradient
 const edges = computed(() => {
   return values.value.map((v, i) => {
     const next = (i + 1) % n.value
@@ -54,10 +53,6 @@ function scoreColor(s) {
   if (s >= 40) return '#fbbf24'
   return '#f87171'
 }
-
-// Interpolate color for the fill based on average
-const avgScore = computed(() => values.value.reduce((a, b) => a + b, 0) / values.value.length)
-const fillColor = computed(() => scoreColor(avgScore.value))
 
 function labelXY(i) {
   const a = (Math.PI * 2 * i) / n.value - Math.PI / 2
@@ -83,6 +78,15 @@ const uid = 'r' + Math.random().toString(36).slice(2, 6)
           <feGaussianBlur stdDeviation="5" result="blur" />
           <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
         </filter>
+
+        <!-- Radial gradient for the fill: red center → green edge -->
+        <radialGradient :id="uid + '-fill'" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#f87171" stop-opacity="0.3" />
+          <stop offset="35%" stop-color="#fbbf24" stop-opacity="0.2" />
+          <stop offset="65%" stop-color="#6395ff" stop-opacity="0.15" />
+          <stop offset="100%" stop-color="#34d399" stop-opacity="0.12" />
+        </radialGradient>
+
         <!-- Per-edge gradients -->
         <linearGradient v-for="(e, i) in edges" :key="'g'+i" :id="uid + '-eg' + i"
           :x1="e.x1" :y1="e.y1" :x2="e.x2" :y2="e.y2" gradientUnits="userSpaceOnUse">
@@ -100,13 +104,13 @@ const uid = 'r' + Math.random().toString(36).slice(2, 6)
         :x1="cx" :y1="cy" :x2="pt(i-1,1)[0]" :y2="pt(i-1,1)[1]"
         stroke="rgba(255,255,255,0.07)" stroke-width="0.75" />
 
-      <!-- Data fill — glow -->
-      <path :d="dataPath" :fill="fillColor + '20'"
+      <!-- Data fill — glow with radial gradient -->
+      <path :d="dataPath" :fill="`url(#${uid}-fill)`"
         stroke="none"
-        :filter="`url(#${uid}-glow)`" opacity="0.5" />
+        :filter="`url(#${uid}-glow)`" opacity="0.6" />
 
-      <!-- Data fill — crisp -->
-      <path :d="dataPath" :fill="fillColor + '18'" stroke="none" />
+      <!-- Data fill — crisp with radial gradient -->
+      <path :d="dataPath" :fill="`url(#${uid}-fill)`" stroke="none" />
 
       <!-- Per-edge gradient strokes -->
       <line v-for="(e, i) in edges" :key="'e'+i"
@@ -114,7 +118,7 @@ const uid = 'r' + Math.random().toString(36).slice(2, 6)
         :stroke="`url(#${uid}-eg${i})`" stroke-width="2"
         stroke-linecap="round" />
 
-      <!-- Score values — colored by their score -->
+      <!-- Score values — colored by score -->
       <text v-for="(v, i) in values" :key="'v'+i"
         :x="scoreXY(i)[0]" :y="scoreXY(i)[1]"
         text-anchor="middle" dominant-baseline="middle"

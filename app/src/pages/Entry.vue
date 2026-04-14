@@ -61,6 +61,15 @@ const hasOtherJournal = computed(() => {
 
 const themeIcons = { 'Design System': '⬡', 'Design & Layout': '◫', 'Page Building': '▦', 'Animation & Effects': '✦', 'Bug Fixes': '⚠', 'Git & Deployment': '⎇', 'Version Iteration': '↻', 'Refactoring': '⟲', 'Content & Copy': '¶', 'Planning & Strategy': '◈', 'General Development': '⌘', 'Git': '⎇', 'Claude Code': '◉', 'Navigation': '≡', 'File Inspection': '◧', 'Package Management': '⬢', 'Homebrew': '⚗', 'Remote': '⚡', 'GitHub CLI': '⎇', 'File Operations': '◧', 'Other': '◆', 'Docker': '◎', 'Python': '◉', 'HTTP': '◎' }
 function scoreColor(s) { if (s >= 80) return '#34d399'; if (s >= 60) return '#6395ff'; if (s >= 40) return '#fbbf24'; return '#f87171' }
+
+function ringScoreColor(s) {
+  const stops = [[0,[248,113,113]],[40,[251,191,36]],[65,[99,149,255]],[100,[52,211,153]]]
+  let lo = stops[0], hi = stops[stops.length-1]
+  for (let i = 0; i < stops.length-1; i++) { if (s >= stops[i][0] && s <= stops[i+1][0]) { lo = stops[i]; hi = stops[i+1]; break } }
+  const t = (s - lo[0]) / (hi[0] - lo[0] || 1)
+  const r = Math.round(lo[1][0]+(hi[1][0]-lo[1][0])*t), g = Math.round(lo[1][1]+(hi[1][1]-lo[1][1])*t), b = Math.round(lo[1][2]+(hi[1][2]-lo[1][2])*t)
+  return `rgb(${r},${g},${b})`
+}
 const genTime = computed(() => { if (!data.value?.generatedAt) return ''; return new Date(data.value.generatedAt).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }) })
 const activeHours = computed(() => { const tr = data.value?.stats?.timeRange; if (!tr) return null; const p = tr.split('–'); if (p.length !== 2) return null; const [h1,m1] = p[0].split(':').map(Number); const [h2,m2] = p[1].split(':').map(Number); const mins = (h2*60+m2)-(h1*60+m1); if (mins <= 0) return null; const h = Math.floor(mins/60); const m = mins%60; return h > 0 ? `${h}h ${m}m` : `${m}m` })
 const summaryLine = computed(() => { if (!data.value) return ''; const s = data.value.stats; const parts = []; if (isWork.value) { if (s?.sessions) parts.push(`${s.sessions} sessions`); if (s?.commits) parts.push(`${s.commits} commits`); if (s?.linesAdded) parts.push(`+${s.linesAdded.toLocaleString()} lines`); if (activeHours.value) parts.push(activeHours.value+' active') } else { if (s?.commands) parts.push(`${s.commands} commands`); if (s?.commits) parts.push(`${s.commits} commits`) }; return parts.join(' · ') })
@@ -165,7 +174,7 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
                       class="ring-arc"
                     />
                   </svg>
-                  <span class="ring-score" :style="{ color: scoreColor(m.score) }">{{ m.score }}</span>
+                  <span class="ring-score" :style="{ color: ringScoreColor(m.score) }">{{ m.score }}</span>
                 </div>
                 <span class="ring-name">{{ m.label }}</span>
               </div>
@@ -177,10 +186,10 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
             <div v-for="(m, key) in data.metrics" :key="key" class="bar-row">
               <div class="bar-info">
                 <span class="bar-label">{{ m.label }}</span>
-                <span class="bar-score" :style="{ color: scoreColor(m.score) }">{{ m.score }}</span>
+                <span class="bar-score" :style="{ color: ringScoreColor(m.score) }">{{ m.score }}</span>
               </div>
               <div class="bar-track">
-                <div class="bar-fill" :style="{ width: m.score + '%', background: scoreColor(m.score) }"></div>
+                <div class="bar-fill" :style="{ width: m.score + '%', background: `linear-gradient(90deg, #f87171, #fbbf24 40%, #6395ff 65%, #34d399)`, backgroundSize: `${100 / (m.score/100)}% 100%` }"></div>
               </div>
             </div>
           </div>
