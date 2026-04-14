@@ -1,10 +1,19 @@
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, onUnmounted, computed } from 'vue'
 
 const manifest = ref({ work: [], daily: [] })
 const weather = ref(null)
+const scrollY = ref(0)
+function onScroll() { scrollY.value = window.scrollY }
+
+// Hero parallax: moves slower, fades out
+const heroStyle = computed(() => ({
+  transform: `translateY(${scrollY.value * 0.15}px)`,
+  opacity: Math.max(1 - scrollY.value / 400, 0),
+}))
 
 onMounted(async () => {
+  window.addEventListener('scroll', onScroll, { passive: true })
   manifest.value = await (await fetch('/manifest.json')).json()
   // Fetch weather (Athens, Greece — no API key needed)
   try {
@@ -118,6 +127,8 @@ function spark7(list, key) {
 }
 const workSpark = computed(() => spark7(manifest.value.work, 'commits'))
 const dailySpark = computed(() => spark7(manifest.value.daily, 'commits'))
+
+onUnmounted(() => window.removeEventListener('scroll', onScroll))
 </script>
 
 <template>
@@ -125,8 +136,8 @@ const dailySpark = computed(() => spark7(manifest.value.daily, 'commits'))
     <!-- TOP ZONE — transparent, animation visible -->
     <div class="top-zone">
       <div class="mx">
-        <!-- Hero -->
-        <div class="hero">
+        <!-- Hero — parallax + fade on scroll -->
+        <div class="hero" :style="heroStyle">
           <div class="hero-top">
             <h1 class="hero-logo">Journals</h1>
             <div v-if="weather" class="weather">
@@ -242,7 +253,7 @@ const dailySpark = computed(() => spark7(manifest.value.daily, 'commits'))
 .top-zone { padding: 64px 0 0; }
 
 /* Hero */
-.hero { margin-bottom: 0; padding-bottom: 120px; }
+.hero { margin-bottom: 0; padding-bottom: 120px; will-change: transform, opacity; }
 .hero-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 24px; }
 .hero-logo { font-family: var(--serif); font-size: 20px; font-weight: 400; color: var(--text-heading); }
 .weather {
@@ -263,7 +274,9 @@ const dailySpark = computed(() => spark7(manifest.value.daily, 'commits'))
 /* BODY ZONE — soft gradient, no hard edge */
 .body-zone {
   position: relative;
-  background: linear-gradient(to bottom, transparent 0%, #0c0c0e 250px);
+  background: linear-gradient(to bottom, transparent 0%, #0c0c0e 150px);
+  margin-top: -80px;
+  padding-top: 80px;
 }
 .body-fade { display: none; }
 .body-solid {
