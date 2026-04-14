@@ -1,0 +1,81 @@
+{
+  "date": "2026-04-13",
+  "day": "Monday",
+  "display": "April 13, 2026",
+  "generatedAt": "2026-04-14T05:22:20.753275",
+  "stats": {
+    "sessions": 9,
+    "messages": 126,
+    "commits": 3,
+    "repos": 2,
+    "timeRange": "00:34\u201323:54"
+  },
+  "wentRight": "Productive day with 3 commit(s) across 2 repo(s) during 9 Claude session(s) spanning 00:34\u201323:54.",
+  "couldBeBetter": "Hit 2 bugs during the session \u2014 check if recurring patterns need architectural fixes.",
+  "whatIDid": [
+    "growthmentor-playground: feat: site redesign \u2014 v2 pages, footer nav, nav polish, DS restructuring",
+    "vesselfront: docs: add comprehensive Costa UX calls research report",
+    "vesselfront: feat: add landing pages V1\u2013V4 with particle wave backgrounds and PRD",
+    "Design System: 18 interactions across sessions",
+    "Page Building: 15 interactions across sessions",
+    "Content & Copy: 5 interactions across sessions",
+    "Design & Layout: 5 interactions across sessions",
+    "Version Iteration: 3 interactions across sessions",
+    "Git & Deployment: 2 task(s)",
+    "Bug Fixes: 2 task(s)"
+  ],
+  "themes": {
+    "General Development": 19,
+    "Design System": 18,
+    "Page Building": 15,
+    "Content & Copy": 5,
+    "Design & Layout": 5,
+    "Version Iteration": 3,
+    "Git & Deployment": 2,
+    "Bug Fixes": 2
+  },
+  "projectsWip": [
+    "alek \u2014 session work",
+    "growthmentor-playground \u2014 1 commit(s)",
+    "vesselfront \u2014 2 commit(s)"
+  ],
+  "docsCreated": [
+    {
+      "title": "docs: add comprehensive Costa UX calls research report",
+      "description": "vesselfront \u00b7 413c09f"
+    }
+  ],
+  "gitActivity": [
+    {
+      "repo": "growthmentor-playground",
+      "commits": [
+        {
+          "hash": "bc158b5",
+          "author": "Alek Manov",
+          "message": "feat: site redesign \u2014 v2 pages, footer nav, nav polish, DS restructuring",
+          "time": "00:50"
+        }
+      ],
+      "stat": "81 files changed, 5146 insertions(+), 2733 deletions(-)"
+    },
+    {
+      "repo": "vesselfront",
+      "commits": [
+        {
+          "hash": "413c09f",
+          "author": "Alek Manov",
+          "message": "docs: add comprehensive Costa UX calls research report",
+          "time": "01:04"
+        },
+        {
+          "hash": "50b4f6e",
+          "author": "Alek Manov",
+          "message": "feat: add landing pages V1\u2013V4 with particle wave backgrounds and PRD",
+          "time": "00:53"
+        }
+      ],
+      "stat": "9 files changed, 13071 insertions(+)"
+    }
+  ],
+  "summary": "9 session(s), 126 msgs, 3 commit(s) across 2 repo(s)"
+}

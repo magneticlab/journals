@@ -1,0 +1,102 @@
+{
+  "date": "2026-03-24",
+  "day": "Tuesday",
+  "display": "March 24, 2026",
+  "generatedAt": "2026-04-14T05:22:16.802585",
+  "summary": "0 terminal commands, 10 commits across 2 repos, 8 files modified.",
+  "stats": {
+    "commands": 0,
+    "commits": 10,
+    "repos": 2,
+    "filesModified": 8
+  },
+  "categories": {},
+  "activityByHour": {},
+  "notableCommands": [],
+  "gitActivity": [
+    {
+      "repo": "growthmentor-playground",
+      "commits": [
+        {
+          "hash": "36b0fce",
+          "author": "Foti Panagiotakopoulos",
+          "message": "refactor: MentorLive topics page \u2014 reorder sections, cleaner design",
+          "time": "16:12"
+        },
+        {
+          "hash": "d8cc40c",
+          "author": "Foti Panagiotakopoulos",
+          "message": "chore: content studio, dashboard, mentor mirror updates + startup pages manifesto",
+          "time": "13:51"
+        },
+        {
+          "hash": "9549854",
+          "author": "Foti Panagiotakopoulos",
+          "message": "feat: MentorLive V5 prototype \u2014 full AI-for-growth workshop platform",
+          "time": "13:50"
+        },
+        {
+          "hash": "be47ef3",
+          "author": "Foti Panagiotakopoulos",
+          "message": "chore: morning brief 2026-03-24",
+          "time": "04:36"
+        }
+      ]
+    },
+    {
+      "repo": "shadcnui",
+      "commits": [
+        {
+          "hash": "ba6ac6e",
+          "author": "shadcn",
+          "message": "fix: button",
+          "time": "22:51"
+        },
+        {
+          "hash": "b75796e",
+          "author": "shadcn",
+          "message": "fix: navigation menu (#10162)",
+          "time": "22:29"
+        },
+        {
+          "hash": "d82b4a7",
+          "author": "shadcn",
+          "message": "fix: radial charts for v3",
+          "time": "17:15"
+        },
+        {
+          "hash": "5b79499",
+          "author": "Luis Llanes",
+          "message": "fix(registry): update @shadcncraft entry in directory (#10151)",
+          "time": "01:12"
+        },
+        {
+          "hash": "d78ff8b",
+          "author": "shadcn",
+          "message": "feat: update colors for popovers (#10155)",
+          "time": "12:12"
+        },
+        {
+          "hash": "ef78384",
+          "author": "shadcn",
+          "message": "feat: replace \"Add a block\" button with \"View Components\" linking to /docs/components (#10154)",
+          "time": "10:13"
+        }
+      ]
+    }
+  ],
+  "fileGroups": {
+    "~/Desktop/Online banking.pdf": [
+      "~/Desktop/Online banking.pdf"
+    ],
+    "~/Documents/GitHub": [
+      "~/Documents/GitHub/growthmentor-playground/.gitignore",
+      "~/Documents/GitHub/growthmentor-playground/README.md",
+      "~/Documents/GitHub/growthmentor-playground/tsconfig.app.json",
+      "~/Documents/GitHub/growthmentor-playground/tsconfig.json",
+      "~/Documents/GitHub/growthmentor-playground/tsconfig.node.json",
+      "~/Documents/GitHub/growthmentor-playground/vercel.json",
+      "~/Documents/GitHub/growthmentor-playground/vite.config.ts"
+    ]
+  }
+}

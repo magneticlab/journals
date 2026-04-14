@@ -1,0 +1,122 @@
+{
+  "date": "2026-03-11",
+  "day": "Wednesday",
+  "display": "March 11, 2026",
+  "generatedAt": "2026-04-14T05:22:14.150287",
+  "stats": {
+    "sessions": 0,
+    "messages": 0,
+    "commits": 13,
+    "repos": 1,
+    "timeRange": ""
+  },
+  "wentRight": "13 commit(s) shipped across 1 repo(s).",
+  "couldBeBetter": "",
+  "whatIDid": [
+    "shadcnui: chore: rebase on main",
+    "shadcnui: update agents-ui registry from livekit.io to livekit.com",
+    "shadcnui: style: fix prettier formatting in create-template.ts",
+    "shadcnui: fix: respect detected package manager for monorepo templates",
+    "shadcnui: chore(release): version packages",
+    "shadcnui: fix",
+    "shadcnui: feat: update handling of init urls",
+    "shadcnui: feat: add @gammaui registry with homepage, URL, description, and logo",
+    "shadcnui: feat(registry): add @shadcnmaps",
+    "shadcnui: chore(release): version packages",
+    "shadcnui: fix: cache in resolveRegistryBaseConfig",
+    "shadcnui: feat: track preset code",
+    "shadcnui: feat: add button active state"
+  ],
+  "themes": {},
+  "projectsWip": [
+    "shadcnui \u2014 13 commit(s)"
+  ],
+  "docsCreated": [],
+  "gitActivity": [
+    {
+      "repo": "shadcnui",
+      "commits": [
+        {
+          "hash": "65ddce2",
+          "author": "Ziane-Badreddine",
+          "message": "chore: rebase on main",
+          "time": "19:45"
+        },
+        {
+          "hash": "f413598",
+          "author": "Thomas Yuill",
+          "message": "update agents-ui registry from livekit.io to livekit.com",
+          "time": "14:17"
+        },
+        {
+          "hash": "34c04d5",
+          "author": "Devin Alexander",
+          "message": "style: fix prettier formatting in create-template.ts",
+          "time": "16:27"
+        },
+        {
+          "hash": "0029b3b",
+          "author": "Devin Alexander",
+          "message": "fix: respect detected package manager for monorepo templates",
+          "time": "14:52"
+        },
+        {
+          "hash": "8df46c4",
+          "author": "github-actions[bot]",
+          "message": "chore(release): version packages",
+          "time": "08:14"
+        },
+        {
+          "hash": "cf672a9",
+          "author": "shadcn",
+          "message": "fix",
+          "time": "12:10"
+        },
+        {
+          "hash": "5ee4567",
+          "author": "shadcn",
+          "message": "feat: update handling of init urls",
+          "time": "12:07"
+        },
+        {
+          "hash": "aff5d7f",
+          "author": "mazyar-kawa02",
+          "message": "feat: add @gammaui registry with homepage, URL, description, and logo",
+          "time": "16:31"
+        },
+        {
+          "hash": "4c0be13",
+          "author": "LGLabGreg",
+          "message": "feat(registry): add @shadcnmaps",
+          "time": "16:40"
+        },
+        {
+          "hash": "7ee55e8",
+          "author": "github-actions[bot]",
+          "message": "chore(release): version packages",
+          "time": "06:50"
+        },
+        {
+          "hash": "aa841e3",
+          "author": "shadcn",
+          "message": "fix: cache in resolveRegistryBaseConfig",
+          "time": "10:48"
+        },
+        {
+          "hash": "598fb2f",
+          "author": "shadcn",
+          "message": "feat: track preset code",
+          "time": "10:35"
+        },
+        {
+          "hash": "ff51e9c",
+          "author": "shadcn",
+          "message": "feat: add button active state",
+          "time": "10:18"
+        }
+      ],
+      "stat": "19 files changed, 19 insertions(+), 19 deletions(-)"
+    }
+  ],
+  "summary": "0 session(s), 0 msgs, 13 commit(s) across 1 repo(s)"
+}

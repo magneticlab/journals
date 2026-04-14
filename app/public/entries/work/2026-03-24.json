@@ -1,0 +1,117 @@
+{
+  "date": "2026-03-24",
+  "day": "Tuesday",
+  "display": "March 24, 2026",
+  "generatedAt": "2026-04-14T05:22:16.725342",
+  "stats": {
+    "sessions": 0,
+    "messages": 0,
+    "commits": 10,
+    "repos": 2,
+    "timeRange": ""
+  },
+  "wentRight": "10 commit(s) shipped across 2 repo(s).",
+  "couldBeBetter": "",
+  "whatIDid": [
+    "growthmentor-playground: refactor: MentorLive topics page \u2014 reorder sections, cleaner design",
+    "growthmentor-playground: chore: content studio, dashboard, mentor mirror updates + startup pages manifesto",
+    "growthmentor-playground: feat: MentorLive V5 prototype \u2014 full AI-for-growth workshop platform",
+    "growthmentor-playground: chore: morning brief 2026-03-24",
+    "shadcnui: fix: button",
+    "shadcnui: fix: navigation menu (#10162)",
+    "shadcnui: fix: radial charts for v3",
+    "shadcnui: fix(registry): update @shadcncraft entry in directory (#10151)",
+    "shadcnui: feat: update colors for popovers (#10155)",
+    "shadcnui: feat: replace \"Add a block\" button with \"View Components\" linking to /docs/components (#10154)"
+  ],
+  "themes": {},
+  "projectsWip": [
+    "growthmentor-playground \u2014 4 commit(s)",
+    "shadcnui \u2014 6 commit(s)"
+  ],
+  "docsCreated": [
+    {
+      "title": "chore: morning brief 2026-03-24",
+      "description": "growthmentor-playground \u00b7 be47ef3"
+    },
+    {
+      "title": "feat: replace \"Add a block\" button with \"View Components\" linking to /docs/components (#10154)",
+      "description": "shadcnui \u00b7 ef78384"
+    }
+  ],
+  "gitActivity": [
+    {
+      "repo": "growthmentor-playground",
+      "commits": [
+        {
+          "hash": "36b0fce",
+          "author": "Foti Panagiotakopoulos",
+          "message": "refactor: MentorLive topics page \u2014 reorder sections, cleaner design",
+          "time": "16:12"
+        },
+        {
+          "hash": "d8cc40c",
+          "author": "Foti Panagiotakopoulos",
+          "message": "chore: content studio, dashboard, mentor mirror updates + startup pages manifesto",
+          "time": "13:51"
+        },
+        {
+          "hash": "9549854",
+          "author": "Foti Panagiotakopoulos",
+          "message": "feat: MentorLive V5 prototype \u2014 full AI-for-growth workshop platform",
+          "time": "13:50"
+        },
+        {
+          "hash": "be47ef3",
+          "author": "Foti Panagiotakopoulos",
+          "message": "chore: morning brief 2026-03-24",
+          "time": "04:36"
+        }
+      ],
+      "stat": "2 files changed, 90 insertions(+)"
+    },
+    {
+      "repo": "shadcnui",
+      "commits": [
+        {
+          "hash": "ba6ac6e",
+          "author": "shadcn",
+          "message": "fix: button",
+          "time": "22:51"
+        },
+        {
+          "hash": "b75796e",
+          "author": "shadcn",
+          "message": "fix: navigation menu (#10162)",
+          "time": "22:29"
+        },
+        {
+          "hash": "d82b4a7",
+          "author": "shadcn",
+          "message": "fix: radial charts for v3",
+          "time": "17:15"
+        },
+        {
+          "hash": "5b79499",
+          "author": "Luis Llanes",
+          "message": "fix(registry): update @shadcncraft entry in directory (#10151)",
+          "time": "01:12"
+        },
+        {
+          "hash": "d78ff8b",
+          "author": "shadcn",
+          "message": "feat: update colors for popovers (#10155)",
+          "time": "12:12"
+        },
+        {
+          "hash": "ef78384",
+          "author": "shadcn",
+          "message": "feat: replace \"Add a block\" button with \"View Components\" linking to /docs/components (#10154)",
+          "time": "10:13"
+        }
+      ],
+      "stat": "1 file changed, 1 insertion(+), 1 deletion(-)"
+    }
+  ],
+  "summary": "0 session(s), 0 msgs, 10 commit(s) across 2 repo(s)"
+}

@@ -1,0 +1,64 @@
+{
+  "date": "2026-03-20",
+  "day": "Friday",
+  "display": "March 20, 2026",
+  "generatedAt": "2026-04-14T05:22:15.962689",
+  "stats": {
+    "sessions": 0,
+    "messages": 0,
+    "commits": 3,
+    "repos": 2,
+    "timeRange": ""
+  },
+  "wentRight": "3 commit(s) shipped across 2 repo(s).",
+  "couldBeBetter": "",
+  "whatIDid": [
+    "growthmentor-playground: chore: morning brief 2026-03-20",
+    "shadcnui: Revert \"feat: update customizer (#10129)\" (#10130)",
+    "shadcnui: feat: update customizer (#10129)"
+  ],
+  "themes": {},
+  "projectsWip": [
+    "growthmentor-playground \u2014 1 commit(s)",
+    "shadcnui \u2014 2 commit(s)"
+  ],
+  "docsCreated": [
+    {
+      "title": "chore: morning brief 2026-03-20",
+      "description": "growthmentor-playground \u00b7 1213d8c"
+    }
+  ],
+  "gitActivity": [
+    {
+      "repo": "growthmentor-playground",
+      "commits": [
+        {
+          "hash": "1213d8c",
+          "author": "Foti Panagiotakopoulos",
+          "message": "chore: morning brief 2026-03-20",
+          "time": "04:33"
+        }
+      ],
+      "stat": "2 files changed, 96 insertions(+)"
+    },
+    {
+      "repo": "shadcnui",
+      "commits": [
+        {
+          "hash": "5b40b9d",
+          "author": "shadcn",
+          "message": "Revert \"feat: update customizer (#10129)\" (#10130)",
+          "time": "16:56"
+        },
+        {
+          "hash": "e327cef",
+          "author": "shadcn",
+          "message": "feat: update customizer (#10129)",
+          "time": "16:46"
+        }
+      ],
+      "stat": "21 files changed, 922 insertions(+), 265 deletions(-)"
+    }
+  ],
+  "summary": "0 session(s), 0 msgs, 3 commit(s) across 2 repo(s)"
+}

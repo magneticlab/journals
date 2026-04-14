@@ -1,0 +1,150 @@
+{
+  "date": "2026-03-26",
+  "day": "Thursday",
+  "display": "March 26, 2026",
+  "generatedAt": "2026-04-14T05:22:17.345545",
+  "summary": "0 terminal commands, 12 commits across 2 repos, 50 files modified.",
+  "stats": {
+    "commands": 0,
+    "commits": 12,
+    "repos": 2,
+    "filesModified": 50
+  },
+  "categories": {},
+  "activityByHour": {},
+  "notableCommands": [],
+  "gitActivity": [
+    {
+      "repo": "growthmentor-playground",
+      "commits": [
+        {
+          "hash": "c918cb0",
+          "author": "Foti Panagiotakopoulos",
+          "message": "chore: morning brief 2026-03-26",
+          "time": "09:00"
+        }
+      ]
+    },
+    {
+      "repo": "shadcnui",
+      "commits": [
+        {
+          "hash": "3ab74a5",
+          "author": "dependabot[bot]",
+          "message": "chore(deps-dev): bump eslint in /templates/next-app",
+          "time": "16:18"
+        },
+        {
+          "hash": "3313b22",
+          "author": "dependabot[bot]",
+          "message": "chore(deps-dev): bump vite in /templates/react-router-app",
+          "time": "16:18"
+        },
+        {
+          "hash": "7336af6",
+          "author": "dependabot[bot]",
+          "message": "chore(deps-dev): bump tailwindcss in /templates/next-app",
+          "time": "16:18"
+        },
+        {
+          "hash": "02f855f",
+          "author": "dependabot[bot]",
+          "message": "chore(deps-dev): bump typescript in /templates/react-router-app",
+          "time": "16:18"
+        },
+        {
+          "hash": "7d718dd",
+          "author": "shadcn",
+          "message": "fix: refactor styles (#10190)",
+          "time": "14:36"
+        },
+        {
+          "hash": "87937c5",
+          "author": "dependabot[bot]",
+          "message": "chore(deps): bump next from 16.1.6 to 16.1.7 in /templates/next-monorepo",
+          "time": "10:25"
+        },
+        {
+          "hash": "5570b3e",
+          "author": "shadcn",
+          "message": "Revert \"deps: update next to 16.2.1 (#10180)\" (#10189)",
+          "time": "14:23"
+        },
+        {
+          "hash": "214b1b8",
+          "author": "shadcn",
+          "message": "Revert \"feat: refactor styles handling across v4 (#10176)\" (#10185)",
+          "time": "11:14"
+        },
+        {
+          "hash": "ee30f90",
+          "author": "dependabot[bot]",
+          "message": "chore(deps): bump picomatch in /templates/next-monorepo",
+          "time": "06:12"
+        },
+        {
+          "hash": "8bd161d",
+          "author": "shadcn",
+          "message": "deps: update next to 16.2.1 (#10180)",
+          "time": "10:10"
+        },
+        {
+          "hash": "64b88b6",
+          "author": "shadcn",
+          "message": "feat: refactor styles handling across v4 (#10176)",
+          "time": "09:50"
+        }
+      ]
+    }
+  ],
+  "fileGroups": {
+    "~/Desktop/CleanShot 2026-03-26 at 14.42.46@2x.png": [
+      "~/Desktop/CleanShot 2026-03-26 at 14.42.46@2x.png"
+    ],
+    "~/Desktop/CleanShot 2026-03-26 at 14.43.27@2x.png": [
+      "~/Desktop/CleanShot 2026-03-26 at 14.43.27@2x.png"
+    ],
+    "~/Desktop/CleanShot 2026-03-26 at 14.46.05@2x.png": [
+      "~/Desktop/CleanShot 2026-03-26 at 14.46.05@2x.png"
+    ],
+    "~/Desktop/CleanShot 2026-03-26 at 14.51.45@2x.png": [
+      "~/Desktop/CleanShot 2026-03-26 at 14.51.45@2x.png"
+    ],
+    "~/Desktop/CleanShot 2026-03-26 at 14.53.01@2x.png": [
+      "~/Desktop/CleanShot 2026-03-26 at 14.53.01@2x.png"
+    ],
+    "~/Desktop/CleanShot 2026-03-26 at 14.54.17@2x.png": [
+      "~/Desktop/CleanShot 2026-03-26 at 14.54.17@2x.png"
+    ],
+    "~/Desktop/CleanShot 2026-03-26 at 15.00.09@2x.png": [
+      "~/Desktop/CleanShot 2026-03-26 at 15.00.09@2x.png"
+    ],
+    "~/Documents/69c52cce4fc9b.pdf": [
+      "~/Documents/69c52cce4fc9b.pdf"
+    ],
+    "~/Documents/GitHub": [
+      "~/Documents/GitHub/shadcnui/.commitlintrc.json",
+      "~/Documents/GitHub/shadcnui/.editorconfig",
+      "~/Documents/GitHub/shadcnui/.eslintignore",
+      "~/Documents/GitHub/shadcnui/.eslintrc.json",
+      "~/Documents/GitHub/shadcnui/.gitignore",
+      "~/Documents/GitHub/shadcnui/.kodiak.toml",
+      "~/Documents/GitHub/shadcnui/.npmrc",
+      "~/Documents/GitHub/shadcnui/.nvmrc",
+      "~/Documents/GitHub/shadcnui/.prettierignore",
+      "~/Documents/GitHub/shadcnui/CONTRIBUTING.md"
+    ],
+    "~/Documents/ViberDownloads": [
+      "~/Documents/ViberDownloads/0-02-05-01b4954698c540dae42f3216330afb985b5c42bf63a4ebe0046869bfcf3c0f24_227754f3a64.jpg",
+      "~/Documents/ViberDownloads/0-02-05-02cd55bf3744044a2c214daec08d806dc524dd67152fe3fb0c69ad8a1cac74c4_227754cbee9.jpg",
+      "~/Documents/ViberDownloads/0-02-05-190c1bab8b20495d2b27e46c7bfc07cd66d7ec59275b1bfa691fd4f47a8f2bfe_22775480208.jpg",
+      "~/Documents/ViberDownloads/0-02-05-27e4c259571b6e0d865593881cab8612b406c91edb4e615b33f41e722e8f0fc4_221c472a95a.jpg",
+      "~/Documents/ViberDownloads/0-02-05-28450cc40e245a1857848b5ccff74bd6099a3678a907ea3229f2fb77fe194db6_22775481eb8.jpg",
+      "~/Documents/ViberDownloads/0-02-05-29cc6fc3d9189b8fdd382b9677986e80e1a83d9b8689f55102aa22607496beed_22775562646.jpg",
+      "~/Documents/ViberDownloads/0-02-05-314bfcfff71ea5f259b00e6b410d1500e72379f93ac866068c8dcfca1dfe8e92_221c4724f9b.jpg",
+      "~/Documents/ViberDownloads/0-02-05-31ab98882d20238ff42fbf7063be4ef60576f4f2079ad60ec7056e19cf35865b_221c4727fa5.jpg",
+      "~/Documents/ViberDownloads/0-02-05-3897a7aa0aba42f414f344b666b4d6b1a0888e6abbd125464673b26831a20608_2277549f790.jpg",
+      "~/Documents/ViberDownloads/0-02-05-398a0f6a7eeb4c6fdc3ecfda6c75fc694fc2abe7d401a0c3004bdf912871c7d2_2277549a605.jpg"
+    ]
+  }
+}

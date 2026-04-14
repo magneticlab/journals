@@ -1,32 +1,27 @@
 #!/usr/bin/env python3
 """
 Daily Journal Generator — Laptop Activity
-Summarizes daily activity from shell history, git logs, and file system changes.
+Outputs structured JSON for the Vue app.
 """
 
+import json
 import subprocess
-import os
 from datetime import datetime, timedelta
 from pathlib import Path
 from collections import defaultdict
 
 REPOS_DIR = Path.home() / "Documents" / "GitHub"
 OUTPUT_DIR = Path(__file__).parent.parent / "daily" / "entries"
+APP_PUBLIC = Path(__file__).parent.parent / "app" / "public" / "entries" / "daily"
 WEEKDAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 
 
 def get_shell_history_for_date(target_date: str) -> list[dict]:
-    """Extract shell commands from zsh history for a given date.
-
-    Supports both extended format (: timestamp:0;command) and macOS
-    session-based history (~/.zsh_sessions/*.history) where we use
-    the session file's modification date as a rough timestamp.
-    """
     entries = []
     target_dt = datetime.strptime(target_date, "%Y-%m-%d")
     target_end = target_dt + timedelta(days=1)
 
-    # Try extended history format first
+    # Extended history format
     history_file = Path.home() / ".zsh_history"
     if history_file.exists():
         try:
@@ -36,32 +31,25 @@ def get_shell_history_for_date(target_date: str) -> list[dict]:
                         line = raw_line.decode("utf-8", errors="replace").strip()
                     except UnicodeDecodeError:
                         continue
-
                     if line.startswith(": "):
                         parts = line[2:].split(";", 1)
                         if len(parts) == 2:
                             try:
-                                ts_part = parts[0].split(":")[0]
-                                ts = int(ts_part)
+                                ts = int(parts[0].split(":")[0])
                                 cmd_time = datetime.fromtimestamp(ts)
                                 if target_dt <= cmd_time < target_end:
-                                    cmd = parts[1].strip()
-                                    entries.append({
-                                        "time": cmd_time.strftime("%H:%M"),
-                                        "command": cmd,
-                                    })
+                                    entries.append({"time": cmd_time.strftime("%H:%M"), "command": parts[1].strip()})
                             except (ValueError, OSError):
                                 continue
         except PermissionError:
             pass
 
-    # Also check macOS session-based history files
+    # macOS session-based history
     sessions_dir = Path.home() / ".zsh_sessions"
     if sessions_dir.exists():
         for hist_file in sessions_dir.glob("*.history"):
             try:
                 mtime = datetime.fromtimestamp(hist_file.stat().st_mtime)
-                # Only process session files modified on the target date
                 if not (target_dt <= mtime < target_end):
                     continue
                 time_str = mtime.strftime("%H:%M")
@@ -72,54 +60,34 @@ def get_shell_history_for_date(target_date: str) -> list[dict]:
                         except UnicodeDecodeError:
                             continue
                         if line and not line.startswith(": "):
-                            entries.append({
-                                "time": time_str,
-                                "command": line,
-                            })
+                            entries.append({"time": time_str, "command": line})
             except (PermissionError, OSError):
                 continue
 
-    # Deduplicate
     seen = set()
     unique = []
     for e in entries:
-        key = e["command"]
-        if key not in seen:
-            seen.add(key)
+        if e["command"] not in seen:
+            seen.add(e["command"])
             unique.append(e)
-
     return unique
 
 
-def get_git_activity_all_repos(target_date: str) -> dict[str, list[dict]]:
-    """Get git commits across all repos for a given date."""
-    activity = {}
-
+def get_git_activity(target_date: str) -> list[dict]:
+    activity = []
     if not REPOS_DIR.exists():
         return activity
 
     for repo_dir in sorted(REPOS_DIR.iterdir()):
-        if not repo_dir.is_dir():
+        if not repo_dir.is_dir() or not (repo_dir / ".git").exists():
             continue
-        git_dir = repo_dir / ".git"
-        if not git_dir.exists():
-            continue
-
         repo_name = repo_dir.name
         try:
             result = subprocess.run(
-                [
-                    "git", "log",
-                    f"--after={target_date} 00:00:00",
-                    f"--before={target_date} 23:59:59",
-                    "--all",
-                    "--format=%H|%an|%s|%ai",
-                    "--no-merges",
-                ],
-                cwd=str(repo_dir),
-                capture_output=True,
-                text=True,
-                timeout=10,
+                ["git", "log", f"--after={target_date} 00:00:00",
+                 f"--before={target_date} 23:59:59", "--all",
+                 "--format=%H|%an|%s|%ai", "--no-merges"],
+                cwd=str(repo_dir), capture_output=True, text=True, timeout=10,
             )
             commits = []
             for line in result.stdout.strip().split("\n"):
@@ -131,215 +99,171 @@ def get_git_activity_all_repos(target_date: str) -> dict[str, list[dict]]:
                         "hash": parts[0][:7],
                         "author": parts[1],
                         "message": parts[2],
-                        "time": parts[3],
+                        "time": parts[3].split(" ")[1][:5] if " " in parts[3] else "",
                     })
-
             if commits:
-                activity[repo_name] = commits
+                activity.append({"repo": repo_name, "commits": commits})
         except (subprocess.TimeoutExpired, Exception):
             continue
-
     return activity
 
 
-def get_recently_modified_files(target_date: str) -> list[str]:
-    """Find files modified on the target date in common working directories."""
+def get_modified_files(target_date: str) -> list[str]:
     modified = []
-    search_dirs = [
-        Path.home() / "Documents",
-        Path.home() / "Desktop",
-        Path.home() / "Downloads",
-    ]
-
+    search_dirs = [Path.home() / "Documents", Path.home() / "Desktop", Path.home() / "Downloads"]
     for search_dir in search_dirs:
         if not search_dir.exists():
             continue
         try:
             result = subprocess.run(
-                [
-                    "find", str(search_dir),
-                    "-maxdepth", "3",
-                    "-type", "f",
-                    "-newermt", f"{target_date} 00:00:00",
-                    "!", "-newermt", f"{target_date} 23:59:59",
-                    "-not", "-path", "*/node_modules/*",
-                    "-not", "-path", "*/.git/*",
-                    "-not", "-path", "*/.claude/*",
-                    "-not", "-name", ".DS_Store",
-                ],
-                capture_output=True,
-                text=True,
-                timeout=30,
+                ["find", str(search_dir), "-maxdepth", "3", "-type", "f",
+                 "-newermt", f"{target_date} 00:00:00", "!", "-newermt", f"{target_date} 23:59:59",
+                 "-not", "-path", "*/node_modules/*", "-not", "-path", "*/.git/*",
+                 "-not", "-path", "*/.claude/*", "-not", "-name", ".DS_Store"],
+                capture_output=True, text=True, timeout=30,
             )
             for line in result.stdout.strip().split("\n"):
                 if line.strip():
-                    # Make path relative to home
-                    rel = line.replace(str(Path.home()), "~")
-                    modified.append(rel)
+                    modified.append(line.replace(str(Path.home()), "~"))
         except (subprocess.TimeoutExpired, Exception):
             continue
+    return sorted(modified)[:50]
 
-    return sorted(modified)[:50]  # Cap at 50
 
-
-def categorize_commands(commands: list[dict]) -> dict[str, list[dict]]:
-    """Categorize shell commands into groups."""
-    categories = defaultdict(list)
-
+def categorize_commands(commands: list[dict]) -> dict[str, int]:
+    cats = defaultdict(int)
     for cmd in commands:
         c = cmd["command"]
         if c.startswith("git "):
-            categories["Git"].append(cmd)
-        elif c.startswith("npm ") or c.startswith("yarn ") or c.startswith("pnpm "):
-            categories["Package Management"].append(cmd)
+            cats["Git"] += 1
+        elif any(c.startswith(s) for s in ["npm ", "yarn ", "pnpm "]):
+            cats["Package Management"] += 1
         elif c.startswith("cd "):
-            categories["Navigation"].append(cmd)
-        elif c.startswith("claude") or c.startswith("cc "):
-            categories["Claude Code"].append(cmd)
-        elif c.startswith("python") or c.startswith("pip ") or c.startswith("python3"):
-            categories["Python"].append(cmd)
+            cats["Navigation"] += 1
+        elif any(c.startswith(s) for s in ["claude", "cc "]):
+            cats["Claude Code"] += 1
+        elif any(c.startswith(s) for s in ["python", "pip "]):
+            cats["Python"] += 1
         elif c.startswith("brew "):
-            categories["Homebrew"].append(cmd)
-        elif c.startswith("docker") or c.startswith("docker-compose"):
-            categories["Docker"].append(cmd)
-        elif c.startswith("ssh ") or c.startswith("scp "):
-            categories["Remote"].append(cmd)
-        elif c.startswith("curl ") or c.startswith("wget "):
-            categories["HTTP"].append(cmd)
-        elif any(c.startswith(s) for s in ["ls", "cat", "head", "tail", "grep", "find", "wc"]):
-            categories["File Inspection"].append(cmd)
-        elif any(c.startswith(s) for s in ["mkdir", "rm ", "mv ", "cp ", "touch"]):
-            categories["File Operations"].append(cmd)
+            cats["Homebrew"] += 1
+        elif any(c.startswith(s) for s in ["docker", "docker-compose"]):
+            cats["Docker"] += 1
+        elif any(c.startswith(s) for s in ["ssh ", "scp "]):
+            cats["Remote"] += 1
         elif c.startswith("gh "):
-            categories["GitHub CLI"].append(cmd)
+            cats["GitHub CLI"] += 1
+        elif any(c.startswith(s) for s in ["ls", "cat", "head", "tail", "grep", "find", "wc"]):
+            cats["File Inspection"] += 1
+        elif any(c.startswith(s) for s in ["mkdir", "rm ", "mv ", "cp ", "touch"]):
+            cats["File Operations"] += 1
         else:
-            categories["Other"].append(cmd)
+            cats["Other"] += 1
+    return dict(sorted(cats.items(), key=lambda x: -x[1]))
 
-    return dict(categories)
 
-
-def generate_report(target_date: str) -> str:
-    """Generate the daily laptop activity journal."""
+def generate_report(target_date: str) -> dict:
     dt = datetime.strptime(target_date, "%Y-%m-%d")
     day_name = WEEKDAYS[dt.weekday()]
 
     shell_history = get_shell_history_for_date(target_date)
-    git_activity = get_git_activity_all_repos(target_date)
-    modified_files = get_recently_modified_files(target_date)
+    git_activity = get_git_activity(target_date)
+    modified_files = get_modified_files(target_date)
 
-    total_commits = sum(len(v) for v in git_activity.values())
+    total_commits = sum(len(r["commits"]) for r in git_activity)
 
-    lines = []
-    lines.append(f"# Daily Journal — {day_name}, {dt.strftime('%B %d, %Y')}")
-    lines.append("")
+    if not shell_history and not git_activity and not modified_files:
+        return None
 
-    # Narrative lead
-    lines.append(f"> {len(shell_history)} terminal commands, {total_commits} git commits across {len(git_activity)} repos, {len(modified_files)} files modified.")
-    lines.append("")
+    categories = categorize_commands(shell_history) if shell_history else {}
 
-    # Shell Activity Summary
-    if shell_history:
-        categories = categorize_commands(shell_history)
-        lines.append("## Terminal Activity")
-        lines.append("")
-        lines.append("| Category | Commands |")
-        lines.append("|----------|----------|")
-        for cat, cmds in sorted(categories.items(), key=lambda x: -len(x[1])):
-            lines.append(f"| {cat} | {len(cmds)} |")
-        lines.append("")
+    # Activity by hour
+    hours = defaultdict(int)
+    for cmd in shell_history:
+        h = cmd["time"].split(":")[0]
+        hours[h] += 1
 
-        # Time distribution
-        hours = defaultdict(int)
-        for cmd in shell_history:
-            h = cmd["time"].split(":")[0]
-            hours[h] += 1
+    # Notable commands
+    notable = []
+    seen = set()
+    for cmd in shell_history:
+        c = cmd["command"]
+        if c.startswith(("ls", "cd ", "clear", "pwd")) or len(c) <= 3:
+            continue
+        short = c[:120]
+        if short not in seen:
+            seen.add(short)
+            notable.append({"time": cmd["time"], "command": short})
+        if len(notable) >= 30:
+            break
 
-        lines.append("### Activity by Hour")
-        lines.append("")
-        for hour in sorted(hours.keys()):
-            bar = "█" * min(hours[hour], 40)
-            lines.append(f"- `{hour}:00` {bar} ({hours[hour]})")
-        lines.append("")
+    # Group modified files by directory
+    file_groups = defaultdict(list)
+    for f in modified_files:
+        parts = f.split("/")
+        dir_key = "/".join(parts[:3]) if len(parts) >= 3 else "/".join(parts[:-1]) or "~"
+        file_groups[dir_key].append(f)
 
-        # Notable commands (skip trivial ones)
-        notable = [
-            cmd for cmd in shell_history
-            if not cmd["command"].startswith(("ls", "cd ", "clear", "pwd"))
-            and len(cmd["command"]) > 3
-        ]
-        if notable:
-            lines.append("### Notable Commands")
-            lines.append("")
-            seen = set()
-            for cmd in notable[:40]:
-                # Deduplicate exact same commands
-                c = cmd["command"][:120]
-                if c not in seen:
-                    seen.add(c)
-                    lines.append(f"- `{cmd['time']}` `{c}`")
-            lines.append("")
-
-    # Git Activity
-    if git_activity:
-        lines.append("## Git Activity")
-        lines.append("")
-        lines.append("| Repo | Commits |")
-        lines.append("|------|---------|")
-        for repo_name, commits in sorted(git_activity.items()):
-            lines.append(f"| {repo_name} | {len(commits)} |")
-        lines.append("")
-
-        for repo_name, commits in sorted(git_activity.items()):
-            lines.append(f"### {repo_name}")
-            lines.append("")
-            for c in commits:
-                time_str = c["time"].split(" ")[1][:5] if " " in c["time"] else ""
-                lines.append(f"- `{c['hash']}` {time_str} — {c['message']} ({c['author']})")
-            lines.append("")
-
-    # Modified Files
-    if modified_files:
-        lines.append("## Files Modified")
-        lines.append("")
-
-        # Group by directory
-        by_dir = defaultdict(list)
-        for f in modified_files:
-            parts = f.split("/")
-            if len(parts) >= 3:
-                dir_key = "/".join(parts[:3])
-            else:
-                dir_key = "/".join(parts[:-1]) or "~"
-            by_dir[dir_key].append(f)
-
-        for dir_key, files in sorted(by_dir.items()):
-            lines.append(f"**{dir_key}/** ({len(files)} files)")
-            for f in files[:10]:
-                lines.append(f"- `{f}`")
-            if len(files) > 10:
-                lines.append(f"- *...and {len(files) - 10} more*")
-            lines.append("")
-
-    # Footer
-    lines.append("---")
-    lines.append(f"*Generated on {datetime.now().strftime('%Y-%m-%d %H:%M')} from shell history, git logs, and file system.*")
-
-    return "\n".join(lines)
+    return {
+        "date": target_date,
+        "day": day_name,
+        "display": dt.strftime("%B %d, %Y"),
+        "generatedAt": datetime.now().isoformat(),
+        "summary": f"{len(shell_history)} terminal commands, {total_commits} commits across {len(git_activity)} repos, {len(modified_files)} files modified.",
+        "stats": {
+            "commands": len(shell_history),
+            "commits": total_commits,
+            "repos": len(git_activity),
+            "filesModified": len(modified_files),
+        },
+        "categories": categories,
+        "activityByHour": dict(sorted(hours.items())),
+        "notableCommands": notable,
+        "gitActivity": git_activity,
+        "fileGroups": {k: v[:10] for k, v in sorted(file_groups.items())},
+    }
 
 
 def main():
     import sys
-
-    if len(sys.argv) > 1:
-        target_date = sys.argv[1]
-    else:
-        target_date = datetime.now().strftime("%Y-%m-%d")
+    target_date = sys.argv[1] if len(sys.argv) > 1 else datetime.now().strftime("%Y-%m-%d")
 
     report = generate_report(target_date)
-    output_file = OUTPUT_DIR / f"{target_date}.md"
+
+    APP_PUBLIC.mkdir(parents=True, exist_ok=True)
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-    output_file.write_text(report)
-    print(f"Daily journal written to {output_file}")
+
+    if report:
+        (APP_PUBLIC / f"{target_date}.json").write_text(json.dumps(report, indent=2))
+        print(f"Daily journal written: {target_date} ({report['stats']['commands']} cmds, {report['stats']['commits']} commits)")
+    else:
+        print(f"Daily journal written: {target_date} (empty day)")
+
+    # Legacy markdown
+    if report:
+        md = generate_markdown(report)
+        (OUTPUT_DIR / f"{target_date}.md").write_text(md)
+    else:
+        (OUTPUT_DIR / f"{target_date}.md").write_text(
+            f"# Daily Journal — {datetime.strptime(target_date, '%Y-%m-%d').strftime('%A, %B %d, %Y')}\n\n> No activity recorded.\n"
+        )
+
+
+def generate_markdown(r: dict) -> str:
+    lines = [f"# Daily Journal — {r['day']}, {r['display']}", "", f"> {r['summary']}", ""]
+    if r["gitActivity"]:
+        lines += ["## Git Activity", ""]
+        for repo in r["gitActivity"]:
+            lines.append(f"### {repo['repo']}")
+            for c in repo["commits"]:
+                lines.append(f"- `{c['hash']}` {c['time']} — {c['message']} ({c['author']})")
+            lines.append("")
+    if r["notableCommands"]:
+        lines += ["## Notable Commands", ""]
+        for cmd in r["notableCommands"]:
+            lines.append(f"- `{cmd['time']}` `{cmd['command']}`")
+        lines.append("")
+    lines += ["---", f"*Generated on {datetime.now().strftime('%Y-%m-%d %H:%M')}*"]
+    return "\n".join(lines)
 
 
 if __name__ == "__main__":

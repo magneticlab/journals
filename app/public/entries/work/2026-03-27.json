@@ -1,0 +1,106 @@
+{
+  "date": "2026-03-27",
+  "day": "Friday",
+  "display": "March 27, 2026",
+  "generatedAt": "2026-04-14T05:22:17.475247",
+  "stats": {
+    "sessions": 0,
+    "messages": 0,
+    "commits": 9,
+    "repos": 2,
+    "timeRange": ""
+  },
+  "wentRight": "9 commit(s) shipped across 2 repo(s).",
+  "couldBeBetter": "",
+  "whatIDid": [
+    "growthmentor-playground: chore: morning brief 2026-03-27",
+    "shadcnui: fix",
+    "shadcnui: fix",
+    "shadcnui: fix",
+    "shadcnui: fix",
+    "shadcnui: fix",
+    "shadcnui: chore(release): version packages (#10203)",
+    "shadcnui: fix: packageManager in package.json (#10202)",
+    "shadcnui: feat(registry): adds openpolicy components (#10196)"
+  ],
+  "themes": {},
+  "projectsWip": [
+    "growthmentor-playground \u2014 1 commit(s)",
+    "shadcnui \u2014 8 commit(s)"
+  ],
+  "docsCreated": [
+    {
+      "title": "chore: morning brief 2026-03-27",
+      "description": "growthmentor-playground \u00b7 1138a6f"
+    }
+  ],
+  "gitActivity": [
+    {
+      "repo": "growthmentor-playground",
+      "commits": [
+        {
+          "hash": "1138a6f",
+          "author": "Foti Panagiotakopoulos",
+          "message": "chore: morning brief 2026-03-27",
+          "time": "04:34"
+        }
+      ],
+      "stat": "2 files changed, 89 insertions(+)"
+    },
+    {
+      "repo": "shadcnui",
+      "commits": [
+        {
+          "hash": "6bf4018",
+          "author": "shadcn",
+          "message": "fix",
+          "time": "16:09"
+        },
+        {
+          "hash": "28481ee",
+          "author": "shadcn",
+          "message": "fix",
+          "time": "16:04"
+        },
+        {
+          "hash": "c3674af",
+          "author": "shadcn",
+          "message": "fix",
+          "time": "15:45"
+        },
+        {
+          "hash": "755b5a6",
+          "author": "shadcn",
+          "message": "fix",
+          "time": "15:23"
+        },
+        {
+          "hash": "98cbe82",
+          "author": "shadcn",
+          "message": "fix",
+          "time": "12:06"
+        },
+        {
+          "hash": "14bb486",
+          "author": "github-actions[bot]",
+          "message": "chore(release): version packages (#10203)",
+          "time": "11:37"
+        },
+        {
+          "hash": "12b49c9",
+          "author": "shadcn",
+          "message": "fix: packageManager in package.json (#10202)",
+          "time": "11:25"
+        },
+        {
+          "hash": "64c8cd9",
+          "author": "Jamie Davenport",
+          "message": "feat(registry): adds openpolicy components (#10196)",
+          "time": "06:52"
+        }
+      ],
+      "stat": "2 files changed, 13 insertions(+)"
+    }
+  ],
+  "summary": "0 session(s), 0 msgs, 9 commit(s) across 2 repo(s)"
+}

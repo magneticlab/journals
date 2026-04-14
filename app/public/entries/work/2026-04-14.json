@@ -1,0 +1,81 @@
+{
+  "date": "2026-04-14",
+  "day": "Tuesday",
+  "display": "April 14, 2026",
+  "generatedAt": "2026-04-14T05:22:20.965332",
+  "stats": {
+    "sessions": 6,
+    "messages": 24,
+    "commits": 4,
+    "repos": 2,
+    "timeRange": "00:24\u201305:18"
+  },
+  "wentRight": "Productive day with 4 commit(s) across 2 repo(s) during 6 Claude session(s) spanning 00:24\u201305:18.",
+  "couldBeBetter": "High session count (6) may indicate context switching \u2014 consider consolidating related work.",
+  "whatIDid": [
+    "growthmentor-playground: feat: design system restructuring \u2014 split pages, component styling, token migration",
+    "journals: Add Vue 3 + Vite app for journal browsing",
+    "journals: Backfill March + daily cron + zsh extended history",
+    "journals: Initial commit \u2014 work journal + daily journal system",
+    "Page Building: 4 interactions across sessions",
+    "Design System: 3 interactions across sessions",
+    "Version Iteration: 3 interactions across sessions",
+    "Git & Deployment: 1 task(s)",
+    "Content & Copy: 1 task(s)",
+    "Bug Fixes: 1 task(s)"
+  ],
+  "themes": {
+    "General Development": 6,
+    "Page Building": 4,
+    "Design System": 3,
+    "Version Iteration": 3,
+    "Git & Deployment": 1,
+    "Content & Copy": 1,
+    "Bug Fixes": 1
+  },
+  "projectsWip": [
+    "alek \u2014 session work",
+    "growthmentor-playground \u2014 1 commit(s)",
+    "journals \u2014 3 commit(s)"
+  ],
+  "docsCreated": [],
+  "gitActivity": [
+    {
+      "repo": "growthmentor-playground",
+      "commits": [
+        {
+          "hash": "67c3671",
+          "author": "Alek Manov",
+          "message": "feat: design system restructuring \u2014 split pages, component styling, token migration",
+          "time": "01:22"
+        }
+      ],
+      "stat": "49 files changed, 2467 insertions(+), 1903 deletions(-)"
+    },
+    {
+      "repo": "journals",
+      "commits": [
+        {
+          "hash": "4cf2807",
+          "author": "Alek Manov",
+          "message": "Add Vue 3 + Vite app for journal browsing",
+          "time": "05:06"
+        },
+        {
+          "hash": "2c6a67a",
+          "author": "Alek Manov",
+          "message": "Backfill March + daily cron + zsh extended history",
+          "time": "04:55"
+        },
+        {
+          "hash": "7eb8fd4",
+          "author": "Alek Manov",
+          "message": "Initial commit \u2014 work journal + daily journal system",
+          "time": "04:42"
+        }
+      ],
+      "stat": "36 files changed, 3322 insertions(+)"
+    }
+  ],
+  "summary": "6 session(s), 24 msgs, 4 commit(s) across 2 repo(s)"
+}

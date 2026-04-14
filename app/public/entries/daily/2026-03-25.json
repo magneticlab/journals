@@ -1,0 +1,69 @@
+{
+  "date": "2026-03-25",
+  "day": "Wednesday",
+  "display": "March 25, 2026",
+  "generatedAt": "2026-04-14T05:22:16.985861",
+  "summary": "0 terminal commands, 4 commits across 2 repos, 5 files modified.",
+  "stats": {
+    "commands": 0,
+    "commits": 4,
+    "repos": 2,
+    "filesModified": 5
+  },
+  "categories": {},
+  "activityByHour": {},
+  "notableCommands": [],
+  "gitActivity": [
+    {
+      "repo": "growthmentor-playground",
+      "commits": [
+        {
+          "hash": "8ed76fc",
+          "author": "Foti Panagiotakopoulos",
+          "message": "chore: morning brief 2026-03-25",
+          "time": "04:34"
+        }
+      ]
+    },
+    {
+      "repo": "shadcnui",
+      "commits": [
+        {
+          "hash": "6a070bf",
+          "author": "shadcn",
+          "message": "docs: update theming",
+          "time": "12:50"
+        },
+        {
+          "hash": "124495f",
+          "author": "shadcn",
+          "message": "fix: yarn (#10173)",
+          "time": "12:04"
+        },
+        {
+          "hash": "43f6406",
+          "author": "shadcn",
+          "message": "docs: rewrite installation docs (#10172)",
+          "time": "11:35"
+        }
+      ]
+    }
+  ],
+  "fileGroups": {
+    "~/Desktop/CleanShot 2026-03-25 at 12.55.58@2x.png": [
+      "~/Desktop/CleanShot 2026-03-25 at 12.55.58@2x.png"
+    ],
+    "~/Desktop/CleanShot 2026-03-25 at 15.11.10@2x.png": [
+      "~/Desktop/CleanShot 2026-03-25 at 15.11.10@2x.png"
+    ],
+    "~/Desktop/CleanShot 2026-03-25 at 15.11.34@2x.png": [
+      "~/Desktop/CleanShot 2026-03-25 at 15.11.34@2x.png"
+    ],
+    "~/Desktop/CleanShot 2026-03-25 at 15.12.29@2x.png": [
+      "~/Desktop/CleanShot 2026-03-25 at 15.12.29@2x.png"
+    ],
+    "~/Documents/canva-logo.svg": [
+      "~/Documents/canva-logo.svg"
+    ]
+  }
+}

@@ -1,77 +1,62 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
+import { useRouter } from 'vue-router'
 
 const props = defineProps({ journal: String })
-
+const router = useRouter()
 const manifest = ref({ work: [], daily: [] })
 const search = ref('')
 
-onMounted(async () => {
-  const res = await fetch('/manifest.json')
-  manifest.value = await res.json()
-})
+onMounted(async () => { manifest.value = await (await fetch('/manifest.json')).json() })
 
-const entries = computed(() => {
-  const list = manifest.value[props.journal] || []
-  if (!search.value) return list
+const entries = computed(() => manifest.value[props.journal] || [])
+const filtered = computed(() => {
+  if (!search.value) return entries.value
   const q = search.value.toLowerCase()
-  return list.filter(
-    (e) =>
-      e.date.includes(q) ||
-      e.day.toLowerCase().includes(q) ||
-      e.summary.toLowerCase().includes(q)
-  )
+  return entries.value.filter(e => e.date.includes(q) || e.day.toLowerCase().includes(q) || e.summary.toLowerCase().includes(q))
 })
-
-const title = computed(() =>
-  props.journal === 'work' ? 'Work Journal' : 'Daily Journal'
-)
-
-const description = computed(() =>
-  props.journal === 'work'
-    ? 'Claude Code sessions, git activity, and project work.'
-    : 'Terminal commands, file changes, and development activity.'
-)
+const title = computed(() => props.journal === 'work' ? 'Work Journal' : 'Daily Journal')
 </script>
 
 <template>
-  <div class="journal">
+  <div class="page">
     <div class="header">
-      <div>
-        <h1>{{ title }}</h1>
-        <p class="desc">{{ description }}</p>
+      <div class="mx header-inner">
+        <div>
+          <p class="label">{{ title }}</p>
+          <h1 class="htitle">{{ filtered.length }} entries</h1>
+        </div>
+        <div class="header-right">
+          <router-link to="/" class="nav-link">Home</router-link>
+          <button v-if="entries.length" class="latest-btn" @click="router.push(`/${journal}/${entries[0]?.date}`)">Latest</button>
+        </div>
       </div>
-      <input
-        v-model="search"
-        type="text"
-        placeholder="Filter by date, day, or keyword..."
-        class="search"
-      />
     </div>
-
-    <div class="table-wrap">
+    <div class="mx search-wrap">
+      <input v-model="search" type="text" placeholder="Filter..." class="search" />
+    </div>
+    <div class="mx table-wrap">
       <table>
         <thead>
           <tr>
             <th>Date</th>
             <th>Day</th>
+            <th v-if="journal==='work'">S</th>
+            <th v-if="journal==='work'">C</th>
+            <th v-if="journal==='daily'">Cmd</th>
+            <th v-if="journal==='daily'">C</th>
             <th>Summary</th>
           </tr>
         </thead>
         <tbody>
-          <tr
-            v-for="entry in entries"
-            :key="entry.date"
-            @click="$router.push(`/${journal}/${entry.date}`)"
-          >
-            <td class="date-cell">{{ entry.date }}</td>
-            <td class="day-cell">{{ entry.day }}</td>
-            <td class="summary-cell">
-              {{ entry.summary.slice(0, 120) }}{{ entry.summary.length > 120 ? '...' : '' }}
-            </td>
-          </tr>
-          <tr v-if="!entries.length">
-            <td colspan="3" class="empty">No entries found.</td>
+          <tr v-for="e in filtered" :key="e.date" @click="router.push(`/${journal}/${e.date}`)">
+            <td class="td-date">{{ e.date }}</td>
+            <td class="td-day">{{ e.day.slice(0,3) }}</td>
+            <td class="td-stat" v-if="journal==='work'">{{ e.stats?.sessions || 0 }}</td>
+            <td class="td-stat" v-if="journal==='work'">{{ e.stats?.commits || 0 }}</td>
+            <td class="td-stat" v-if="journal==='daily'">{{ e.stats?.commands || 0 }}</td>
+            <td class="td-stat" v-if="journal==='daily'">{{ e.stats?.commits || 0 }}</td>
+            <td class="td-summary">{{ e.summary }}</td>
           </tr>
         </tbody>
       </table>
@@ -80,121 +65,28 @@ const description = computed(() =>
 </template>
 
 <style scoped>
-.journal {
-  padding-top: 0.5rem;
-}
-
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 2rem;
-  margin-bottom: 1.5rem;
-}
-
-.header h1 {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #fff;
-  letter-spacing: -0.02em;
-  margin-bottom: 0.25rem;
-}
-
-.desc {
-  font-size: 0.8125rem;
-  color: #71717a;
-}
-
-.search {
-  background: #18181b;
-  border: 1px solid #27272a;
-  border-radius: 6px;
-  padding: 0.5rem 0.75rem;
-  font-size: 0.8125rem;
-  color: #e4e4e7;
-  width: 260px;
-  outline: none;
-  font-family: inherit;
-  flex-shrink: 0;
-}
-
-.search::placeholder {
-  color: #52525b;
-}
-
-.search:focus {
-  border-color: #3f3f46;
-}
-
-.table-wrap {
-  overflow-x: auto;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-thead th {
-  text-align: left;
-  padding: 0.625rem 0.75rem;
-  font-size: 0.6875rem;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  font-weight: 600;
-  color: #52525b;
-  border-bottom: 1px solid #27272a;
-}
-
-tbody tr {
-  cursor: pointer;
-  transition: background 0.1s;
-}
-
-tbody tr:hover {
-  background: #18181b;
-}
-
-td {
-  padding: 0.75rem;
-  font-size: 0.8125rem;
-  border-bottom: 1px solid #1c1c1f;
-  vertical-align: top;
-}
-
-.date-cell {
-  font-weight: 500;
-  color: #e4e4e7;
-  white-space: nowrap;
-  font-variant-numeric: tabular-nums;
-  width: 110px;
-}
-
-.day-cell {
-  color: #71717a;
-  white-space: nowrap;
-  width: 90px;
-}
-
-.summary-cell {
-  color: #a1a1aa;
-  line-height: 1.5;
-}
-
-.empty {
-  text-align: center;
-  color: #52525b;
-  padding: 2rem;
-  font-style: italic;
-}
-
-@media (max-width: 600px) {
-  .header {
-    flex-direction: column;
-    gap: 1rem;
-  }
-  .search {
-    width: 100%;
-  }
-}
+.page { min-height: 100vh; }
+.header { border-bottom: 1px solid var(--border); background: var(--bg-card); padding: 28px 0 24px; }
+.mx { max-width: 880px; margin: 0 auto; padding-left: 24px; padding-right: 24px; }
+.header-inner { display: flex; align-items: center; justify-content: space-between; }
+.label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.2em; color: var(--text-muted); }
+.htitle { margin-top: 4px; font-size: 18px; font-weight: 700; letter-spacing: -0.02em; color: var(--text-heading); }
+.header-right { display: flex; gap: 8px; }
+.nav-link { font-size: 12px; color: var(--text-muted); padding: 6px 12px; border-radius: 8px; border: 1px solid var(--border); transition: all 0.15s; }
+.nav-link:hover { border-color: var(--border-hover); color: var(--text-strong); }
+.latest-btn { font-size: 12px; font-weight: 500; color: var(--bg); background: var(--text-strong); padding: 6px 14px; border-radius: 8px; border: none; cursor: pointer; font-family: inherit; }
+.search-wrap { padding: 16px 0; }
+.search { width: 100%; background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; font-size: 13px; color: var(--text-strong); outline: none; font-family: inherit; }
+.search::placeholder { color: var(--text-muted); }
+.search:focus { border-color: var(--border-hover); }
+.table-wrap { padding-bottom: 64px; }
+table { width: 100%; border-collapse: collapse; background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+thead th { text-align: left; padding: 10px 12px; font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; color: var(--text-muted); border-bottom: 1px solid var(--border); }
+tbody tr { cursor: pointer; transition: background 0.1s; }
+tbody tr:hover { background: var(--bg-elevated); }
+td { padding: 10px 12px; font-size: 13px; border-bottom: 1px solid var(--border); }
+.td-date { font-weight: 500; color: var(--text-strong); font-variant-numeric: tabular-nums; width: 100px; }
+.td-day { color: var(--text-muted); width: 40px; }
+.td-stat { color: var(--text-muted); font-variant-numeric: tabular-nums; font-size: 12px; width: 40px; text-align: center; }
+.td-summary { color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 400px; }
 </style>

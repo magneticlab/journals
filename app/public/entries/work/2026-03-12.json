@@ -1,0 +1,284 @@
+{
+  "date": "2026-03-12",
+  "day": "Thursday",
+  "display": "March 12, 2026",
+  "generatedAt": "2026-04-14T05:22:14.348050",
+  "stats": {
+    "sessions": 0,
+    "messages": 0,
+    "commits": 35,
+    "repos": 2,
+    "timeRange": ""
+  },
+  "wentRight": "35 commit(s) shipped across 2 repo(s).",
+  "couldBeBetter": "",
+  "whatIDid": [
+    "growthmentor-playground: Expand 8 Lenses section with examples, extraction process detail",
+    "growthmentor-playground: Add Impact Emails section + Orchestration, expand Beyond Matching",
+    "growthmentor-playground: Restore subtitle in sticky nav on AI Matching V2 page",
+    "growthmentor-playground: Remove subtitle from sticky nav on AI Matching V2 page",
+    "growthmentor-playground: AI Matching V2 docs: restructure hierarchy, add orchestration + anonymization sections",
+    "growthmentor-playground: Lock down AI Matching V2 page as standalone destination",
+    "growthmentor-playground: AI Matching V2: restructure shadow profiles, add deck, tooltips",
+    "growthmentor-playground: Visual and narrative fixes across AI Matching V2 docs page",
+    "growthmentor-playground: Add persistent sub-nav with scroll waypoints to AI Matching V2 docs",
+    "growthmentor-playground: Add matching pipeline diagram and missing prototype files for Vercel build",
+    "growthmentor-playground: Add AI Matching V2 overview docs page with full system documentation",
+    "shadcnui: chore(deps-dev): bump @turbo/gen in /templates/next-monorepo",
+    "shadcnui: chore(deps-dev): bump @types/node in /templates/start-monorepo",
+    "shadcnui: chore(deps-dev): bump @turbo/gen in /templates/vite-monorepo",
+    "shadcnui: chore(deps-dev): bump eslint-plugin-turbo in /templates/next-monorepo"
+  ],
+  "themes": {},
+  "projectsWip": [
+    "growthmentor-playground \u2014 11 commit(s)",
+    "shadcnui \u2014 24 commit(s)"
+  ],
+  "docsCreated": [
+    {
+      "title": "AI Matching V2 docs: restructure hierarchy, add orchestration + anonymization sections",
+      "description": "growthmentor-playground \u00b7 d65d99f"
+    },
+    {
+      "title": "Visual and narrative fixes across AI Matching V2 docs page",
+      "description": "growthmentor-playground \u00b7 3c97d6f"
+    },
+    {
+      "title": "Add persistent sub-nav with scroll waypoints to AI Matching V2 docs",
+      "description": "growthmentor-playground \u00b7 d8827df"
+    },
+    {
+      "title": "Add AI Matching V2 overview docs page with full system documentation",
+      "description": "growthmentor-playground \u00b7 d604757"
+    },
+    {
+      "title": "docs: fix headings in changelog",
+      "description": "shadcnui \u00b7 bc9f556"
+    }
+  ],
+  "gitActivity": [
+    {
+      "repo": "growthmentor-playground",
+      "commits": [
+        {
+          "hash": "4c9f86b",
+          "author": "Foti Panagiotakopoulos",
+          "message": "Expand 8 Lenses section with examples, extraction process detail",
+          "time": "02:54"
+        },
+        {
+          "hash": "23f3799",
+          "author": "Foti Panagiotakopoulos",
+          "message": "Add Impact Emails section + Orchestration, expand Beyond Matching",
+          "time": "02:43"
+        },
+        {
+          "hash": "63201c5",
+          "author": "Foti Panagiotakopoulos",
+          "message": "Restore subtitle in sticky nav on AI Matching V2 page",
+          "time": "02:10"
+        },
+        {
+          "hash": "4670fdf",
+          "author": "Foti Panagiotakopoulos",
+          "message": "Remove subtitle from sticky nav on AI Matching V2 page",
+          "time": "02:09"
+        },
+        {
+          "hash": "d65d99f",
+          "author": "Foti Panagiotakopoulos",
+          "message": "AI Matching V2 docs: restructure hierarchy, add orchestration + anonymization sections",
+          "time": "02:08"
+        },
+        {
+          "hash": "0118945",
+          "author": "Foti Panagiotakopoulos",
+          "message": "Lock down AI Matching V2 page as standalone destination",
+          "time": "01:35"
+        },
+        {
+          "hash": "3ea99bf",
+          "author": "Foti Panagiotakopoulos",
+          "message": "AI Matching V2: restructure shadow profiles, add deck, tooltips",
+          "time": "01:31"
+        },
+        {
+          "hash": "3c97d6f",
+          "author": "Foti Panagiotakopoulos",
+          "message": "Visual and narrative fixes across AI Matching V2 docs page",
+          "time": "01:10"
+        },
+        {
+          "hash": "d8827df",
+          "author": "Foti Panagiotakopoulos",
+          "message": "Add persistent sub-nav with scroll waypoints to AI Matching V2 docs",
+          "time": "00:57"
+        },
+        {
+          "hash": "eea6b8a",
+          "author": "Foti Panagiotakopoulos",
+          "message": "Add matching pipeline diagram and missing prototype files for Vercel build",
+          "time": "00:54"
+        },
+        {
+          "hash": "d604757",
+          "author": "Foti Panagiotakopoulos",
+          "message": "Add AI Matching V2 overview docs page with full system documentation",
+          "time": "00:47"
+        }
+      ],
+      "stat": "5 files changed, 1793 insertions(+), 1 deletion(-)"
+    },
+    {
+      "repo": "shadcnui",
+      "commits": [
+        {
+          "hash": "e4661b9",
+          "author": "dependabot[bot]",
+          "message": "chore(deps-dev): bump @turbo/gen in /templates/next-monorepo",
+          "time": "16:19"
+        },
+        {
+          "hash": "e07e94b",
+          "author": "dependabot[bot]",
+          "message": "chore(deps-dev): bump @types/node in /templates/start-monorepo",
+          "time": "16:19"
+        },
+        {
+          "hash": "f5dc395",
+          "author": "dependabot[bot]",
+          "message": "chore(deps-dev): bump @turbo/gen in /templates/vite-monorepo",
+          "time": "16:19"
+        },
+        {
+          "hash": "ba2a191",
+          "author": "dependabot[bot]",
+          "message": "chore(deps-dev): bump eslint-plugin-turbo in /templates/next-monorepo",
+          "time": "16:18"
+        },
+        {
+          "hash": "c99a517",
+          "author": "dependabot[bot]",
+          "message": "chore(deps-dev): bump eslint in /templates/astro-monorepo",
+          "time": "16:18"
+        },
+        {
+          "hash": "aa1ec66",
+          "author": "dependabot[bot]",
+          "message": "chore(deps-dev): bump eslint-plugin-react-refresh",
+          "time": "16:18"
+        },
+        {
+          "hash": "fcc4ece",
+          "author": "dependabot[bot]",
+          "message": "chore(deps-dev): bump eslint-plugin-only-warn",
+          "time": "16:18"
+        },
+        {
+          "hash": "b60a706",
+          "author": "dependabot[bot]",
+          "message": "chore(deps-dev): bump typescript-eslint in /templates/vite-monorepo",
+          "time": "16:18"
+        },
+        {
+          "hash": "4209097",
+          "author": "dependabot[bot]",
+          "message": "chore(deps): bump vite-tsconfig-paths in /templates/start-monorepo",
+          "time": "16:18"
+        },
+        {
+          "hash": "8974097",
+          "author": "dependabot[bot]",
+          "message": "chore(deps-dev): bump typescript-eslint in /templates/astro-app",
+          "time": "16:18"
+        },
+        {
+          "hash": "af8f6f5",
+          "author": "dependabot[bot]",
+          "message": "chore(deps): bump @astrojs/react in /templates/astro-monorepo",
+          "time": "16:18"
+        },
+        {
+          "hash": "5631e12",
+          "author": "dependabot[bot]",
+          "message": "chore(deps-dev): bump @typescript-eslint/parser",
+          "time": "16:18"
+        },
+        {
+          "hash": "360c2d4",
+          "author": "dependabot[bot]",
+          "message": "chore(deps-dev): bump typescript-eslint in /templates/astro-monorepo",
+          "time": "16:18"
+        },
+        {
+          "hash": "51c1db0",
+          "author": "dependabot[bot]",
+          "message": "chore(deps-dev): bump @types/node in /templates/vite-monorepo",
+          "time": "16:18"
+        },
+        {
+          "hash": "15ab127",
+          "author": "dependabot[bot]",
+          "message": "chore(deps-dev): bump @vitejs/plugin-react in /templates/start-monorepo",
+          "time": "16:18"
+        },
+        {
+          "hash": "b02e22b",
+          "author": "dependabot[bot]",
+          "message": "chore(deps-dev): bump globals in /templates/astro-monorepo",
+          "time": "16:18"
+        },
+        {
+          "hash": "22105e8",
+          "author": "dependabot[bot]",
+          "message": "chore(deps-dev): bump @types/node in /templates/astro-monorepo",
+          "time": "16:17"
+        },
+        {
+          "hash": "3874918",
+          "author": "dependabot[bot]",
+          "message": "chore(deps-dev): bump eslint-plugin-react-refresh",
+          "time": "16:17"
+        },
+        {
+          "hash": "85443d0",
+          "author": "dependabot[bot]",
+          "message": "chore(deps-dev): bump typescript-eslint in /templates/vite-app",
+          "time": "16:17"
+        },
+        {
+          "hash": "0488fa5",
+          "author": "dependabot[bot]",
+          "message": "chore(deps-dev): bump @types/node in /templates/next-app",
+          "time": "16:17"
+        },
+        {
+          "hash": "dc92559",
+          "author": "dependabot[bot]",
+          "message": "chore(deps-dev): bump prettier in /templates/start-app",
+          "time": "16:17"
+        },
+        {
+          "hash": "5ab89f3",
+          "author": "Denish Navadiya",
+          "message": "Add @pacekit-gsap registry information",
+          "time": "17:10"
+        },
+        {
+          "hash": "bc9f556",
+          "author": "shadcn",
+          "message": "docs: fix headings in changelog",
+          "time": "08:00"
+        },
+        {
+          "hash": "d06e54d",
+          "author": "Justin Levine",
+          "message": "feat(registry): add @jalco registry",
+          "time": "18:53"
+        }
+      ],
+      "stat": "1 file changed, 15 insertions(+), 8 deletions(-)"
+    }
+  ],
+  "summary": "0 session(s), 0 msgs, 35 commit(s) across 2 repo(s)"
+}

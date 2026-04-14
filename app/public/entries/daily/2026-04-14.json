@@ -1,0 +1,191 @@
+{
+  "date": "2026-04-14",
+  "day": "Tuesday",
+  "display": "April 14, 2026",
+  "generatedAt": "2026-04-14T05:22:21.038140",
+  "summary": "69 terminal commands, 4 commits across 2 repos, 1 files modified.",
+  "stats": {
+    "commands": 69,
+    "commits": 4,
+    "repos": 2,
+    "filesModified": 1
+  },
+  "categories": {
+    "Other": 27,
+    "Claude Code": 12,
+    "Git": 12,
+    "Navigation": 5,
+    "File Inspection": 5,
+    "Package Management": 4,
+    "Homebrew": 1,
+    "Remote": 1,
+    "GitHub CLI": 1,
+    "File Operations": 1
+  },
+  "activityByHour": {
+    "03": 69
+  },
+  "notableCommands": [
+    {
+      "time": "03:38",
+      "command": "ping 192.168.0.253"
+    },
+    {
+      "time": "03:38",
+      "command": "ping 192.168.0.254"
+    },
+    {
+      "time": "03:38",
+      "command": "sudo nano etc/hosts"
+    },
+    {
+      "time": "03:38",
+      "command": "ping growthmentor.com"
+    },
+    {
+      "time": "03:38",
+      "command": "/Users/alek/.zsh/misc/helper_update ; exit;"
+    },
+    {
+      "time": "03:38",
+      "command": "ping google.com"
+    },
+    {
+      "time": "03:38",
+      "command": "/Volumes/Installer/Adobe\\ Photoshop\\ for\\ Mac\\ 2024\\ v2510\\ Cracked ; exit;"
+    },
+    {
+      "time": "03:38",
+      "command": "/Volumes/Starcom\\ Nexus/Fix.command ; exit;"
+    },
+    {
+      "time": "03:38",
+      "command": "DevToolsSecurity -enable"
+    },
+    {
+      "time": "03:38",
+      "command": "find growthmentor playground folder"
+    },
+    {
+      "time": "03:38",
+      "command": "find /Users/alek -type d -iname \"*growthmentor*\" -o -type d -iname \"*playground*\" 2>/dev/null"
+    },
+    {
+      "time": "03:38",
+      "command": "npm install && npm run dev"
+    },
+    {
+      "time": "03:38",
+      "command": "npm install"
+    },
+    {
+      "time": "03:38",
+      "command": "brew install node"
+    },
+    {
+      "time": "03:38",
+      "command": "/bin/bash -c \"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)\""
+    },
+    {
+      "time": "03:38",
+      "command": "echo 'eval \"$(brew shellenv zsh)\"' >> /Users/alek/.zprofile"
+    },
+    {
+      "time": "03:38",
+      "command": "source /Users/alek/.zprofile"
+    },
+    {
+      "time": "03:38",
+      "command": "npm install --prefix /Users/alek/Documents/GitHub/growthmentor-playground"
+    },
+    {
+      "time": "03:38",
+      "command": "eval \"$(/opt/homebrew/bin/brew shellenv)\" && brew install node"
+    },
+    {
+      "time": "03:38",
+      "command": "eval \"$(/opt/homebrew/bin/brew shellenv)\" && npm install --prefix /Users/alek/Documents/GitHub/growthmentor-playground"
+    },
+    {
+      "time": "03:38",
+      "command": "eval \"$(/opt/homebrew/bin/brew shellenv)\" && npm run dev --prefix /Users/alek/Documents/GitHub/growthmentor-playground"
+    },
+    {
+      "time": "03:38",
+      "command": "claude plugin install figma@claude-plugins-official"
+    },
+    {
+      "time": "03:38",
+      "command": "git -C /Users/alek/Documents/GitHub/growthmentor-playground fetch --all --prune"
+    },
+    {
+      "time": "03:38",
+      "command": "git -C /Users/alek/Documents/GitHub/growthmentor-playground --no-pager remote -v && git -C /Users/alek/Documents/GitHub/"
+    },
+    {
+      "time": "03:38",
+      "command": "ssh -o BatchMode=yes -o ConnectTimeout=8 -T git@github.com"
+    },
+    {
+      "time": "03:38",
+      "command": "git -C /Users/alek/Documents/GitHub/growthmentor-playground config --local --get-all credential.helper && git config --g"
+    },
+    {
+      "time": "03:38",
+      "command": "git -C /Users/alek/Documents/GitHub/growthmentor-playground config --local --get-all credential.helper; git config --glo"
+    },
+    {
+      "time": "03:38",
+      "command": "[ -d /Users/alek/Documents/GitHub/growthmentor-playground/node_modules ] && echo INSTALLED || echo MISSING"
+    },
+    {
+      "time": "03:38",
+      "command": "nohup npm --prefix /Users/alek/Documents/GitHub/growthmentor-playground run dev >/tmp/growthmentor-playground-dev.log 2>"
+    },
+    {
+      "time": "03:38",
+      "command": "git -C /Users/alek/Documents/GitHub/growthmentor-playground branch --show-current"
+    }
+  ],
+  "gitActivity": [
+    {
+      "repo": "growthmentor-playground",
+      "commits": [
+        {
+          "hash": "67c3671",
+          "author": "Alek Manov",
+          "message": "feat: design system restructuring \u2014 split pages, component styling, token migration",
+          "time": "01:22"
+        }
+      ]
+    },
+    {
+      "repo": "journals",
+      "commits": [
+        {
+          "hash": "4cf2807",
+          "author": "Alek Manov",
+          "message": "Add Vue 3 + Vite app for journal browsing",
+          "time": "05:06"
+        },
+        {
+          "hash": "2c6a67a",
+          "author": "Alek Manov",
+          "message": "Backfill March + daily cron + zsh extended history",
+          "time": "04:55"
+        },
+        {
+          "hash": "7eb8fd4",
+          "author": "Alek Manov",
+          "message": "Initial commit \u2014 work journal + daily journal system",
+          "time": "04:42"
+        }
+      ]
+    }
+  ],
+  "fileGroups": {
+    "~/Documents/GitHub": [
+      "~/Documents/GitHub/journals/.gitignore"
+    ]
+  }
+}
