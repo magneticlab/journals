@@ -19,14 +19,17 @@ function loadReflection() {
   reflection.value = stored[props.date] || null
 }
 
-// Extract highlight sentences from text
+// Extract concise highlights — max ~80 chars each
 function extractHighlights(text) {
-  if (!text || text.length < 20) return []
-  // Split on sentence boundaries
-  const sentences = text.split(/[.!?\n]+/).map(s => s.trim()).filter(s => s.length > 10)
-  if (sentences.length <= 1) return sentences
-  // Return key phrases — first sentence is usually the main point, then others
-  return sentences.slice(0, 3)
+  if (!text || text.length < 15) return []
+  // Split on sentence/clause boundaries
+  const parts = text.split(/[.!?\n;]+/).map(s => s.trim()).filter(s => s.length > 8)
+  return parts.slice(0, 3).map(s => {
+    // Trim to ~80 chars at a word boundary
+    if (s.length <= 80) return s
+    const cut = s.slice(0, 80).lastIndexOf(' ')
+    return s.slice(0, cut > 40 ? cut : 80) + '…'
+  })
 }
 
 // Extract keywords/themes from text
