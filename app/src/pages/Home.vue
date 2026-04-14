@@ -299,8 +299,8 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll))
 .weather {
   display: flex; align-items: center; gap: 6px;
   font-size: 12px; color: var(--text-muted);
-  background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px;
-  padding: 6px 14px;
+  background: rgba(12,12,14,0.7); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border); border-radius: 10px; padding: 6px 14px;
 }
 .wx-icon { font-size: 16px; }
 .wx-temp { font-weight: 600; color: var(--text-strong); font-size: 14px; }
