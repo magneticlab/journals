@@ -3,6 +3,7 @@ import { useRoute } from 'vue-router'
 import { computed } from 'vue'
 
 const route = useRoute()
+const isHome = computed(() => route.path === '/')
 const activeJournal = computed(() => {
   const p = route.path
   if (p.startsWith('/work')) return 'work'
@@ -13,16 +14,17 @@ const activeJournal = computed(() => {
 
 <template>
   <div class="layout">
-    <nav class="topnav">
+    <!-- Nav only on journal pages, not on home -->
+    <nav v-if="!isHome" class="topnav">
       <router-link to="/" class="logo">Journals</router-link>
       <div class="nav-tabs">
-        <router-link to="/work" :class="['nav-tab', { active: activeJournal === 'work' }]">
+        <router-link to="/work" :class="['nav-tab', 'tab-work', { active: activeJournal === 'work' }]">
           <div class="tab-icon icon-work">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
           </div>
           Work
         </router-link>
-        <router-link to="/daily" :class="['nav-tab', { active: activeJournal === 'daily' }]">
+        <router-link to="/daily" :class="['nav-tab', 'tab-daily', { active: activeJournal === 'daily' }]">
           <div class="tab-icon icon-daily">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
           </div>
@@ -58,13 +60,8 @@ const activeJournal = computed(() => {
 }
 .nav-tab:hover { color: var(--text-strong); }
 .nav-tab.active { color: var(--text-heading); }
-
-/* Branded bottom border on active */
-.nav-tab.active:has(.icon-work) { border-bottom-color: #6395ff; }
-.nav-tab.active:has(.icon-daily) { border-bottom-color: #34d399; }
-
-/* Fallback for browsers without :has() */
-.nav-tab.active { border-bottom-color: var(--text-muted); }
+.tab-work.active { border-bottom-color: #6395ff; }
+.tab-daily.active { border-bottom-color: #34d399; }
 
 .tab-icon {
   display: flex; align-items: center; justify-content: center;
