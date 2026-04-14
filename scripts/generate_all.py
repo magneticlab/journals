@@ -36,10 +36,14 @@ def main():
         check=True,
     )
 
+    # Rebuild app manifest
+    subprocess.run(
+        [sys.executable, str(SCRIPTS_DIR / "build_manifest.py")],
+        check=True,
+    )
+
     print()
-    print("Done. Open the index pages:")
-    print(f"  Work:  file://{SCRIPTS_DIR.parent}/work/index.html")
-    print(f"  Daily: file://{SCRIPTS_DIR.parent}/daily/index.html")
+    print("Done. Open http://localhost:3010/")
 
 
 if __name__ == "__main__":

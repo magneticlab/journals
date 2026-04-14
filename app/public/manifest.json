@@ -1,0 +1,522 @@
+{
+  "work": [
+    {
+      "date": "2026-04-14",
+      "day": "Tuesday",
+      "display": "April 14, 2026",
+      "summary": "6 Claude session(s), 17 messages across 00:24\u201304:34. Projects touched: alek. 1 git commit(s) across 1 repo(s)."
+    },
+    {
+      "date": "2026-04-13",
+      "day": "Monday",
+      "display": "April 13, 2026",
+      "summary": "9 Claude session(s), 126 messages across 00:34\u201323:54. Projects touched: alek. 3 git commit(s) across 2 repo(s)."
+    },
+    {
+      "date": "2026-04-12",
+      "day": "Sunday",
+      "display": "April 12, 2026",
+      "summary": "6 Claude session(s), 92 messages across 00:35\u201323:13. Projects touched: alek. 9 git commit(s) across 1 repo(s)."
+    },
+    {
+      "date": "2026-04-11",
+      "day": "Saturday",
+      "display": "April 11, 2026",
+      "summary": "6 Claude session(s), 77 messages across 00:02\u201321:57. Projects touched: alek. 1 git commit(s) across 1 repo(s)."
+    },
+    {
+      "date": "2026-04-10",
+      "day": "Friday",
+      "display": "April 10, 2026",
+      "summary": "8 Claude session(s), 130 messages across 00:02\u201323:56. Projects touched: alek. 3 git commit(s) across 1 repo(s)."
+    },
+    {
+      "date": "2026-04-09",
+      "day": "Thursday",
+      "display": "April 09, 2026",
+      "summary": "4 Claude session(s), 238 messages across 00:03\u201323:59. Projects touched: alek. 7 git commit(s) across 1 repo(s)."
+    },
+    {
+      "date": "2026-04-08",
+      "day": "Wednesday",
+      "display": "April 08, 2026",
+      "summary": "9 Claude session(s), 103 messages across 00:25\u201323:59. Projects touched: alek, vesselfront. 11 git commit(s) across 2 repo(s)."
+    },
+    {
+      "date": "2026-04-07",
+      "day": "Tuesday",
+      "display": "April 07, 2026",
+      "summary": "3 Claude session(s), 33 messages across 19:31\u201322:11. Projects touched: alek. 4 git commit(s) across 1 repo(s)."
+    },
+    {
+      "date": "2026-04-06",
+      "day": "Monday",
+      "display": "April 06, 2026",
+      "summary": "0 Claude session(s), 0 messages across N/A. Projects touched: . 1 git commit(s) across 1 repo(s)."
+    },
+    {
+      "date": "2026-04-05",
+      "day": "Sunday",
+      "display": "April 05, 2026",
+      "summary": "0 Claude session(s), 0 messages across N/A. Projects touched: . 1 git commit(s) across 1 repo(s)."
+    },
+    {
+      "date": "2026-04-03",
+      "day": "Friday",
+      "display": "April 03, 2026",
+      "summary": "0 Claude session(s), 0 messages across N/A. Projects touched: . 1 git commit(s) across 1 repo(s)."
+    },
+    {
+      "date": "2026-04-02",
+      "day": "Thursday",
+      "display": "April 02, 2026",
+      "summary": "0 Claude session(s), 0 messages across N/A. Projects touched: . 1 git commit(s) across 1 repo(s)."
+    },
+    {
+      "date": "2026-04-01",
+      "day": "Wednesday",
+      "display": "April 01, 2026",
+      "summary": "0 Claude session(s), 0 messages across N/A. Projects touched: . 1 git commit(s) across 1 repo(s)."
+    },
+    {
+      "date": "2026-03-31",
+      "day": "Tuesday",
+      "display": "March 31, 2026",
+      "summary": "0 Claude session(s), 0 messages across N/A. Projects touched: . 1 git commit(s) across 1 repo(s)."
+    },
+    {
+      "date": "2026-03-30",
+      "day": "Monday",
+      "display": "March 30, 2026",
+      "summary": "0 Claude session(s), 0 messages across N/A. Projects touched: . 1 git commit(s) across 1 repo(s)."
+    },
+    {
+      "date": "2026-03-29",
+      "day": "Sunday",
+      "display": "March 29, 2026",
+      "summary": "0 Claude session(s), 0 messages across N/A. Projects touched: . 1 git commit(s) across 1 repo(s)."
+    },
+    {
+      "date": "2026-03-28",
+      "day": "Saturday",
+      "display": "March 28, 2026",
+      "summary": "0 Claude session(s), 0 messages across N/A. Projects touched: . 1 git commit(s) across 1 repo(s)."
+    },
+    {
+      "date": "2026-03-27",
+      "day": "Friday",
+      "display": "March 27, 2026",
+      "summary": "0 Claude session(s), 0 messages across N/A. Projects touched: . 9 git commit(s) across 2 repo(s)."
+    },
+    {
+      "date": "2026-03-26",
+      "day": "Thursday",
+      "display": "March 26, 2026",
+      "summary": "0 Claude session(s), 0 messages across N/A. Projects touched: . 12 git commit(s) across 2 repo(s)."
+    },
+    {
+      "date": "2026-03-25",
+      "day": "Wednesday",
+      "display": "March 25, 2026",
+      "summary": "0 Claude session(s), 0 messages across N/A. Projects touched: . 4 git commit(s) across 2 repo(s)."
+    },
+    {
+      "date": "2026-03-24",
+      "day": "Tuesday",
+      "display": "March 24, 2026",
+      "summary": "0 Claude session(s), 0 messages across N/A. Projects touched: . 10 git commit(s) across 2 repo(s)."
+    },
+    {
+      "date": "2026-03-23",
+      "day": "Monday",
+      "display": "March 23, 2026",
+      "summary": "0 Claude session(s), 0 messages across N/A. Projects touched: . 23 git commit(s) across 2 repo(s)."
+    },
+    {
+      "date": "2026-03-22",
+      "day": "Sunday",
+      "display": "March 22, 2026",
+      "summary": "0 Claude session(s), 0 messages across N/A. Projects touched: . 1 git commit(s) across 1 repo(s)."
+    },
+    {
+      "date": "2026-03-21",
+      "day": "Saturday",
+      "display": "March 21, 2026",
+      "summary": "0 Claude session(s), 0 messages across N/A. Projects touched: . 4 git commit(s) across 2 repo(s)."
+    },
+    {
+      "date": "2026-03-20",
+      "day": "Friday",
+      "display": "March 20, 2026",
+      "summary": "0 Claude session(s), 0 messages across N/A. Projects touched: . 3 git commit(s) across 2 repo(s)."
+    },
+    {
+      "date": "2026-03-19",
+      "day": "Thursday",
+      "display": "March 19, 2026",
+      "summary": "0 Claude session(s), 0 messages across N/A. Projects touched: . 7 git commit(s) across 2 repo(s)."
+    },
+    {
+      "date": "2026-03-18",
+      "day": "Wednesday",
+      "display": "March 18, 2026",
+      "summary": "0 Claude session(s), 0 messages across N/A. Projects touched: . 8 git commit(s) across 2 repo(s)."
+    },
+    {
+      "date": "2026-03-17",
+      "day": "Tuesday",
+      "display": "March 17, 2026",
+      "summary": "0 Claude session(s), 0 messages across N/A. Projects touched: . 20 git commit(s) across 2 repo(s)."
+    },
+    {
+      "date": "2026-03-16",
+      "day": "Monday",
+      "display": "March 16, 2026",
+      "summary": "0 Claude session(s), 0 messages across N/A. Projects touched: . 23 git commit(s) across 2 repo(s)."
+    },
+    {
+      "date": "2026-03-15",
+      "day": "Sunday",
+      "display": "March 15, 2026",
+      "summary": "0 Claude session(s), 0 messages across N/A. Projects touched: . 11 git commit(s) across 2 repo(s)."
+    },
+    {
+      "date": "2026-03-14",
+      "day": "Saturday",
+      "display": "March 14, 2026",
+      "summary": "0 Claude session(s), 0 messages across N/A. Projects touched: . 28 git commit(s) across 2 repo(s)."
+    },
+    {
+      "date": "2026-03-13",
+      "day": "Friday",
+      "display": "March 13, 2026",
+      "summary": "0 Claude session(s), 0 messages across N/A. Projects touched: . 10 git commit(s) across 1 repo(s)."
+    },
+    {
+      "date": "2026-03-12",
+      "day": "Thursday",
+      "display": "March 12, 2026",
+      "summary": "0 Claude session(s), 0 messages across N/A. Projects touched: . 35 git commit(s) across 2 repo(s)."
+    },
+    {
+      "date": "2026-03-11",
+      "day": "Wednesday",
+      "display": "March 11, 2026",
+      "summary": "0 Claude session(s), 0 messages across N/A. Projects touched: . 13 git commit(s) across 1 repo(s)."
+    },
+    {
+      "date": "2026-03-10",
+      "day": "Tuesday",
+      "display": "March 10, 2026",
+      "summary": "0 Claude session(s), 0 messages across N/A. Projects touched: . 10 git commit(s) across 1 repo(s)."
+    },
+    {
+      "date": "2026-03-09",
+      "day": "Monday",
+      "display": "March 09, 2026",
+      "summary": "0 Claude session(s), 0 messages across N/A. Projects touched: . 7 git commit(s) across 1 repo(s)."
+    },
+    {
+      "date": "2026-03-08",
+      "day": "Sunday",
+      "display": "March 08, 2026",
+      "summary": "0 Claude session(s), 0 messages across N/A. Projects touched: . 16 git commit(s) across 2 repo(s)."
+    },
+    {
+      "date": "2026-03-07",
+      "day": "Saturday",
+      "display": "March 07, 2026",
+      "summary": "0 Claude session(s), 0 messages across N/A. Projects touched: . 3 git commit(s) across 2 repo(s)."
+    },
+    {
+      "date": "2026-03-06",
+      "day": "Friday",
+      "display": "March 06, 2026",
+      "summary": "0 Claude session(s), 0 messages across N/A. Projects touched: . 19 git commit(s) across 1 repo(s)."
+    },
+    {
+      "date": "2026-03-05",
+      "day": "Thursday",
+      "display": "March 05, 2026",
+      "summary": "0 Claude session(s), 0 messages across N/A. Projects touched: . 15 git commit(s) across 2 repo(s)."
+    },
+    {
+      "date": "2026-03-04",
+      "day": "Wednesday",
+      "display": "March 04, 2026",
+      "summary": "0 Claude session(s), 0 messages across N/A. Projects touched: . 24 git commit(s) across 2 repo(s)."
+    },
+    {
+      "date": "2026-03-03",
+      "day": "Tuesday",
+      "display": "March 03, 2026",
+      "summary": "0 Claude session(s), 0 messages across N/A. Projects touched: . 8 git commit(s) across 1 repo(s)."
+    },
+    {
+      "date": "2026-03-02",
+      "day": "Monday",
+      "display": "March 02, 2026",
+      "summary": "0 Claude session(s), 0 messages across N/A. Projects touched: . 29 git commit(s) across 1 repo(s)."
+    }
+  ],
+  "daily": [
+    {
+      "date": "2026-04-14",
+      "day": "Tuesday",
+      "display": "April 14, 2026",
+      "summary": "69 terminal commands, 1 git commits across 1 repos, 1 files modified."
+    },
+    {
+      "date": "2026-04-13",
+      "day": "Monday",
+      "display": "April 13, 2026",
+      "summary": "69 terminal commands, 3 git commits across 2 repos, 4 files modified."
+    },
+    {
+      "date": "2026-04-12",
+      "day": "Sunday",
+      "display": "April 12, 2026",
+      "summary": "68 terminal commands, 9 git commits across 1 repos, 1 files modified."
+    },
+    {
+      "date": "2026-04-11",
+      "day": "Saturday",
+      "display": "April 11, 2026",
+      "summary": "68 terminal commands, 1 git commits across 1 repos, 1 files modified."
+    },
+    {
+      "date": "2026-04-10",
+      "day": "Friday",
+      "display": "April 10, 2026",
+      "summary": "68 terminal commands, 3 git commits across 1 repos, 1 files modified."
+    },
+    {
+      "date": "2026-04-09",
+      "day": "Thursday",
+      "display": "April 09, 2026",
+      "summary": "68 terminal commands, 7 git commits across 1 repos, 1 files modified."
+    },
+    {
+      "date": "2026-04-08",
+      "day": "Wednesday",
+      "display": "April 08, 2026",
+      "summary": "68 terminal commands, 11 git commits across 2 repos, 9 files modified."
+    },
+    {
+      "date": "2026-04-07",
+      "day": "Tuesday",
+      "display": "April 07, 2026",
+      "summary": "57 terminal commands, 4 git commits across 1 repos, 12 files modified."
+    },
+    {
+      "date": "2026-04-06",
+      "day": "Monday",
+      "display": "April 06, 2026",
+      "summary": "0 terminal commands, 1 git commits across 1 repos, 1 files modified."
+    },
+    {
+      "date": "2026-04-05",
+      "day": "Sunday",
+      "display": "April 05, 2026",
+      "summary": "0 terminal commands, 1 git commits across 1 repos, 0 files modified."
+    },
+    {
+      "date": "2026-04-03",
+      "day": "Friday",
+      "display": "April 03, 2026",
+      "summary": "0 terminal commands, 1 git commits across 1 repos, 0 files modified."
+    },
+    {
+      "date": "2026-04-02",
+      "day": "Thursday",
+      "display": "April 02, 2026",
+      "summary": "0 terminal commands, 1 git commits across 1 repos, 4 files modified."
+    },
+    {
+      "date": "2026-04-01",
+      "day": "Wednesday",
+      "display": "April 01, 2026",
+      "summary": "0 terminal commands, 1 git commits across 1 repos, 0 files modified."
+    },
+    {
+      "date": "2026-03-31",
+      "day": "Tuesday",
+      "display": "March 31, 2026",
+      "summary": "0 terminal commands, 1 git commits across 1 repos, 0 files modified."
+    },
+    {
+      "date": "2026-03-30",
+      "day": "Monday",
+      "display": "March 30, 2026",
+      "summary": "0 terminal commands, 1 git commits across 1 repos, 0 files modified."
+    },
+    {
+      "date": "2026-03-29",
+      "day": "Sunday",
+      "display": "March 29, 2026",
+      "summary": "0 terminal commands, 1 git commits across 1 repos, 0 files modified."
+    },
+    {
+      "date": "2026-03-28",
+      "day": "Saturday",
+      "display": "March 28, 2026",
+      "summary": "0 terminal commands, 1 git commits across 1 repos, 0 files modified."
+    },
+    {
+      "date": "2026-03-27",
+      "day": "Friday",
+      "display": "March 27, 2026",
+      "summary": "0 terminal commands, 9 git commits across 2 repos, 3 files modified."
+    },
+    {
+      "date": "2026-03-26",
+      "day": "Thursday",
+      "display": "March 26, 2026",
+      "summary": "0 terminal commands, 12 git commits across 2 repos, 50 files modified."
+    },
+    {
+      "date": "2026-03-25",
+      "day": "Wednesday",
+      "display": "March 25, 2026",
+      "summary": "0 terminal commands, 4 git commits across 2 repos, 5 files modified."
+    },
+    {
+      "date": "2026-03-24",
+      "day": "Tuesday",
+      "display": "March 24, 2026",
+      "summary": "0 terminal commands, 10 git commits across 2 repos, 8 files modified."
+    },
+    {
+      "date": "2026-03-23",
+      "day": "Monday",
+      "display": "March 23, 2026",
+      "summary": "0 terminal commands, 23 git commits across 2 repos, 6 files modified."
+    },
+    {
+      "date": "2026-03-22",
+      "day": "Sunday",
+      "display": "March 22, 2026",
+      "summary": "0 terminal commands, 1 git commits across 1 repos, 0 files modified."
+    },
+    {
+      "date": "2026-03-21",
+      "day": "Saturday",
+      "display": "March 21, 2026",
+      "summary": "0 terminal commands, 4 git commits across 2 repos, 1 files modified."
+    },
+    {
+      "date": "2026-03-20",
+      "day": "Friday",
+      "display": "March 20, 2026",
+      "summary": "0 terminal commands, 3 git commits across 2 repos, 1 files modified."
+    },
+    {
+      "date": "2026-03-19",
+      "day": "Thursday",
+      "display": "March 19, 2026",
+      "summary": "0 terminal commands, 7 git commits across 2 repos, 0 files modified."
+    },
+    {
+      "date": "2026-03-18",
+      "day": "Wednesday",
+      "display": "March 18, 2026",
+      "summary": "0 terminal commands, 8 git commits across 2 repos, 0 files modified."
+    },
+    {
+      "date": "2026-03-17",
+      "day": "Tuesday",
+      "display": "March 17, 2026",
+      "summary": "0 terminal commands, 20 git commits across 2 repos, 0 files modified."
+    },
+    {
+      "date": "2026-03-16",
+      "day": "Monday",
+      "display": "March 16, 2026",
+      "summary": "0 terminal commands, 23 git commits across 2 repos, 0 files modified."
+    },
+    {
+      "date": "2026-03-15",
+      "day": "Sunday",
+      "display": "March 15, 2026",
+      "summary": "0 terminal commands, 11 git commits across 2 repos, 0 files modified."
+    },
+    {
+      "date": "2026-03-14",
+      "day": "Saturday",
+      "display": "March 14, 2026",
+      "summary": "0 terminal commands, 28 git commits across 2 repos, 2 files modified."
+    },
+    {
+      "date": "2026-03-13",
+      "day": "Friday",
+      "display": "March 13, 2026",
+      "summary": "0 terminal commands, 10 git commits across 1 repos, 0 files modified."
+    },
+    {
+      "date": "2026-03-12",
+      "day": "Thursday",
+      "display": "March 12, 2026",
+      "summary": "0 terminal commands, 35 git commits across 2 repos, 0 files modified."
+    },
+    {
+      "date": "2026-03-11",
+      "day": "Wednesday",
+      "display": "March 11, 2026",
+      "summary": "0 terminal commands, 13 git commits across 1 repos, 0 files modified."
+    },
+    {
+      "date": "2026-03-10",
+      "day": "Tuesday",
+      "display": "March 10, 2026",
+      "summary": "0 terminal commands, 10 git commits across 1 repos, 1 files modified."
+    },
+    {
+      "date": "2026-03-09",
+      "day": "Monday",
+      "display": "March 09, 2026",
+      "summary": "0 terminal commands, 7 git commits across 1 repos, 0 files modified."
+    },
+    {
+      "date": "2026-03-08",
+      "day": "Sunday",
+      "display": "March 08, 2026",
+      "summary": "0 terminal commands, 16 git commits across 2 repos, 0 files modified."
+    },
+    {
+      "date": "2026-03-07",
+      "day": "Saturday",
+      "display": "March 07, 2026",
+      "summary": "0 terminal commands, 3 git commits across 2 repos, 0 files modified."
+    },
+    {
+      "date": "2026-03-06",
+      "day": "Friday",
+      "display": "March 06, 2026",
+      "summary": "0 terminal commands, 19 git commits across 1 repos, 0 files modified."
+    },
+    {
+      "date": "2026-03-05",
+      "day": "Thursday",
+      "display": "March 05, 2026",
+      "summary": "0 terminal commands, 15 git commits across 2 repos, 3 files modified."
+    },
+    {
+      "date": "2026-03-04",
+      "day": "Wednesday",
+      "display": "March 04, 2026",
+      "summary": "0 terminal commands, 24 git commits across 2 repos, 1 files modified."
+    },
+    {
+      "date": "2026-03-03",
+      "day": "Tuesday",
+      "display": "March 03, 2026",
+      "summary": "0 terminal commands, 8 git commits across 1 repos, 3 files modified."
+    },
+    {
+      "date": "2026-03-02",
+      "day": "Monday",
+      "display": "March 02, 2026",
+      "summary": "0 terminal commands, 29 git commits across 1 repos, 0 files modified."
+    }
+  ]
+}
