@@ -48,9 +48,9 @@ const edges = computed(() => {
 })
 
 function scoreColor(s) {
-  if (s >= 80) return '#34d399'
-  if (s >= 60) return '#6395ff'
-  if (s >= 40) return '#fbbf24'
+  if (s >= 75) return '#34d399'
+  if (s >= 50) return '#fbbf24'
+  if (s >= 25) return '#fb923c'
   return '#f87171'
 }
 

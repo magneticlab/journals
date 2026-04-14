@@ -60,10 +60,10 @@ const hasOtherJournal = computed(() => {
 })
 
 const themeIcons = { 'Design System': '⬡', 'Design & Layout': '◫', 'Page Building': '▦', 'Animation & Effects': '✦', 'Bug Fixes': '⚠', 'Git & Deployment': '⎇', 'Version Iteration': '↻', 'Refactoring': '⟲', 'Content & Copy': '¶', 'Planning & Strategy': '◈', 'General Development': '⌘', 'Git': '⎇', 'Claude Code': '◉', 'Navigation': '≡', 'File Inspection': '◧', 'Package Management': '⬢', 'Homebrew': '⚗', 'Remote': '⚡', 'GitHub CLI': '⎇', 'File Operations': '◧', 'Other': '◆', 'Docker': '◎', 'Python': '◉', 'HTTP': '◎' }
-function scoreColor(s) { if (s >= 80) return '#34d399'; if (s >= 60) return '#6395ff'; if (s >= 40) return '#fbbf24'; return '#f87171' }
+function scoreColor(s) { if (s >= 75) return '#34d399'; if (s >= 50) return '#fbbf24'; if (s >= 25) return '#fb923c'; return '#f87171' }
 
 function ringScoreColor(s) {
-  const stops = [[0,[248,113,113]],[40,[251,191,36]],[65,[99,149,255]],[100,[52,211,153]]]
+  const stops = [[0,[248,113,113]],[35,[251,146,60]],[55,[251,191,36]],[100,[52,211,153]]]
   let lo = stops[0], hi = stops[stops.length-1]
   for (let i = 0; i < stops.length-1; i++) { if (s >= stops[i][0] && s <= stops[i+1][0]) { lo = stops[i]; hi = stops[i+1]; break } }
   const t = (s - lo[0]) / (hi[0] - lo[0] || 1)
@@ -157,7 +157,7 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
               <div v-for="(m, key) in data.metrics" :key="key" class="ring-item">
                 <div class="ring-wrap">
                   <div class="ring-bg"></div>
-                  <div class="ring-fill" :style="{ background: `conic-gradient(from 0deg, #f87171 0%, #fbbf24 ${m.score * 0.4}%, #6395ff ${m.score * 0.65}%, #34d399 ${m.score * 0.95}%, transparent ${m.score}%, transparent 100%)` }"></div>
+                  <div class="ring-fill" :style="{ background: `conic-gradient(from 0deg, #f87171 0%, #fb923c ${m.score * 0.3}%, #fbbf24 ${m.score * 0.55}%, #34d399 ${m.score * 0.9}%, transparent ${m.score}%, transparent 100%)` }"></div>
                   <span class="ring-score" :style="{ color: ringScoreColor(m.score) }">{{ m.score }}</span>
                 </div>
                 <span class="ring-name">{{ m.label }}</span>
@@ -173,7 +173,7 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
                 <span class="bar-score" :style="{ color: ringScoreColor(m.score) }">{{ m.score }}</span>
               </div>
               <div class="bar-track">
-                <div class="bar-fill" :style="{ width: m.score + '%', background: `linear-gradient(90deg, #f87171, #fbbf24 40%, #6395ff 65%, ${ringScoreColor(m.score)})` }"></div>
+                <div class="bar-fill" :style="{ width: m.score + '%', background: `linear-gradient(90deg, #f87171, #fb923c 30%, #fbbf24 55%, ${ringScoreColor(m.score)})` }"></div>
               </div>
             </div>
           </div>
