@@ -238,6 +238,73 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
       <div v-else-if="!data" class="mx empty">No entry for this date.</div>
       <div v-else class="mx body">
 
+        <!-- Daily Reflection — top of daily journal only -->
+        <section v-if="!isWork && reflection" v-reveal class="section">
+          <p class="section-label" style="color: #34d399">Daily Reflection</p>
+          <div class="reflect-card">
+            <div v-if="reflectEval" class="reflect-eval">
+              <div class="eval-tags">
+                <span v-for="t in reflectEval.tags" :key="t.label" class="eval-tag" :style="{ color: t.color, borderColor: t.color + '30', background: t.color + '10' }">{{ t.label }}</span>
+              </div>
+              <ul class="eval-insights">
+                <li v-for="(ins, i) in reflectEval.insights" :key="i">{{ ins }}</li>
+              </ul>
+            </div>
+            <div class="reflect-scores">
+              <div class="rscores-left">
+                <div class="rscore" v-for="(val, key) in reflection.scores" :key="key">
+                  <div class="rscore-ring">
+                    <svg width="48" height="48" viewBox="0 0 48 48">
+                      <circle cx="24" cy="24" r="20" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="3" />
+                      <circle cx="24" cy="24" r="20" fill="none" stroke-width="3" stroke-linecap="round" :stroke="ringScoreColor(val * 10)" :stroke-dasharray="`${val * 12.566} 200`" transform="rotate(-90 24 24)" />
+                    </svg>
+                    <span class="rscore-num" :style="{ color: ringScoreColor(val * 10) }">{{ val }}</span>
+                  </div>
+                  <span class="rscore-label">{{ key }}</span>
+                </div>
+              </div>
+              <div class="rscore-avg">
+                <div class="rscore-ring rscore-ring-lg">
+                  <svg width="72" height="72" viewBox="0 0 72 72">
+                    <circle cx="36" cy="36" r="30" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="4" />
+                    <circle cx="36" cy="36" r="30" fill="none" stroke-width="4" stroke-linecap="round" :stroke="ringScoreColor(reflection.average * 10)" :stroke-dasharray="`${reflection.average * 18.85} 250`" transform="rotate(-90 36 36)" />
+                  </svg>
+                  <span class="rscore-num rscore-num-lg" :style="{ color: ringScoreColor(reflection.average * 10) }">{{ reflection.average }}</span>
+                </div>
+                <span class="rscore-label">Average</span>
+              </div>
+            </div>
+            <div class="reflect-text" v-if="reflection.win || reflection.improve">
+              <div v-if="reflection.win" class="rtext-block">
+                <div class="rtext-head">
+                  <p class="rtext-label">Biggest Win</p>
+                  <div class="rtext-themes" v-if="reflectEval?.winThemes?.length">
+                    <span v-for="t in reflectEval.winThemes" :key="t.label" class="rtext-theme">{{ t.icon }} {{ t.label }}</span>
+                  </div>
+                </div>
+                <p class="rtext-content">{{ reflection.win }}</p>
+                <div v-if="reflectEval?.winHighlights?.length" class="rtext-highlights hl-green">
+                  <p class="hl-title">Key Highlights</p>
+                  <ul><li v-for="(h, i) in reflectEval.winHighlights" :key="i">{{ h }}</li></ul>
+                </div>
+              </div>
+              <div v-if="reflection.improve" class="rtext-block">
+                <div class="rtext-head">
+                  <p class="rtext-label" style="color: var(--amber)">What to Improve</p>
+                  <div class="rtext-themes" v-if="reflectEval?.improveThemes?.length">
+                    <span v-for="t in reflectEval.improveThemes" :key="t.label" class="rtext-theme">{{ t.icon }} {{ t.label }}</span>
+                  </div>
+                </div>
+                <p class="rtext-content">{{ reflection.improve }}</p>
+                <div v-if="reflectEval?.improveHighlights?.length" class="rtext-highlights hl-amber">
+                  <p class="hl-title">Areas Flagged</p>
+                  <ul><li v-for="(h, i) in reflectEval.improveHighlights" :key="i">{{ h }}</li></ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         <!-- Went Right / Could Be Better -->
         <div v-if="data.wentRight || data.couldBeBetter" v-reveal class="duo-grid">
           <div v-if="data.wentRight" class="duo-card duo-green rv"><div class="duo-accent accent-green"></div><div class="duo-icon">✓</div><div><p class="duo-label">Went Right</p><p class="duo-text">{{ data.wentRight }}</p></div></div>
@@ -401,77 +468,6 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
           <div class="files-card"><div v-for="(files, dir) in data.fileGroups" :key="dir" class="fgroup rv"><p class="fdir"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>{{ dir }}/ <span class="fcount">({{ files.length }})</span></p><p v-for="f in files" :key="f" class="fpath">{{ f }}</p></div></div>
         </section>
 
-        <!-- Daily Reflection -->
-        <section v-if="reflection" v-reveal class="section">
-          <p class="section-label" style="color: #34d399">Daily Reflection</p>
-          <div class="reflect-card">
-            <!-- Evaluation: insights + tags -->
-            <div v-if="reflectEval" class="reflect-eval">
-              <div class="eval-tags">
-                <span v-for="t in reflectEval.tags" :key="t.label" class="eval-tag" :style="{ color: t.color, borderColor: t.color + '30', background: t.color + '10' }">{{ t.label }}</span>
-              </div>
-              <ul class="eval-insights">
-                <li v-for="(ins, i) in reflectEval.insights" :key="i">{{ ins }}</li>
-              </ul>
-            </div>
-
-            <!-- Scores: 3 small on left, average large on right -->
-            <div class="reflect-scores">
-              <div class="rscores-left">
-                <div class="rscore" v-for="(val, key) in reflection.scores" :key="key">
-                  <div class="rscore-ring">
-                    <svg width="48" height="48" viewBox="0 0 48 48">
-                      <circle cx="24" cy="24" r="20" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="3" />
-                      <circle cx="24" cy="24" r="20" fill="none" stroke-width="3" stroke-linecap="round" :stroke="ringScoreColor(val * 10)" :stroke-dasharray="`${val * 12.566} 200`" transform="rotate(-90 24 24)" />
-                    </svg>
-                    <span class="rscore-num" :style="{ color: ringScoreColor(val * 10) }">{{ val }}</span>
-                  </div>
-                  <span class="rscore-label">{{ key }}</span>
-                </div>
-              </div>
-              <div class="rscore-avg">
-                <div class="rscore-ring rscore-ring-lg">
-                  <svg width="72" height="72" viewBox="0 0 72 72">
-                    <circle cx="36" cy="36" r="30" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="4" />
-                    <circle cx="36" cy="36" r="30" fill="none" stroke-width="4" stroke-linecap="round" :stroke="ringScoreColor(reflection.average * 10)" :stroke-dasharray="`${reflection.average * 18.85} 250`" transform="rotate(-90 36 36)" />
-                  </svg>
-                  <span class="rscore-num rscore-num-lg" :style="{ color: ringScoreColor(reflection.average * 10) }">{{ reflection.average }}</span>
-                </div>
-                <span class="rscore-label">Average</span>
-              </div>
-            </div>
-
-            <!-- Text responses with extracted themes -->
-            <div class="reflect-text" v-if="reflection.win || reflection.improve">
-              <div v-if="reflection.win" class="rtext-block">
-                <div class="rtext-head">
-                  <p class="rtext-label">Biggest Win</p>
-                  <div class="rtext-themes" v-if="reflectEval?.winThemes?.length">
-                    <span v-for="t in reflectEval.winThemes" :key="t.label" class="rtext-theme">{{ t.icon }} {{ t.label }}</span>
-                  </div>
-                </div>
-                <p class="rtext-content">{{ reflection.win }}</p>
-                <div v-if="reflectEval?.winHighlights?.length" class="rtext-highlights hl-green">
-                  <p class="hl-title">Key Highlights</p>
-                  <ul><li v-for="(h, i) in reflectEval.winHighlights" :key="i">{{ h }}</li></ul>
-                </div>
-              </div>
-              <div v-if="reflection.improve" class="rtext-block">
-                <div class="rtext-head">
-                  <p class="rtext-label" style="color: var(--amber)">What to Improve</p>
-                  <div class="rtext-themes" v-if="reflectEval?.improveThemes?.length">
-                    <span v-for="t in reflectEval.improveThemes" :key="t.label" class="rtext-theme">{{ t.icon }} {{ t.label }}</span>
-                  </div>
-                </div>
-                <p class="rtext-content">{{ reflection.improve }}</p>
-                <div v-if="reflectEval?.improveHighlights?.length" class="rtext-highlights hl-amber">
-                  <p class="hl-title">Areas Flagged</p>
-                  <ul><li v-for="(h, i) in reflectEval.improveHighlights" :key="i">{{ h }}</li></ul>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
       </div>
       <div v-if="data?.generatedAt" class="footer"><p class="footer-text">Generated {{ genTime }}</p></div>
     </div>
