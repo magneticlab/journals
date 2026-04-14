@@ -19,6 +19,16 @@ function loadReflection() {
   reflection.value = stored[props.date] || null
 }
 
+// Extract highlight sentences from text
+function extractHighlights(text) {
+  if (!text || text.length < 20) return []
+  // Split on sentence boundaries
+  const sentences = text.split(/[.!?\n]+/).map(s => s.trim()).filter(s => s.length > 10)
+  if (sentences.length <= 1) return sentences
+  // Return key phrases — first sentence is usually the main point, then others
+  return sentences.slice(0, 3)
+}
+
 // Extract keywords/themes from text
 function extractThemes(text) {
   if (!text) return []
@@ -99,6 +109,8 @@ const reflectEval = computed(() => {
     insights: insights.slice(0, 3),
     winThemes,
     improveThemes,
+    winHighlights: extractHighlights(reflection.value.win),
+    improveHighlights: extractHighlights(reflection.value.improve),
   }
 })
 const scrollY = ref(0)
@@ -436,6 +448,10 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
                   </div>
                 </div>
                 <p class="rtext-content">{{ reflection.win }}</p>
+                <div v-if="reflectEval?.winHighlights?.length" class="rtext-highlights hl-green">
+                  <p class="hl-title">Key Highlights</p>
+                  <ul><li v-for="(h, i) in reflectEval.winHighlights" :key="i">{{ h }}</li></ul>
+                </div>
               </div>
               <div v-if="reflection.improve" class="rtext-block">
                 <div class="rtext-head">
@@ -445,6 +461,10 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
                   </div>
                 </div>
                 <p class="rtext-content">{{ reflection.improve }}</p>
+                <div v-if="reflectEval?.improveHighlights?.length" class="rtext-highlights hl-amber">
+                  <p class="hl-title">Areas Flagged</p>
+                  <ul><li v-for="(h, i) in reflectEval.improveHighlights" :key="i">{{ h }}</li></ul>
+                </div>
               </div>
             </div>
           </div>
@@ -735,7 +755,24 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
 .rtext-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #34d399; }
 .rtext-themes { display: flex; gap: 4px; }
 .rtext-theme { font-size: 10px; color: var(--text-muted); background: rgba(255,255,255,0.04); padding: 2px 8px; border-radius: 4px; }
-.rtext-content { font-size: 13px; line-height: 1.6; color: var(--text); }
+.rtext-content { font-size: 13px; line-height: 1.6; color: var(--text); margin-bottom: 10px; }
+
+.rtext-highlights {
+  border-radius: 10px; padding: 12px 14px; margin-top: 4px;
+}
+.hl-green { background: rgba(52,211,153,0.06); border: 1px solid rgba(52,211,153,0.1); }
+.hl-amber { background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.08); }
+.hl-title { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px; }
+.hl-green .hl-title { color: #34d399; }
+.hl-amber .hl-title { color: #fbbf24; }
+.rtext-highlights ul { list-style: none; display: flex; flex-direction: column; gap: 4px; }
+.rtext-highlights li {
+  font-size: 12px; line-height: 1.5; color: var(--text-strong);
+  padding-left: 12px; position: relative;
+}
+.rtext-highlights li::before { content: '•'; position: absolute; left: 0; }
+.hl-green li::before { color: #34d399; }
+.hl-amber li::before { color: #fbbf24; }
 
 /* Footer */
 .footer { border-top: 1px solid var(--border); padding: 12px; text-align: center; }
