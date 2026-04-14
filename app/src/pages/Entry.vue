@@ -578,7 +578,7 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
 .jtab.active { color: var(--text-heading); background: rgba(255,255,255,0.08); }
 
 /* Body zone — below top-zone in stacking */
-.body-zone { position: relative; z-index: 5; background: linear-gradient(to bottom, transparent 0%, #0c0c0e 120px); padding-top: 20px; min-height: 100vh; }
+.body-zone { position: relative; z-index: 5; background: linear-gradient(to bottom, transparent 0%, var(--bg) 120px); padding-top: 20px; min-height: 100vh; }
 .body { padding-bottom: 64px; }
 .empty { padding: 80px 24px; text-align: center; font-size: 14px; color: var(--text-muted); }
 

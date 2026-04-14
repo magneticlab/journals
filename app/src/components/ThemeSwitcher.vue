@@ -2,18 +2,12 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 import { useTheme } from '../composables/useTheme'
 
-const { current, THEMES } = useTheme()
+const { mode, current, THEMES, getAutoTheme } = useTheme()
 const open = ref(false)
 const wrapper = ref(null)
 
-function select(id) {
-  current.value = id
-  open.value = false
-}
-
-function onClickOutside(e) {
-  if (wrapper.value && !wrapper.value.contains(e.target)) open.value = false
-}
+function select(id) { mode.value = id; open.value = false }
+function onClickOutside(e) { if (wrapper.value && !wrapper.value.contains(e.target)) open.value = false }
 onMounted(() => document.addEventListener('click', onClickOutside))
 onUnmounted(() => document.removeEventListener('click', onClickOutside))
 </script>
@@ -29,14 +23,21 @@ onUnmounted(() => document.removeEventListener('click', onClickOutside))
     <Transition name="fade">
       <div v-if="open" class="theme-dropdown">
         <p class="dropdown-label">Theme</p>
-        <button
-          v-for="t in THEMES" :key="t.id"
-          :class="['theme-option', { active: current === t.id }]"
-          @click="select(t.id)"
-        >
+
+        <!-- Auto mode -->
+        <button :class="['theme-option', { active: mode === 'auto' }]" @click="select('auto')">
+          <span class="option-icon">🕐</span>
+          <span class="option-label">Auto <span class="auto-hint">({{ getAutoTheme() }})</span></span>
+          <svg v-if="mode === 'auto'" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+        </button>
+
+        <div class="dropdown-divider"></div>
+
+        <!-- Manual themes -->
+        <button v-for="t in THEMES" :key="t.id" :class="['theme-option', { active: mode === t.id }]" @click="select(t.id)">
           <span class="option-icon">{{ t.icon }}</span>
           <span class="option-label">{{ t.label }}</span>
-          <svg v-if="current === t.id" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+          <svg v-if="mode === t.id" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
         </button>
       </div>
     </Transition>
@@ -50,37 +51,33 @@ onUnmounted(() => document.removeEventListener('click', onClickOutside))
   width: 36px; height: 36px; border-radius: 8px;
   border: 1px solid var(--border); background: rgba(12,12,14,0.7);
   backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-  color: var(--text-muted); cursor: pointer;
-  transition: all 0.2s;
+  color: var(--text-muted); cursor: pointer; transition: all 0.2s;
 }
 .theme-btn:hover { border-color: var(--border-hover); color: var(--text-heading); }
 
 .theme-dropdown {
   position: absolute; top: calc(100% + 8px); right: 0;
-  width: 180px; padding: 8px;
+  width: 200px; padding: 8px;
   background: rgba(18,18,22,0.95);
   backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
   border: 1px solid var(--border); border-radius: 12px;
-  box-shadow: 0 12px 40px rgba(0,0,0,0.5);
-  z-index: 9999;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.5); z-index: 9999;
 }
-.dropdown-label {
-  font-size: 9px; font-weight: 700; text-transform: uppercase;
-  letter-spacing: 0.1em; color: var(--text-muted);
-  padding: 6px 10px 4px;
-}
+.dropdown-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); padding: 6px 10px 4px; }
+.dropdown-divider { height: 1px; background: var(--border); margin: 4px 8px; }
+
 .theme-option {
   display: flex; align-items: center; gap: 8px; width: 100%;
   padding: 8px 10px; border-radius: 8px; border: none;
   background: none; color: var(--text); font-size: 13px;
-  font-family: inherit; cursor: pointer; transition: all 0.15s;
-  text-align: left;
+  font-family: inherit; cursor: pointer; transition: all 0.15s; text-align: left;
 }
 .theme-option:hover { background: rgba(255,255,255,0.05); color: var(--text-heading); }
 .theme-option.active { color: var(--text-heading); }
 .theme-option.active svg { color: #34d399; }
 .option-icon { font-size: 15px; }
 .option-label { flex: 1; }
+.auto-hint { font-size: 11px; color: var(--text-muted); }
 
 .fade-enter-active, .fade-leave-active { transition: all 0.15s ease; }
 .fade-enter-from, .fade-leave-to { opacity: 0; transform: translateY(-4px); }

@@ -1,26 +1,39 @@
-import { ref, watch } from 'vue'
+import { ref, watch, computed } from 'vue'
 
 const THEMES = [
-  { id: 'dark', label: 'Midnight', icon: '🌙' },
-  { id: 'aurora', label: 'Aurora', icon: '🌌' },
+  { id: 'midnight', label: 'Midnight', icon: '🌙', hours: [22, 5] },
+  { id: 'dawn', label: 'Dawn', icon: '🌅', hours: [5, 9] },
+  { id: 'daylight', label: 'Daylight', icon: '☀️', hours: [9, 17] },
+  { id: 'dusk', label: 'Dusk', icon: '🌇', hours: [17, 22] },
+  { id: 'aurora', label: 'Aurora', icon: '🌌', hours: null },
 ]
 
-const current = ref(localStorage.getItem('journal-theme') || 'dark')
+function getAutoTheme() {
+  const h = new Date().getHours()
+  if (h >= 22 || h < 5) return 'midnight'
+  if (h >= 5 && h < 9) return 'dawn'
+  if (h >= 9 && h < 17) return 'daylight'
+  return 'dusk'
+}
 
-watch(current, (val) => {
+const stored = localStorage.getItem('journal-theme')
+const mode = ref(stored || 'auto') // 'auto' or a theme id
+const current = computed(() => mode.value === 'auto' ? getAutoTheme() : mode.value)
+
+watch(current, (val) => applyTheme(val), { immediate: false })
+watch(mode, (val) => {
   localStorage.setItem('journal-theme', val)
-  applyTheme(val)
+  applyTheme(current.value)
 })
 
 function applyTheme(id) {
   document.documentElement.setAttribute('data-theme', id)
 }
 
-// Apply on load
 if (typeof document !== 'undefined') {
   applyTheme(current.value)
 }
 
 export function useTheme() {
-  return { current, THEMES, applyTheme }
+  return { current, mode, THEMES, applyTheme, getAutoTheme }
 }

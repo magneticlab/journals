@@ -13,7 +13,8 @@ function onScroll() { scrollY.value = window.scrollY }
 onMounted(() => window.addEventListener('scroll', onScroll, { passive: true }))
 onUnmounted(() => window.removeEventListener('scroll', onScroll))
 
-const fadeBg = computed(() => theme.value === 'aurora' ? '#080b12' : '#0c0c0e')
+const fadeBgs = { midnight: '#0c0c0e', dawn: '#110d0a', daylight: '#0e0f12', dusk: '#0c0a10', aurora: '#080b12' }
+const fadeBg = computed(() => fadeBgs[theme.value] || '#0c0c0e')
 </script>
 
 <template>

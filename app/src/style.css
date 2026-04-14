@@ -27,7 +27,85 @@
   --ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Aurora theme — deeper, cooler, more atmospheric */
+/* Midnight — default dark, late night */
+[data-theme="midnight"] {
+  --bg: #0c0c0e;
+  --bg-card: #141416;
+  --bg-elevated: #1a1a1e;
+  --border: #232328;
+  --border-hover: #2e2e35;
+}
+
+/* Dawn — warm morning, soft amber/rose tones */
+[data-theme="dawn"] {
+  --bg: #110d0a;
+  --bg-card: #1a1410;
+  --bg-elevated: #221c16;
+  --border: #2e2520;
+  --border-hover: #3d322a;
+  --text: #b09a88;
+  --text-muted: #7a6858;
+  --text-strong: #e8dcd0;
+  --text-heading: #f5ede4;
+  --green: #78c9a0;
+  --green-bg: rgba(120, 201, 160, 0.08);
+  --red: #e87070;
+  --red-bg: rgba(232, 112, 112, 0.06);
+  --blue: #7aafe0;
+  --blue-bg: rgba(122, 175, 224, 0.08);
+  --purple: #c0a0e0;
+  --purple-bg: rgba(192, 160, 224, 0.08);
+  --amber: #e8b44c;
+  --amber-bg: rgba(232, 180, 76, 0.08);
+}
+
+/* Daylight — neutral, high contrast, productive */
+[data-theme="daylight"] {
+  --bg: #0e0f12;
+  --bg-card: #161820;
+  --bg-elevated: #1e2028;
+  --border: #282a35;
+  --border-hover: #353842;
+  --text: #a0a4b4;
+  --text-muted: #686c80;
+  --text-strong: #dcdee8;
+  --text-heading: #f0f1f6;
+  --green: #2dd4a0;
+  --green-bg: rgba(45, 212, 160, 0.08);
+  --red: #f07070;
+  --red-bg: rgba(240, 112, 112, 0.06);
+  --blue: #5c9cff;
+  --blue-bg: rgba(92, 156, 255, 0.08);
+  --purple: #a885f0;
+  --purple-bg: rgba(168, 133, 240, 0.08);
+  --amber: #f0b830;
+  --amber-bg: rgba(240, 184, 48, 0.08);
+}
+
+/* Dusk — deep purple/indigo, evening wind-down */
+[data-theme="dusk"] {
+  --bg: #0c0a10;
+  --bg-card: #14111a;
+  --bg-elevated: #1c1824;
+  --border: #28223a;
+  --border-hover: #352e48;
+  --text: #9890aa;
+  --text-muted: #605878;
+  --text-strong: #d4cee4;
+  --text-heading: #eeeaf6;
+  --green: #58d8b0;
+  --green-bg: rgba(88, 216, 176, 0.08);
+  --red: #f08080;
+  --red-bg: rgba(240, 128, 128, 0.06);
+  --blue: #7090e8;
+  --blue-bg: rgba(112, 144, 232, 0.08);
+  --purple: #b480f0;
+  --purple-bg: rgba(180, 128, 240, 0.08);
+  --amber: #e8c040;
+  --amber-bg: rgba(232, 192, 64, 0.08);
+}
+
+/* Aurora — deeper, cooler, atmospheric */
 [data-theme="aurora"] {
   --bg: #080b12;
   --bg-card: #0e1219;

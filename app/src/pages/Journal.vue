@@ -198,7 +198,7 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
 .hero-sub { font-size: 14px; color: var(--text-muted); margin-left: 62px; }
 
 /* Body zone */
-.body-zone { position: relative; background: linear-gradient(to bottom, transparent 0%, #0c0c0e 120px); padding-top: 20px; min-height: 100vh; }
+.body-zone { position: relative; background: linear-gradient(to bottom, transparent 0%, var(--bg) 120px); padding-top: 20px; min-height: 100vh; }
 .body { padding-bottom: 64px; }
 
 /* Featured */

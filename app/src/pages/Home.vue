@@ -351,7 +351,7 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll))
 /* BODY ZONE — soft gradient, no hard edge */
 .body-zone {
   position: relative;
-  background: linear-gradient(to bottom, transparent 0%, #0c0c0e 150px);
+  background: linear-gradient(to bottom, transparent 0%, var(--bg) 150px);
   margin-top: -80px;
   padding-top: 80px;
   min-height: 100vh;
@@ -428,7 +428,7 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll))
 .timeline-wrap::after {
   content: ''; position: sticky; bottom: 0; display: block;
   height: 80px; margin-top: -80px; pointer-events: none;
-  background: linear-gradient(to bottom, transparent, #0c0c0e);
+  background: linear-gradient(to bottom, transparent, var(--bg));
 }
 .section-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; color: var(--text-muted); margin-bottom: 16px; }
 .timeline { position: relative; }
