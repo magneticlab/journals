@@ -19,29 +19,87 @@ function loadReflection() {
   reflection.value = stored[props.date] || null
 }
 
-// Generate evaluation insights from reflection scores
+// Extract keywords/themes from text
+function extractThemes(text) {
+  if (!text) return []
+  const t = text.toLowerCase()
+  const themes = []
+  const patterns = [
+    { words: ['ship', 'launch', 'deploy', 'release', 'publish'], label: 'Shipping', icon: '🚀' },
+    { words: ['design', 'figma', 'ui', 'ux', 'layout', 'visual'], label: 'Design', icon: '🎨' },
+    { words: ['bug', 'fix', 'error', 'broken', 'issue', 'debug'], label: 'Problem Solving', icon: '🔧' },
+    { words: ['learn', 'discover', 'realize', 'understand', 'insight'], label: 'Learning', icon: '📚' },
+    { words: ['team', 'collaborat', 'discuss', 'meeting', 'sync', 'review'], label: 'Collaboration', icon: '🤝' },
+    { words: ['refactor', 'clean', 'restructur', 'organiz', 'simplif'], label: 'Refinement', icon: '✨' },
+    { words: ['plan', 'strateg', 'roadmap', 'priorit', 'decision'], label: 'Strategy', icon: '🧭' },
+    { words: ['focus', 'distract', 'context switch', 'interrupt'], label: 'Focus', icon: '🎯' },
+    { words: ['energy', 'tired', 'exhaust', 'rest', 'sleep', 'burnout'], label: 'Wellbeing', icon: '💪' },
+    { words: ['progress', 'momentum', 'velocity', 'productive'], label: 'Momentum', icon: '⚡' },
+    { words: ['stuck', 'block', 'frustrat', 'difficult', 'challeng'], label: 'Friction', icon: '🧱' },
+    { words: ['creativ', 'idea', 'concept', 'experiment', 'explor'], label: 'Creative', icon: '💡' },
+    { words: ['component', 'system', 'token', 'architecture'], label: 'Systems', icon: '⬡' },
+    { words: ['commit', 'code', 'implement', 'build', 'develop'], label: 'Building', icon: '🔨' },
+  ]
+  for (const p of patterns) {
+    if (p.words.some(w => t.includes(w))) themes.push(p)
+  }
+  return themes.slice(0, 3)
+}
+
 const reflectEval = computed(() => {
   if (!reflection.value) return null
   const { energy, focus, mood } = reflection.value.scores
   const avg = reflection.value.average
   const tags = []
-  const summary = []
+  const insights = []
 
   // Overall assessment
-  if (avg >= 8) { tags.push({ label: 'Peak Day', color: '#34d399' }); summary.push('Outstanding day across all dimensions — this is your peak performance state.') }
-  else if (avg >= 6) { tags.push({ label: 'Solid Day', color: '#fbbf24' }); summary.push('A productive day with room for optimization in specific areas.') }
-  else if (avg >= 4) { tags.push({ label: 'Mixed Day', color: '#fb923c' }); summary.push('Some friction today — identifying the blockers can help tomorrow.') }
-  else { tags.push({ label: 'Recovery Needed', color: '#f87171' }); summary.push('Tough day. Rest and reset — tomorrow is a fresh start.') }
+  if (avg >= 8) { tags.push({ label: 'Peak Day', color: '#34d399' }) }
+  else if (avg >= 6) { tags.push({ label: 'Solid Day', color: '#fbbf24' }) }
+  else if (avg >= 4) { tags.push({ label: 'Mixed Day', color: '#fb923c' }) }
+  else { tags.push({ label: 'Recovery Needed', color: '#f87171' }) }
 
-  // Specific patterns
-  if (energy >= 8 && focus < 6) { tags.push({ label: 'Energy → Focus Gap', color: '#fb923c' }); summary.push('High energy but low focus suggests distractions or unclear priorities.') }
-  if (focus >= 8 && energy < 6) { tags.push({ label: 'Pushing Through', color: '#fbbf24' }); summary.push('Strong focus despite low energy — sustainable short-term, but watch for burnout.') }
-  if (mood >= 8 && energy >= 8) { tags.push({ label: 'Flow State', color: '#34d399' }) }
-  if (energy <= 4) { tags.push({ label: 'Low Battery', color: '#f87171' }) }
-  if (focus >= 9) { tags.push({ label: 'Deep Focus', color: '#34d399' }) }
-  if (mood <= 4 && energy <= 4) { tags.push({ label: 'Burnout Risk', color: '#f87171' }); summary.push('Both mood and energy are low — consider taking a break or changing pace.') }
+  // Score patterns
+  if (energy >= 8 && focus >= 8 && mood >= 8) { tags.push({ label: 'Flow State', color: '#34d399' }) }
+  else if (energy >= 8 && focus < 6) { tags.push({ label: 'Energy → Focus Gap', color: '#fb923c' }) }
+  else if (focus >= 8 && energy < 6) { tags.push({ label: 'Pushing Through', color: '#fbbf24' }) }
+  if (focus >= 9) tags.push({ label: 'Deep Focus', color: '#34d399' })
+  if (energy <= 4) tags.push({ label: 'Low Battery', color: '#f87171' })
+  if (mood <= 4 && energy <= 4) tags.push({ label: 'Burnout Risk', color: '#f87171' })
 
-  return { tags: tags.slice(0, 4), summary: summary[0] || '' }
+  // Strongest and weakest
+  const scores = [['Energy', energy], ['Focus', focus], ['Mood', mood]]
+  const strongest = scores.reduce((a, b) => b[1] > a[1] ? b : a)
+  const weakest = scores.reduce((a, b) => b[1] < a[1] ? b : a)
+  if (strongest[1] !== weakest[1]) {
+    insights.push(`${strongest[0]} was your strongest area today at ${strongest[1]}/10, while ${weakest[0].toLowerCase()} scored ${weakest[1]}/10.`)
+  }
+
+  // Win analysis
+  const winThemes = extractThemes(reflection.value.win)
+  if (winThemes.length) {
+    insights.push(`Your win centered on ${winThemes.map(t => t.label.toLowerCase()).join(' and ')} — keep this momentum going.`)
+  }
+
+  // Improve analysis
+  const improveThemes = extractThemes(reflection.value.improve)
+  if (improveThemes.length) {
+    insights.push(`Areas to watch: ${improveThemes.map(t => t.label.toLowerCase()).join(', ')}. Set a specific action for tomorrow.`)
+  }
+
+  // Score-based insight
+  if (avg >= 7) {
+    insights.push('Above-average day overall. Document what worked so you can replicate these conditions.')
+  } else if (avg <= 4) {
+    insights.push('Below your baseline. Identify the root cause — was it external factors or internal state?')
+  }
+
+  return {
+    tags: tags.slice(0, 4),
+    insights: insights.slice(0, 3),
+    winThemes,
+    improveThemes,
+  }
 })
 const scrollY = ref(0)
 function onScroll() { scrollY.value = window.scrollY }
@@ -332,12 +390,14 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
         <section v-if="reflection" v-reveal class="section">
           <p class="section-label" style="color: #34d399">Daily Reflection</p>
           <div class="reflect-card">
-            <!-- Evaluation summary + tags at top -->
+            <!-- Evaluation: insights + tags -->
             <div v-if="reflectEval" class="reflect-eval">
-              <p class="eval-summary">{{ reflectEval.summary }}</p>
               <div class="eval-tags">
                 <span v-for="t in reflectEval.tags" :key="t.label" class="eval-tag" :style="{ color: t.color, borderColor: t.color + '30', background: t.color + '10' }">{{ t.label }}</span>
               </div>
+              <ul class="eval-insights">
+                <li v-for="(ins, i) in reflectEval.insights" :key="i">{{ ins }}</li>
+              </ul>
             </div>
 
             <!-- Scores: 3 small on left, average large on right -->
@@ -366,14 +426,24 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
               </div>
             </div>
 
-            <!-- Text responses below -->
+            <!-- Text responses with extracted themes -->
             <div class="reflect-text" v-if="reflection.win || reflection.improve">
               <div v-if="reflection.win" class="rtext-block">
-                <p class="rtext-label">Biggest Win</p>
+                <div class="rtext-head">
+                  <p class="rtext-label">Biggest Win</p>
+                  <div class="rtext-themes" v-if="reflectEval?.winThemes?.length">
+                    <span v-for="t in reflectEval.winThemes" :key="t.label" class="rtext-theme">{{ t.icon }} {{ t.label }}</span>
+                  </div>
+                </div>
                 <p class="rtext-content">{{ reflection.win }}</p>
               </div>
               <div v-if="reflection.improve" class="rtext-block">
-                <p class="rtext-label" style="color: var(--amber)">What to Improve</p>
+                <div class="rtext-head">
+                  <p class="rtext-label" style="color: var(--amber)">What to Improve</p>
+                  <div class="rtext-themes" v-if="reflectEval?.improveThemes?.length">
+                    <span v-for="t in reflectEval.improveThemes" :key="t.label" class="rtext-theme">{{ t.icon }} {{ t.label }}</span>
+                  </div>
+                </div>
                 <p class="rtext-content">{{ reflection.improve }}</p>
               </div>
             </div>
@@ -637,11 +707,13 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
   backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
 }
 
-/* Evaluation summary */
+/* Evaluation */
 .reflect-eval { margin-bottom: 20px; padding-bottom: 18px; border-bottom: 1px solid var(--border); }
-.eval-summary { font-size: 14px; line-height: 1.6; color: var(--text-strong); margin-bottom: 10px; }
-.eval-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+.eval-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
 .eval-tag { font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 6px; border: 1px solid; }
+.eval-insights { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+.eval-insights li { font-size: 13px; line-height: 1.6; color: var(--text); padding-left: 14px; position: relative; }
+.eval-insights li::before { content: '→'; position: absolute; left: 0; color: var(--text-muted); }
 
 /* Scores layout: 3 left, average right */
 .reflect-scores { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
@@ -659,7 +731,10 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
 .rscore-num-lg { font-size: 20px; }
 
 .reflect-text { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding-top: 18px; border-top: 1px solid var(--border); }
-.rtext-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #34d399; margin-bottom: 6px; }
+.rtext-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.rtext-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #34d399; }
+.rtext-themes { display: flex; gap: 4px; }
+.rtext-theme { font-size: 10px; color: var(--text-muted); background: rgba(255,255,255,0.04); padding: 2px 8px; border-radius: 4px; }
 .rtext-content { font-size: 13px; line-height: 1.6; color: var(--text); }
 
 /* Footer */
