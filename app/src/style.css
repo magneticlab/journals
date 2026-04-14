@@ -24,6 +24,7 @@
   --amber-bg: rgba(251, 191, 36, 0.08);
   --serif: 'Gloock', Georgia, serif;
   --sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }

@@ -136,20 +136,22 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll))
     <!-- TOP ZONE — transparent, animation visible -->
     <div class="top-zone">
       <div class="mx">
+        <!-- Nav row — stays fixed, doesn't parallax -->
+        <div class="nav-row">
+          <router-link to="/" class="hero-logo">Journals</router-link>
+          <div v-if="weather" class="weather">
+            <span class="wx-icon">{{ wxLabel?.icon }}</span>
+            <span class="wx-temp">{{ wxTemp }}°</span>
+            <span class="wx-label">{{ wxLabel?.label }}</span>
+            <span class="wx-sep">·</span>
+            <span class="wx-detail">{{ wxHumidity }}% humidity</span>
+            <span class="wx-sep">·</span>
+            <span class="wx-detail">{{ wxWind }} km/h</span>
+          </div>
+        </div>
+
         <!-- Hero — parallax + fade on scroll -->
         <div class="hero" :style="heroStyle">
-          <div class="hero-top">
-            <h1 class="hero-logo">Journals</h1>
-            <div v-if="weather" class="weather">
-              <span class="wx-icon">{{ wxLabel?.icon }}</span>
-              <span class="wx-temp">{{ wxTemp }}°</span>
-              <span class="wx-label">{{ wxLabel?.label }}</span>
-              <span class="wx-sep">·</span>
-              <span class="wx-detail">{{ wxHumidity }}% humidity</span>
-              <span class="wx-sep">·</span>
-              <span class="wx-detail">{{ wxWind }} km/h</span>
-            </div>
-          </div>
           <p class="hero-greeting">{{ greeting }}, Alek.</p>
           <p class="hero-date">{{ todayStr }}</p>
         </div>
@@ -250,11 +252,13 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll))
 .mx { max-width: 880px; margin: 0 auto; padding: 0 24px; }
 
 /* TOP ZONE — transparent, animation shows through */
-.top-zone { padding: 64px 0 0; }
+.top-zone { padding: 48px 0 0; }
+
+/* Nav row — same height as inner pages */
+.nav-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 32px; min-height: 36px; }
 
 /* Hero */
 .hero { margin-bottom: 0; padding-bottom: 120px; will-change: transform, opacity; }
-.hero-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 24px; }
 .hero-logo { font-family: var(--serif); font-size: 20px; font-weight: 400; color: var(--text-heading); }
 .weather {
   display: flex; align-items: center; gap: 6px;
@@ -288,7 +292,7 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll))
 .cards-wrap { position: relative; margin-top: -60px; z-index: 2; }
 .cards { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 56px; }
 .card {
-  border-radius: 14px; padding: 24px; transition: all 0.2s; display: block;
+  border-radius: 14px; padding: 24px; transition: all 0.4s var(--ease-spring); display: block;
   backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
 }
 .card-work {
@@ -364,7 +368,7 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll))
   .cards { grid-template-columns: 1fr; }
   .day-cols { grid-template-columns: 1fr; }
   .day-col:first-child { border-right: none; border-bottom: 1px solid var(--border); }
-  .hero-top { flex-direction: column; gap: 12px; }
+  .nav-row { flex-direction: column; align-items: flex-start; gap: 12px; }
   .hero-greeting { font-size: 28px; }
   .cards-wrap { margin-top: -20px; }
   .body-fade { height: 80px; }

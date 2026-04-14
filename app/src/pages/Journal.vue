@@ -176,7 +176,7 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
 
 /* Top zone */
 .top-zone { padding: 48px 0 0; }
-.nav-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 32px; }
+.nav-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 32px; min-height: 36px; }
 .hero-logo { font-family: var(--serif); font-size: 20px; color: var(--text-heading); }
 .hero-logo:hover { color: var(--text-muted); }
 .weather { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-muted); background: rgba(20,20,22,0.5); backdrop-filter: blur(12px); border: 1px solid var(--border); border-radius: 10px; padding: 6px 14px; }
@@ -195,7 +195,7 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
 .body { padding-bottom: 64px; }
 
 /* Featured */
-.featured { border-radius: 16px; padding: 28px; margin-bottom: 16px; cursor: pointer; transition: all 0.2s; background: rgba(12,12,14,0.75); border: 1px solid var(--border); backdrop-filter: blur(16px); box-shadow: 0 4px 24px rgba(0,0,0,0.25); }
+.featured { border-radius: 16px; padding: 28px; margin-bottom: 16px; cursor: pointer; transition: all 0.4s var(--ease-spring); background: rgba(12,12,14,0.75); border: 1px solid var(--border); backdrop-filter: blur(16px); box-shadow: 0 4px 24px rgba(0,0,0,0.25); }
 .featured:hover { border-color: var(--border-hover); box-shadow: 0 8px 32px rgba(0,0,0,0.35); transform: translateY(-1px); }
 .feat-row-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
 .feat-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; }

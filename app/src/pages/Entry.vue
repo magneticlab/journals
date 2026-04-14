@@ -194,7 +194,7 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
 
 /* Top zone */
 .top-zone { padding: 48px 0 0; }
-.nav-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 32px; }
+.nav-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 32px; min-height: 36px; }
 .hero-logo { font-family: var(--serif); font-size: 20px; color: var(--text-heading); }
 .hero-logo:hover { color: var(--text-muted); }
 .weather { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-muted); background: rgba(20,20,22,0.5); backdrop-filter: blur(12px); border: 1px solid var(--border); border-radius: 10px; padding: 6px 14px; }

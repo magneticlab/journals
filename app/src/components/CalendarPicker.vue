@@ -186,7 +186,7 @@ onUnmounted(() => document.removeEventListener('click', onClickOutside))
   backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
   border: 1px solid var(--border); border-radius: 14px;
   box-shadow: 0 12px 40px rgba(0,0,0,0.5), 0 2px 8px rgba(0,0,0,0.3);
-  z-index: 100;
+  z-index: 9999;
 }
 
 .cal-header {
