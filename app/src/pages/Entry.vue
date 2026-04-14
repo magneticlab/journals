@@ -51,6 +51,10 @@ function goToNext() { if (hasNext.value) router.push(`/${props.journal}/${dates.
 function goTo(e) { if (typeof e === 'string') router.push(`/${props.journal}/${e}`); else router.push(`/${props.journal}/${e.target.value}`) }
 
 const isWork = computed(() => props.journal === 'work')
+const today = computed(() => new Date().toISOString().slice(0, 10))
+const isToday = computed(() => props.date === today.value)
+const hasTodayEntry = computed(() => dates.value.includes(today.value))
+function goToday() { if (hasTodayEntry.value) router.push(`/${props.journal}/${today.value}`) }
 const brand = computed(() => isWork.value ? '#6395ff' : '#34d399')
 
 // Check if the other journal has an entry for this date
@@ -104,6 +108,7 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
             </button>
             <CalendarPicker :modelValue="date" @update:modelValue="goTo" :availableDates="dates" :brandColor="brand" />
+            <button v-if="!isToday && hasTodayEntry" class="today-btn" @click="goToday">Today</button>
           </div>
           <p class="hero-sub">{{ summaryLine }}</p>
 
@@ -300,8 +305,8 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
 .page { min-height: 100vh; position: relative; z-index: 1; }
 .mx { max-width: 880px; margin: 0 auto; padding-left: 24px; padding-right: 24px; }
 
-/* Top zone */
-.top-zone { padding: 48px 0 0; }
+/* Top zone — above body-zone so calendar dropdown isn't hidden */
+.top-zone { padding: 48px 0 0; position: relative; z-index: 10; }
 .nav-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 32px; min-height: 36px; }
 .hero-logo { font-family: var(--serif); font-size: 20px; color: var(--text-heading); }
 .hero-logo:hover { color: var(--text-muted); }
@@ -326,6 +331,15 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
 .arrow-btn:hover { border-color: var(--border-hover); color: var(--text-heading); background: rgba(12,12,14,0.85); }
 .arrow-btn.disabled { color: var(--border); cursor: not-allowed; opacity: 0.4; }
 
+.today-btn {
+  padding: 8px 14px; border-radius: 8px; border: none;
+  background: rgba(52,211,153,0.15); color: #34d399;
+  font-size: 12px; font-weight: 600; font-family: inherit;
+  cursor: pointer; transition: all 0.2s var(--ease-spring);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+}
+.today-btn:hover { background: rgba(52,211,153,0.25); }
+
 /* Journal tabs — switch work/daily for this day */
 .journal-tabs { display: flex; gap: 4px; }
 .jtab {
@@ -338,8 +352,8 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
 .jtab:hover { color: var(--text-strong); background: rgba(255,255,255,0.06); }
 .jtab.active { color: var(--text-heading); background: rgba(255,255,255,0.08); }
 
-/* Body zone */
-.body-zone { position: relative; background: linear-gradient(to bottom, transparent 0%, #0c0c0e 120px); padding-top: 20px; min-height: 100vh; }
+/* Body zone — below top-zone in stacking */
+.body-zone { position: relative; z-index: 5; background: linear-gradient(to bottom, transparent 0%, #0c0c0e 120px); padding-top: 20px; min-height: 100vh; }
 .body { padding-bottom: 64px; }
 .empty { padding: 80px 24px; text-align: center; font-size: 14px; color: var(--text-muted); }
 
