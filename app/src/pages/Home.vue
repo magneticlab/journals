@@ -242,7 +242,7 @@ const dailySpark = computed(() => spark7(manifest.value.daily, 'commits'))
 .top-zone { padding: 48px 0 0; }
 
 /* Hero */
-.hero { margin-bottom: 0; padding-bottom: 60px; }
+.hero { margin-bottom: 0; padding-bottom: 80px; }
 .hero-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 24px; }
 .hero-logo { font-family: var(--serif); font-size: 20px; font-weight: 400; color: var(--text-heading); }
 .weather {
@@ -264,7 +264,7 @@ const dailySpark = computed(() => spark7(manifest.value.daily, 'commits'))
 .body-zone { position: relative; }
 .body-fade {
   position: absolute; top: 0; left: 0; width: 100%;
-  height: 120px; pointer-events: none;
+  height: 160px; pointer-events: none;
   background: linear-gradient(to bottom, transparent 0%, #0c0c0e 100%);
   z-index: 0;
 }
@@ -275,8 +275,8 @@ const dailySpark = computed(() => spark7(manifest.value.daily, 'commits'))
 }
 
 /* Cards — pulled up into the fade zone */
-.cards-wrap { position: relative; margin-top: -40px; z-index: 2; }
-.cards { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 40px; }
+.cards-wrap { position: relative; margin-top: -50px; z-index: 2; }
+.cards { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 56px; }
 .card {
   border-radius: 14px; padding: 24px; transition: all 0.2s; display: block;
   backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
