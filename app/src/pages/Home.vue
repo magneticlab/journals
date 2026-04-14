@@ -433,7 +433,7 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll))
 .section-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; color: var(--text-muted); margin-bottom: 16px; }
 .timeline { position: relative; }
 .tl-group { margin-bottom: 4px; }
-.group-header { display: flex; align-items: center; gap: 12px; padding: 10px 0; position: sticky; top: 0; background: rgba(12,12,14,0.9); backdrop-filter: blur(8px); z-index: 10; }
+.group-header { display: flex; align-items: center; gap: 12px; padding: 10px 0; z-index: 10; }
 .group-dot { width: 10px; height: 10px; border-radius: 50%; border: 2px solid var(--border-hover); background: var(--bg); flex-shrink: 0; }
 .group-label { font-family: var(--serif); font-size: 15px; color: var(--text-heading); }
 

@@ -255,7 +255,7 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
   padding-bottom: 40px;
 }
 .month-group { margin-bottom: 8px; }
-.month-header { display: flex; align-items: center; gap: 12px; padding: 12px 0; position: sticky; top: 0; background: rgba(12,12,14,0.9); backdrop-filter: blur(8px); z-index: 10; }
+.month-header { display: flex; align-items: center; gap: 12px; padding: 12px 0; z-index: 10; }
 .month-dot { width: 10px; height: 10px; border-radius: 50%; border: 2px solid; }
 .month-label { font-family: var(--serif); font-size: 15px; color: var(--text-heading); }
 .month-count { font-size: 11px; color: var(--text-muted); }
