@@ -1,11 +1,11 @@
 import { ref, watch, computed } from 'vue'
 
 const THEMES = [
-  { id: 'midnight', label: 'Midnight', icon: '🌙', hours: [22, 5] },
-  { id: 'dawn', label: 'Dawn', icon: '🌅', hours: [5, 9] },
-  { id: 'daylight', label: 'Daylight', icon: '☀️', hours: [9, 17] },
-  { id: 'dusk', label: 'Dusk', icon: '🌇', hours: [17, 22] },
-  { id: 'aurora', label: 'Aurora', icon: '🌌', hours: null },
+  { id: 'midnight', label: 'Midnight', icon: 'moon', hours: [22, 5] },
+  { id: 'dawn', label: 'Dawn', icon: 'sunrise', hours: [5, 9] },
+  { id: 'daylight', label: 'Daylight', icon: 'sun', hours: [9, 17] },
+  { id: 'dusk', label: 'Dusk', icon: 'sunset', hours: [17, 22] },
+  { id: 'aurora', label: 'Aurora', icon: 'sparkles', hours: null },
 ]
 
 function getAutoTheme() {
