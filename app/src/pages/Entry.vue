@@ -246,7 +246,19 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
         <section v-if="!isWork && reflection" v-reveal class="section">
           <p class="section-label" style="color: #34d399">Daily Reflection</p>
           <div class="reflect-card">
-            <div v-if="reflectEval" class="reflect-eval">
+            <!-- AI Analysis -->
+            <div v-if="reflection.ai" class="reflect-eval">
+              <p class="eval-ai-summary">{{ reflection.ai.summary }}</p>
+              <div class="eval-tags">
+                <span v-for="t in (reflection.ai.tags || [])" :key="t" class="eval-tag" style="color: #34d399; border-color: rgba(52,211,153,0.3); background: rgba(52,211,153,0.1)">{{ t }}</span>
+              </div>
+              <div v-if="reflection.ai.advice" class="eval-advice">
+                <span>💡</span>
+                <p>{{ reflection.ai.advice }}</p>
+              </div>
+            </div>
+            <!-- Fallback pattern-matching -->
+            <div v-else-if="reflectEval" class="reflect-eval">
               <div class="eval-tags">
                 <span v-for="t in reflectEval.tags" :key="t.label" class="eval-tag" :style="{ color: t.color, borderColor: t.color + '30', background: t.color + '10' }">{{ t.label }}</span>
               </div>
@@ -287,7 +299,11 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
                   </div>
                 </div>
                 <p class="rtext-content">{{ reflection.win }}</p>
-                <div v-if="reflectEval?.winHighlights?.length" class="rtext-highlights hl-green">
+                <div v-if="reflection.ai?.winHighlights?.length" class="rtext-highlights hl-green">
+                  <p class="hl-title">Key Highlights</p>
+                  <ul><li v-for="(h, i) in reflection.ai.winHighlights" :key="i">{{ h }}</li></ul>
+                </div>
+                <div v-else-if="reflectEval?.winHighlights?.length" class="rtext-highlights hl-green">
                   <p class="hl-title">Key Highlights</p>
                   <ul><li v-for="(h, i) in reflectEval.winHighlights" :key="i">{{ h }}</li></ul>
                 </div>
@@ -300,7 +316,11 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
                   </div>
                 </div>
                 <p class="rtext-content">{{ reflection.improve }}</p>
-                <div v-if="reflectEval?.improveHighlights?.length" class="rtext-highlights hl-amber">
+                <div v-if="reflection.ai?.improveHighlights?.length" class="rtext-highlights hl-amber">
+                  <p class="hl-title">Areas Flagged</p>
+                  <ul><li v-for="(h, i) in reflection.ai.improveHighlights" :key="i">{{ h }}</li></ul>
+                </div>
+                <div v-else-if="reflectEval?.improveHighlights?.length" class="rtext-highlights hl-amber">
                   <p class="hl-title">Areas Flagged</p>
                   <ul><li v-for="(h, i) in reflectEval.improveHighlights" :key="i">{{ h }}</li></ul>
                 </div>
@@ -738,6 +758,10 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
 .eval-insights { list-style: none; display: flex; flex-direction: column; gap: 6px; }
 .eval-insights li { font-size: 13px; line-height: 1.6; color: var(--text); padding-left: 14px; position: relative; }
 .eval-insights li::before { content: '→'; position: absolute; left: 0; color: var(--text-muted); }
+.eval-ai-summary { font-size: 14px; line-height: 1.6; color: var(--text-strong); margin-bottom: 12px; }
+.eval-advice { display: flex; align-items: flex-start; gap: 8px; margin-top: 12px; padding: 10px 12px; border-radius: 8px; background: rgba(255,255,255,0.03); }
+.eval-advice span { font-size: 14px; flex-shrink: 0; }
+.eval-advice p { font-size: 12px; line-height: 1.5; color: var(--text); }
 
 /* Scores layout: 3 left, average right */
 .reflect-scores { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }

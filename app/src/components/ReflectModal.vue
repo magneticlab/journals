@@ -1,5 +1,6 @@
 <script setup>
 import { ref, computed } from 'vue'
+import { analyzeReflection } from '../services/claude'
 
 const emit = defineEmits(['close', 'submit'])
 
@@ -41,23 +42,35 @@ function next() {
 }
 function prev() { if (step.value > 0) step.value-- }
 
-function startProcessing() {
+async function startProcessing() {
   phase.value = 'processing'
   processingStep.value = 0
 
+  // Start AI analysis in parallel with the animation
+  const aiPromise = analyzeReflection({
+    scores: { energy: answers.value.energy, focus: answers.value.focus, mood: answers.value.mood },
+    win: answers.value.win,
+    improve: answers.value.improve,
+  })
+
   // Animate through processing steps
-  const interval = setInterval(() => {
-    processingStep.value++
-    if (processingStep.value >= processingSteps.length) {
-      clearInterval(interval)
-      setTimeout(() => {
-        saveAndShowResults()
-      }, 400)
-    }
-  }, 600)
+  await new Promise(resolve => {
+    const interval = setInterval(() => {
+      processingStep.value++
+      if (processingStep.value >= processingSteps.length) {
+        clearInterval(interval)
+        resolve()
+      }
+    }, 600)
+  })
+
+  // Wait for AI result (may already be done)
+  const aiResult = await aiPromise
+
+  saveAndShowResults(aiResult)
 }
 
-function saveAndShowResults() {
+function saveAndShowResults(aiResult) {
   const today = new Date().toISOString().slice(0, 10)
   const reflection = {
     date: today,
@@ -66,6 +79,7 @@ function saveAndShowResults() {
     win: answers.value.win,
     improve: answers.value.improve,
     average: Math.round((answers.value.energy + answers.value.focus + answers.value.mood) / 3 * 10) / 10,
+    ai: aiResult || null,
   }
 
   const stored = JSON.parse(localStorage.getItem('reflections') || '{}')
@@ -176,16 +190,36 @@ function ringColor(val) {
               </div>
             </div>
 
-            <!-- Text responses -->
+            <!-- AI Analysis -->
+            <div v-if="savedReflection.ai" class="results-ai">
+              <p class="ai-summary">{{ savedReflection.ai.summary }}</p>
+              <div v-if="savedReflection.ai.tags?.length" class="ai-tags">
+                <span v-for="t in savedReflection.ai.tags" :key="t" class="ai-tag">{{ t }}</span>
+              </div>
+            </div>
+
+            <!-- Text responses with AI highlights -->
             <div class="results-text" v-if="savedReflection.win || savedReflection.improve">
               <div v-if="savedReflection.win" class="res-block">
                 <p class="res-block-label">Biggest Win</p>
                 <p class="res-block-text">{{ savedReflection.win }}</p>
+                <div v-if="savedReflection.ai?.winHighlights?.length" class="res-highlights hl-g">
+                  <ul><li v-for="h in savedReflection.ai.winHighlights" :key="h">{{ h }}</li></ul>
+                </div>
               </div>
               <div v-if="savedReflection.improve" class="res-block">
                 <p class="res-block-label" style="color: var(--amber)">What to Improve</p>
                 <p class="res-block-text">{{ savedReflection.improve }}</p>
+                <div v-if="savedReflection.ai?.improveHighlights?.length" class="res-highlights hl-a">
+                  <ul><li v-for="h in savedReflection.ai.improveHighlights" :key="h">{{ h }}</li></ul>
+                </div>
               </div>
+            </div>
+
+            <!-- AI Advice -->
+            <div v-if="savedReflection.ai?.advice" class="ai-advice">
+              <span class="advice-icon">💡</span>
+              <p>{{ savedReflection.ai.advice }}</p>
             </div>
 
             <p class="results-hint">This reflection is saved to your daily journal report.</p>
@@ -272,6 +306,25 @@ function ringColor(val) {
 .results-text { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding-top: 20px; border-top: 1px solid var(--border); margin-bottom: 20px; }
 .res-block-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #34d399; margin-bottom: 6px; }
 .res-block-text { font-size: 13px; line-height: 1.6; color: var(--text); }
+
+/* AI Analysis */
+.results-ai { margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+.ai-summary { font-size: 14px; line-height: 1.6; color: var(--text-strong); margin-bottom: 10px; }
+.ai-tags { display: flex; gap: 5px; flex-wrap: wrap; }
+.ai-tag { font-size: 10px; font-weight: 600; color: #34d399; background: rgba(52,211,153,0.1); border: 1px solid rgba(52,211,153,0.2); padding: 3px 8px; border-radius: 5px; }
+
+.res-highlights { margin-top: 8px; border-radius: 8px; padding: 8px 12px; }
+.hl-g { background: rgba(52,211,153,0.06); }
+.hl-a { background: rgba(251,191,36,0.05); }
+.res-highlights ul { list-style: none; display: flex; flex-direction: column; gap: 3px; }
+.res-highlights li { font-size: 11px; color: var(--text-strong); padding-left: 10px; position: relative; }
+.res-highlights li::before { content: '→'; position: absolute; left: 0; font-size: 10px; }
+.hl-g li::before { color: #34d399; }
+.hl-a li::before { color: #fbbf24; }
+
+.ai-advice { display: flex; align-items: flex-start; gap: 8px; padding: 12px; border-radius: 10px; background: rgba(255,255,255,0.03); border: 1px solid var(--border); margin-bottom: 16px; }
+.advice-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+.ai-advice p { font-size: 13px; line-height: 1.5; color: var(--text); }
 
 .results-hint { font-size: 11px; color: var(--text-muted); text-align: center; margin-bottom: 16px; }
 
