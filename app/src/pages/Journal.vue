@@ -182,7 +182,7 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
 .weather { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-muted); background: rgba(12,12,14,0.7); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid var(--border); border-radius: 10px; padding: 6px 14px; }
 .wx-i { font-size: 16px; } .wx-t { font-weight: 600; color: var(--text-strong); font-size: 14px; } .wx-l { color: var(--text); }
 
-.hero { padding-bottom: 100px; will-change: transform, opacity; }
+.hero { padding-bottom: 48px; will-change: transform, opacity; }
 .hero-title-row { display: flex; align-items: center; gap: 14px; margin-bottom: 6px; }
 .hero-icon { display: flex; align-items: center; justify-content: center; width: 48px; height: 48px; border-radius: 14px; flex-shrink: 0; }
 .hicon-work { background: rgba(99,149,255,0.12); color: #6395ff; }
