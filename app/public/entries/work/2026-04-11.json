@@ -2,13 +2,16 @@
   "date": "2026-04-11",
   "day": "Saturday",
   "display": "April 11, 2026",
-  "generatedAt": "2026-04-14T05:22:20.329752",
+  "generatedAt": "2026-04-14T06:03:26.370246",
   "stats": {
     "sessions": 6,
     "messages": 77,
     "commits": 1,
     "repos": 1,
-    "timeRange": "00:02\u201321:57"
+    "timeRange": "00:02\u201321:57",
+    "linesAdded": 4212,
+    "linesRemoved": 3552,
+    "filesChanged": 86
   },
   "wentRight": "Productive day with 1 commit(s) across 1 repo(s) during 6 Claude session(s) spanning 00:02\u201321:57.",
   "couldBeBetter": "High session count (6) may indicate context switching \u2014 consider consolidating related work.",

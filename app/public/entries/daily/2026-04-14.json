@@ -2,11 +2,11 @@
   "date": "2026-04-14",
   "day": "Tuesday",
   "display": "April 14, 2026",
-  "generatedAt": "2026-04-14T05:22:21.038140",
-  "summary": "69 terminal commands, 4 commits across 2 repos, 1 files modified.",
+  "generatedAt": "2026-04-14T06:03:27.119882",
+  "summary": "69 terminal commands, 10 commits across 2 repos, 1 files modified.",
   "stats": {
     "commands": 69,
-    "commits": 4,
+    "commits": 10,
     "repos": 2,
     "filesModified": 1
   },
@@ -162,6 +162,42 @@
     {
       "repo": "journals",
       "commits": [
+        {
+          "hash": "a9f2386",
+          "author": "Alek Manov",
+          "message": "Timeline: calendar stickers, two-column Work/Daily layout",
+          "time": "05:56"
+        },
+        {
+          "hash": "19164f4",
+          "author": "Alek Manov",
+          "message": "Consolidate timeline: day cards with Work+Daily rows, week/month groups",
+          "time": "05:53"
+        },
+        {
+          "hash": "cf30b71",
+          "author": "Alek Manov",
+          "message": "Color branding, sparklines, timeline polish, hover-to-back",
+          "time": "05:48"
+        },
+        {
+          "hash": "e9d95ff",
+          "author": "Alek Manov",
+          "message": "UI polish: Gloock serif titles, icons on tags, timeline, sparkline",
+          "time": "05:40"
+        },
+        {
+          "hash": "4ce679d",
+          "author": "Alek Manov",
+          "message": "Navigation polish: persistent topnav, back buttons, improved home",
+          "time": "05:27"
+        },
+        {
+          "hash": "f1b63f1",
+          "author": "Alek Manov",
+          "message": "Redesign: dark theme, CEO-style digested reports",
+          "time": "05:22"
+        },
         {
           "hash": "4cf2807",
           "author": "Alek Manov",

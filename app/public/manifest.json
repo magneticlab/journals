@@ -4,13 +4,16 @@
       "date": "2026-04-14",
       "day": "Tuesday",
       "display": "April 14, 2026",
-      "summary": "6 session(s), 24 msgs, 4 commit(s) across 2 repo(s)",
+      "summary": "6 session(s), 32 msgs, 10 commit(s) across 2 repo(s)",
       "stats": {
         "sessions": 6,
-        "messages": 24,
-        "commits": 4,
+        "messages": 32,
+        "commits": 10,
         "repos": 2,
-        "timeRange": "00:24\u201305:18"
+        "timeRange": "00:24\u201306:02",
+        "linesAdded": 5789,
+        "linesRemoved": 1903,
+        "filesChanged": 85
       }
     },
     {
@@ -23,7 +26,10 @@
         "messages": 126,
         "commits": 3,
         "repos": 2,
-        "timeRange": "00:34\u201323:54"
+        "timeRange": "00:34\u201323:54",
+        "linesAdded": 18217,
+        "linesRemoved": 2733,
+        "filesChanged": 90
       }
     },
     {
@@ -36,7 +42,10 @@
         "messages": 92,
         "commits": 9,
         "repos": 1,
-        "timeRange": "00:35\u201323:13"
+        "timeRange": "00:35\u201323:13",
+        "linesAdded": 441,
+        "linesRemoved": 133,
+        "filesChanged": 1
       }
     },
     {
@@ -49,7 +58,10 @@
         "messages": 77,
         "commits": 1,
         "repos": 1,
-        "timeRange": "00:02\u201321:57"
+        "timeRange": "00:02\u201321:57",
+        "linesAdded": 4212,
+        "linesRemoved": 3552,
+        "filesChanged": 86
       }
     },
     {
@@ -62,7 +74,10 @@
         "messages": 130,
         "commits": 3,
         "repos": 1,
-        "timeRange": "00:02\u201323:56"
+        "timeRange": "00:02\u201323:56",
+        "linesAdded": 1114,
+        "linesRemoved": 867,
+        "filesChanged": 12
       }
     },
     {
@@ -75,7 +90,10 @@
         "messages": 238,
         "commits": 7,
         "repos": 1,
-        "timeRange": "00:03\u201323:59"
+        "timeRange": "00:03\u201323:59",
+        "linesAdded": 98,
+        "linesRemoved": 0,
+        "filesChanged": 2
       }
     },
     {
@@ -88,7 +106,10 @@
         "messages": 103,
         "commits": 11,
         "repos": 2,
-        "timeRange": "00:25\u201323:59"
+        "timeRange": "00:25\u201323:59",
+        "linesAdded": 5088,
+        "linesRemoved": 1119,
+        "filesChanged": 27
       }
     },
     {
@@ -101,7 +122,10 @@
         "messages": 33,
         "commits": 4,
         "repos": 1,
-        "timeRange": "19:31\u201322:11"
+        "timeRange": "19:31\u201322:11",
+        "linesAdded": 129,
+        "linesRemoved": 0,
+        "filesChanged": 2
       }
     },
     {
@@ -114,7 +138,10 @@
         "messages": 0,
         "commits": 1,
         "repos": 1,
-        "timeRange": ""
+        "timeRange": "",
+        "linesAdded": 140,
+        "linesRemoved": 0,
+        "filesChanged": 2
       }
     },
     {
@@ -127,7 +154,10 @@
         "messages": 0,
         "commits": 1,
         "repos": 1,
-        "timeRange": ""
+        "timeRange": "",
+        "linesAdded": 183,
+        "linesRemoved": 0,
+        "filesChanged": 3
       }
     },
     {
@@ -140,7 +170,10 @@
         "messages": 0,
         "commits": 1,
         "repos": 1,
-        "timeRange": ""
+        "timeRange": "",
+        "linesAdded": 90,
+        "linesRemoved": 0,
+        "filesChanged": 2
       }
     },
     {
@@ -153,7 +186,10 @@
         "messages": 0,
         "commits": 1,
         "repos": 1,
-        "timeRange": ""
+        "timeRange": "",
+        "linesAdded": 112,
+        "linesRemoved": 0,
+        "filesChanged": 2
       }
     },
     {
@@ -166,7 +202,10 @@
         "messages": 0,
         "commits": 1,
         "repos": 1,
-        "timeRange": ""
+        "timeRange": "",
+        "linesAdded": 82,
+        "linesRemoved": 0,
+        "filesChanged": 2
       }
     },
     {
@@ -179,7 +218,10 @@
         "messages": 0,
         "commits": 1,
         "repos": 1,
-        "timeRange": ""
+        "timeRange": "",
+        "linesAdded": 68,
+        "linesRemoved": 0,
+        "filesChanged": 2
       }
     },
     {
@@ -192,7 +234,10 @@
         "messages": 0,
         "commits": 1,
         "repos": 1,
-        "timeRange": ""
+        "timeRange": "",
+        "linesAdded": 105,
+        "linesRemoved": 0,
+        "filesChanged": 2
       }
     },
     {
@@ -205,7 +250,10 @@
         "messages": 0,
         "commits": 1,
         "repos": 1,
-        "timeRange": ""
+        "timeRange": "",
+        "linesAdded": 123,
+        "linesRemoved": 0,
+        "filesChanged": 2
       }
     },
     {
@@ -218,7 +266,10 @@
         "messages": 0,
         "commits": 1,
         "repos": 1,
-        "timeRange": ""
+        "timeRange": "",
+        "linesAdded": 111,
+        "linesRemoved": 0,
+        "filesChanged": 2
       }
     },
     {
@@ -231,7 +282,10 @@
         "messages": 0,
         "commits": 9,
         "repos": 2,
-        "timeRange": ""
+        "timeRange": "",
+        "linesAdded": 102,
+        "linesRemoved": 0,
+        "filesChanged": 4
       }
     },
     {
@@ -244,7 +298,10 @@
         "messages": 0,
         "commits": 12,
         "repos": 2,
-        "timeRange": ""
+        "timeRange": "",
+        "linesAdded": 70110,
+        "linesRemoved": 5349,
+        "filesChanged": 1571
       }
     },
     {
@@ -257,7 +314,10 @@
         "messages": 0,
         "commits": 4,
         "repos": 2,
-        "timeRange": ""
+        "timeRange": "",
+        "linesAdded": 1421,
+        "linesRemoved": 92,
+        "filesChanged": 11
       }
     },
     {
@@ -270,7 +330,10 @@
         "messages": 0,
         "commits": 10,
         "repos": 2,
-        "timeRange": ""
+        "timeRange": "",
+        "linesAdded": 91,
+        "linesRemoved": 1,
+        "filesChanged": 3
       }
     },
     {
@@ -283,7 +346,10 @@
         "messages": 0,
         "commits": 23,
         "repos": 2,
-        "timeRange": ""
+        "timeRange": "",
+        "linesAdded": 66,
+        "linesRemoved": 1,
+        "filesChanged": 3
       }
     },
     {
@@ -296,7 +362,10 @@
         "messages": 0,
         "commits": 1,
         "repos": 1,
-        "timeRange": ""
+        "timeRange": "",
+        "linesAdded": 691,
+        "linesRemoved": 0,
+        "filesChanged": 7
       }
     },
     {
@@ -309,7 +378,10 @@
         "messages": 0,
         "commits": 4,
         "repos": 2,
-        "timeRange": ""
+        "timeRange": "",
+        "linesAdded": 86,
+        "linesRemoved": 1,
+        "filesChanged": 3
       }
     },
     {
@@ -322,7 +394,10 @@
         "messages": 0,
         "commits": 3,
         "repos": 2,
-        "timeRange": ""
+        "timeRange": "",
+        "linesAdded": 1018,
+        "linesRemoved": 265,
+        "filesChanged": 23
       }
     },
     {
@@ -335,7 +410,10 @@
         "messages": 0,
         "commits": 7,
         "repos": 2,
-        "timeRange": ""
+        "timeRange": "",
+        "linesAdded": 3,
+        "linesRemoved": 1,
+        "filesChanged": 2
       }
     },
     {
@@ -348,7 +426,10 @@
         "messages": 0,
         "commits": 8,
         "repos": 2,
-        "timeRange": ""
+        "timeRange": "",
+        "linesAdded": 120,
+        "linesRemoved": 2,
+        "filesChanged": 4
       }
     },
     {
@@ -361,7 +442,10 @@
         "messages": 0,
         "commits": 20,
         "repos": 2,
-        "timeRange": ""
+        "timeRange": "",
+        "linesAdded": 92,
+        "linesRemoved": 1,
+        "filesChanged": 3
       }
     },
     {
@@ -374,7 +458,10 @@
         "messages": 0,
         "commits": 23,
         "repos": 2,
-        "timeRange": ""
+        "timeRange": "",
+        "linesAdded": 430,
+        "linesRemoved": 0,
+        "filesChanged": 3
       }
     },
     {
@@ -387,7 +474,10 @@
         "messages": 0,
         "commits": 11,
         "repos": 2,
-        "timeRange": ""
+        "timeRange": "",
+        "linesAdded": 97,
+        "linesRemoved": 2,
+        "filesChanged": 3
       }
     },
     {
@@ -400,7 +490,10 @@
         "messages": 0,
         "commits": 28,
         "repos": 2,
-        "timeRange": ""
+        "timeRange": "",
+        "linesAdded": 436,
+        "linesRemoved": 3,
+        "filesChanged": 4
       }
     },
     {
@@ -413,7 +506,10 @@
         "messages": 0,
         "commits": 10,
         "repos": 1,
-        "timeRange": ""
+        "timeRange": "",
+        "linesAdded": 14,
+        "linesRemoved": 8,
+        "filesChanged": 2
       }
     },
     {
@@ -426,7 +522,10 @@
         "messages": 0,
         "commits": 35,
         "repos": 2,
-        "timeRange": ""
+        "timeRange": "",
+        "linesAdded": 1808,
+        "linesRemoved": 9,
+        "filesChanged": 6
       }
     },
     {
@@ -439,7 +538,10 @@
         "messages": 0,
         "commits": 13,
         "repos": 1,
-        "timeRange": ""
+        "timeRange": "",
+        "linesAdded": 19,
+        "linesRemoved": 19,
+        "filesChanged": 19
       }
     },
     {
@@ -452,7 +554,10 @@
         "messages": 0,
         "commits": 10,
         "repos": 1,
-        "timeRange": ""
+        "timeRange": "",
+        "linesAdded": 54,
+        "linesRemoved": 42,
+        "filesChanged": 28
       }
     },
     {
@@ -465,7 +570,10 @@
         "messages": 0,
         "commits": 7,
         "repos": 1,
-        "timeRange": ""
+        "timeRange": "",
+        "linesAdded": 24,
+        "linesRemoved": 32,
+        "filesChanged": 24
       }
     },
     {
@@ -478,7 +586,10 @@
         "messages": 0,
         "commits": 16,
         "repos": 2,
-        "timeRange": ""
+        "timeRange": "",
+        "linesAdded": 35234,
+        "linesRemoved": 261,
+        "filesChanged": 145
       }
     },
     {
@@ -491,7 +602,10 @@
         "messages": 0,
         "commits": 3,
         "repos": 2,
-        "timeRange": ""
+        "timeRange": "",
+        "linesAdded": 4913,
+        "linesRemoved": 4,
+        "filesChanged": 27
       }
     },
     {
@@ -504,7 +618,10 @@
         "messages": 0,
         "commits": 19,
         "repos": 1,
-        "timeRange": ""
+        "timeRange": "",
+        "linesAdded": 1,
+        "linesRemoved": 0,
+        "filesChanged": 1
       }
     },
     {
@@ -517,7 +634,10 @@
         "messages": 0,
         "commits": 15,
         "repos": 2,
-        "timeRange": ""
+        "timeRange": "",
+        "linesAdded": 2145,
+        "linesRemoved": 3,
+        "filesChanged": 19
       }
     },
     {
@@ -530,7 +650,10 @@
         "messages": 0,
         "commits": 24,
         "repos": 2,
-        "timeRange": ""
+        "timeRange": "",
+        "linesAdded": 62522,
+        "linesRemoved": 1385,
+        "filesChanged": 265
       }
     },
     {
@@ -543,7 +666,10 @@
         "messages": 0,
         "commits": 8,
         "repos": 1,
-        "timeRange": ""
+        "timeRange": "",
+        "linesAdded": 2,
+        "linesRemoved": 1,
+        "filesChanged": 1
       }
     },
     {
@@ -556,7 +682,10 @@
         "messages": 0,
         "commits": 29,
         "repos": 1,
-        "timeRange": ""
+        "timeRange": "",
+        "linesAdded": 159,
+        "linesRemoved": 163,
+        "filesChanged": 2
       }
     }
   ],
@@ -565,10 +694,10 @@
       "date": "2026-04-14",
       "day": "Tuesday",
       "display": "April 14, 2026",
-      "summary": "69 terminal commands, 4 commits across 2 repos, 1 files modified.",
+      "summary": "69 terminal commands, 10 commits across 2 repos, 1 files modified.",
       "stats": {
         "commands": 69,
-        "commits": 4,
+        "commits": 10,
         "repos": 2,
         "filesModified": 1
       }

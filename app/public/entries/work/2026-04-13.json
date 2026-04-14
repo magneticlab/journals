@@ -2,13 +2,16 @@
   "date": "2026-04-13",
   "day": "Monday",
   "display": "April 13, 2026",
-  "generatedAt": "2026-04-14T05:22:20.753275",
+  "generatedAt": "2026-04-14T06:03:26.789531",
   "stats": {
     "sessions": 9,
     "messages": 126,
     "commits": 3,
     "repos": 2,
-    "timeRange": "00:34\u201323:54"
+    "timeRange": "00:34\u201323:54",
+    "linesAdded": 18217,
+    "linesRemoved": 2733,
+    "filesChanged": 90
   },
   "wentRight": "Productive day with 3 commit(s) across 2 repo(s) during 9 Claude session(s) spanning 00:34\u201323:54.",
   "couldBeBetter": "Hit 2 bugs during the session \u2014 check if recurring patterns need architectural fixes.",

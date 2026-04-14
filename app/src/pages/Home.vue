@@ -231,14 +231,14 @@ const dailySpark = computed(() => spark7(manifest.value.daily, 'commits'))
 /* Cards */
 .cards { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 40px; }
 .card { border-radius: 14px; padding: 24px; transition: border-color 0.2s; display: block; }
-.card-work { background: rgba(59,130,246,0.04); border: 1px solid rgba(59,130,246,0.15); }
-.card-work:hover { border-color: rgba(59,130,246,0.3); }
-.card-daily { background: rgba(34,197,94,0.04); border: 1px solid rgba(34,197,94,0.15); }
-.card-daily:hover { border-color: rgba(34,197,94,0.3); }
+.card-work { background: rgba(99,149,255,0.03); border: 1px solid rgba(99,149,255,0.15); }
+.card-work:hover { border-color: rgba(99,149,255,0.3); }
+.card-daily { background: rgba(52,211,153,0.03); border: 1px solid rgba(52,211,153,0.15); }
+.card-daily:hover { border-color: rgba(52,211,153,0.3); }
 .card-head { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 16px; }
 .card-icon { display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 10px; }
-.icon-work { background: rgba(59,130,246,0.1); color: var(--blue); }
-.icon-daily { background: rgba(34,197,94,0.1); color: var(--green); }
+.icon-work { background: rgba(99,149,255,0.12); color: #6395ff; }
+.icon-daily { background: rgba(52,211,153,0.12); color: #34d399; }
 .card-count { font-size: 12px; font-weight: 600; color: var(--text-muted); background: var(--bg-elevated); padding: 3px 10px; border-radius: 6px; }
 .card-label { font-family: var(--serif); font-size: 24px; font-weight: 400; color: var(--text-heading); margin-bottom: 4px; }
 .card-desc { font-size: 13px; color: var(--text-muted); line-height: 1.5; margin-bottom: 20px; }
@@ -251,8 +251,8 @@ const dailySpark = computed(() => spark7(manifest.value.daily, 'commits'))
 .spark-hint { font-size: 9px; color: var(--text-muted); writing-mode: vertical-rl; transform: rotate(180deg); margin-bottom: 2px; }
 .spark-bars { display: flex; align-items: flex-end; gap: 2px; height: 32px; }
 .spark-bar { width: 4px; border-radius: 2px; min-height: 2px; transition: height 0.3s; }
-.bar-work { background: rgba(59,130,246,0.5); }
-.bar-daily { background: rgba(34,197,94,0.5); }
+.bar-work { background: rgba(99,149,255,0.5); }
+.bar-daily { background: rgba(52,211,153,0.5); }
 
 /* Timeline */
 .section-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; color: var(--text-muted); margin-bottom: 16px; }
@@ -303,8 +303,8 @@ const dailySpark = computed(() => spark7(manifest.value.daily, 'commits'))
 .day-col:hover { background: var(--bg-elevated); }
 
 .col-head { display: flex; align-items: center; gap: 5px; }
-.col-work .col-head { color: var(--blue); }
-.col-daily .col-head { color: var(--green); }
+.col-work .col-head { color: #6395ff; }
+.col-daily .col-head { color: #34d399; }
 .col-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; }
 .col-summary { font-size: 11px; color: var(--text-muted); line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .col-meta { display: flex; gap: 8px; font-size: 10px; color: var(--text-muted); font-variant-numeric: tabular-nums; margin-top: auto; }

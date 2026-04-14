@@ -182,6 +182,21 @@ def generate_report(target_date):
     total_messages = len(entries)
     total_commits = sum(len(r["commits"]) for r in git_activity)
 
+    # Parse volume metrics from git stat strings
+    total_insertions = 0
+    total_deletions = 0
+    total_files_changed = 0
+    import re
+    for repo in git_activity:
+        stat = repo.get("stat", "")
+        if stat:
+            fm = re.search(r'(\d+) file', stat)
+            im = re.search(r'(\d+) insertion', stat)
+            dm = re.search(r'(\d+) deletion', stat)
+            if fm: total_files_changed += int(fm.group(1))
+            if im: total_insertions += int(im.group(1))
+            if dm: total_deletions += int(dm.group(1))
+
     # Time range
     time_range = ""
     if entries:
@@ -236,6 +251,9 @@ def generate_report(target_date):
             "commits": total_commits,
             "repos": len(git_activity),
             "timeRange": time_range,
+            "linesAdded": total_insertions,
+            "linesRemoved": total_deletions,
+            "filesChanged": total_files_changed,
         },
         "wentRight": went_right,
         "couldBeBetter": could_be_better,
