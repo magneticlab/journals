@@ -54,6 +54,9 @@ function scoreColor(s) {
   return '#f87171'
 }
 
+const avgScore = computed(() => values.value.reduce((a, b) => a + b, 0) / values.value.length)
+const fillColor = computed(() => scoreColor(avgScore.value))
+
 function labelXY(i) {
   const a = (Math.PI * 2 * i) / n.value - Math.PI / 2
   const lr = r.value + 24
