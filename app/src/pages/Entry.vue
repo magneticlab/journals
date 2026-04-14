@@ -165,7 +165,7 @@ onMounted(async () => {
 })
 onUnmounted(() => window.removeEventListener('scroll', onScroll))
 
-watch(() => props.date, () => { loadEntry(); loadReflection() })
+watch([() => props.date, () => props.journal], () => { loadEntry(); loadReflection() })
 async function loadEntry() {
   // Don't clear data — keep old content visible to prevent flicker
   try {
