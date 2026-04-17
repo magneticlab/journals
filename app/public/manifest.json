@@ -1,1 +1,1226 @@
-{"work":[],"daily":[],"narrative":[]}
+{
+  "work": [
+    {
+      "date": "2026-04-18",
+      "day": "Saturday",
+      "display": "April 18, 2026",
+      "summary": "3 session(s), 68 msgs, 0 commit(s) across 0 repo(s)",
+      "stats": {
+        "sessions": 3,
+        "messages": 68,
+        "commits": 0,
+        "repos": 0,
+        "timeRange": "00:02\u201302:14",
+        "linesAdded": 0,
+        "linesRemoved": 0,
+        "filesChanged": 0
+      }
+    },
+    {
+      "date": "2026-04-14",
+      "day": "Tuesday",
+      "display": "April 14, 2026",
+      "summary": "8 session(s), 58 msgs, 31 commit(s) across 2 repo(s)",
+      "stats": {
+        "sessions": 8,
+        "messages": 58,
+        "commits": 31,
+        "repos": 2,
+        "timeRange": "00:24\u201308:01",
+        "linesAdded": 5789,
+        "linesRemoved": 1903,
+        "filesChanged": 85
+      }
+    },
+    {
+      "date": "2026-04-13",
+      "day": "Monday",
+      "display": "April 13, 2026",
+      "summary": "9 session(s), 126 msgs, 3 commit(s) across 2 repo(s)",
+      "stats": {
+        "sessions": 9,
+        "messages": 126,
+        "commits": 3,
+        "repos": 2,
+        "timeRange": "00:34\u201323:54",
+        "linesAdded": 18217,
+        "linesRemoved": 2733,
+        "filesChanged": 90
+      }
+    },
+    {
+      "date": "2026-04-12",
+      "day": "Sunday",
+      "display": "April 12, 2026",
+      "summary": "6 session(s), 92 msgs, 9 commit(s) across 1 repo(s)",
+      "stats": {
+        "sessions": 6,
+        "messages": 92,
+        "commits": 9,
+        "repos": 1,
+        "timeRange": "00:35\u201323:13",
+        "linesAdded": 441,
+        "linesRemoved": 133,
+        "filesChanged": 1
+      }
+    },
+    {
+      "date": "2026-04-11",
+      "day": "Saturday",
+      "display": "April 11, 2026",
+      "summary": "6 session(s), 77 msgs, 1 commit(s) across 1 repo(s)",
+      "stats": {
+        "sessions": 6,
+        "messages": 77,
+        "commits": 1,
+        "repos": 1,
+        "timeRange": "00:02\u201321:57",
+        "linesAdded": 4212,
+        "linesRemoved": 3552,
+        "filesChanged": 86
+      }
+    },
+    {
+      "date": "2026-04-10",
+      "day": "Friday",
+      "display": "April 10, 2026",
+      "summary": "8 session(s), 130 msgs, 3 commit(s) across 1 repo(s)",
+      "stats": {
+        "sessions": 8,
+        "messages": 130,
+        "commits": 3,
+        "repos": 1,
+        "timeRange": "00:02\u201323:56",
+        "linesAdded": 1114,
+        "linesRemoved": 867,
+        "filesChanged": 12
+      }
+    },
+    {
+      "date": "2026-04-09",
+      "day": "Thursday",
+      "display": "April 09, 2026",
+      "summary": "4 session(s), 238 msgs, 7 commit(s) across 1 repo(s)",
+      "stats": {
+        "sessions": 4,
+        "messages": 238,
+        "commits": 7,
+        "repos": 1,
+        "timeRange": "00:03\u201323:59",
+        "linesAdded": 98,
+        "linesRemoved": 0,
+        "filesChanged": 2
+      }
+    },
+    {
+      "date": "2026-04-08",
+      "day": "Wednesday",
+      "display": "April 08, 2026",
+      "summary": "9 session(s), 103 msgs, 11 commit(s) across 2 repo(s)",
+      "stats": {
+        "sessions": 9,
+        "messages": 103,
+        "commits": 11,
+        "repos": 2,
+        "timeRange": "00:25\u201323:59",
+        "linesAdded": 5088,
+        "linesRemoved": 1119,
+        "filesChanged": 27
+      }
+    },
+    {
+      "date": "2026-04-07",
+      "day": "Tuesday",
+      "display": "April 07, 2026",
+      "summary": "3 session(s), 33 msgs, 4 commit(s) across 1 repo(s)",
+      "stats": {
+        "sessions": 3,
+        "messages": 33,
+        "commits": 4,
+        "repos": 1,
+        "timeRange": "19:31\u201322:11",
+        "linesAdded": 129,
+        "linesRemoved": 0,
+        "filesChanged": 2
+      }
+    },
+    {
+      "date": "2026-04-06",
+      "day": "Monday",
+      "display": "April 06, 2026",
+      "summary": "0 session(s), 0 msgs, 1 commit(s) across 1 repo(s)",
+      "stats": {
+        "sessions": 0,
+        "messages": 0,
+        "commits": 1,
+        "repos": 1,
+        "timeRange": "",
+        "linesAdded": 140,
+        "linesRemoved": 0,
+        "filesChanged": 2
+      }
+    },
+    {
+      "date": "2026-04-05",
+      "day": "Sunday",
+      "display": "April 05, 2026",
+      "summary": "0 session(s), 0 msgs, 1 commit(s) across 1 repo(s)",
+      "stats": {
+        "sessions": 0,
+        "messages": 0,
+        "commits": 1,
+        "repos": 1,
+        "timeRange": "",
+        "linesAdded": 183,
+        "linesRemoved": 0,
+        "filesChanged": 3
+      }
+    },
+    {
+      "date": "2026-04-03",
+      "day": "Friday",
+      "display": "April 03, 2026",
+      "summary": "0 session(s), 0 msgs, 1 commit(s) across 1 repo(s)",
+      "stats": {
+        "sessions": 0,
+        "messages": 0,
+        "commits": 1,
+        "repos": 1,
+        "timeRange": "",
+        "linesAdded": 90,
+        "linesRemoved": 0,
+        "filesChanged": 2
+      }
+    },
+    {
+      "date": "2026-04-02",
+      "day": "Thursday",
+      "display": "April 02, 2026",
+      "summary": "0 session(s), 0 msgs, 1 commit(s) across 1 repo(s)",
+      "stats": {
+        "sessions": 0,
+        "messages": 0,
+        "commits": 1,
+        "repos": 1,
+        "timeRange": "",
+        "linesAdded": 112,
+        "linesRemoved": 0,
+        "filesChanged": 2
+      }
+    },
+    {
+      "date": "2026-04-01",
+      "day": "Wednesday",
+      "display": "April 01, 2026",
+      "summary": "0 session(s), 0 msgs, 1 commit(s) across 1 repo(s)",
+      "stats": {
+        "sessions": 0,
+        "messages": 0,
+        "commits": 1,
+        "repos": 1,
+        "timeRange": "",
+        "linesAdded": 82,
+        "linesRemoved": 0,
+        "filesChanged": 2
+      }
+    },
+    {
+      "date": "2026-03-31",
+      "day": "Tuesday",
+      "display": "March 31, 2026",
+      "summary": "0 session(s), 0 msgs, 1 commit(s) across 1 repo(s)",
+      "stats": {
+        "sessions": 0,
+        "messages": 0,
+        "commits": 1,
+        "repos": 1,
+        "timeRange": "",
+        "linesAdded": 68,
+        "linesRemoved": 0,
+        "filesChanged": 2
+      }
+    },
+    {
+      "date": "2026-03-30",
+      "day": "Monday",
+      "display": "March 30, 2026",
+      "summary": "0 session(s), 0 msgs, 1 commit(s) across 1 repo(s)",
+      "stats": {
+        "sessions": 0,
+        "messages": 0,
+        "commits": 1,
+        "repos": 1,
+        "timeRange": "",
+        "linesAdded": 105,
+        "linesRemoved": 0,
+        "filesChanged": 2
+      }
+    },
+    {
+      "date": "2026-03-29",
+      "day": "Sunday",
+      "display": "March 29, 2026",
+      "summary": "0 session(s), 0 msgs, 1 commit(s) across 1 repo(s)",
+      "stats": {
+        "sessions": 0,
+        "messages": 0,
+        "commits": 1,
+        "repos": 1,
+        "timeRange": "",
+        "linesAdded": 123,
+        "linesRemoved": 0,
+        "filesChanged": 2
+      }
+    },
+    {
+      "date": "2026-03-28",
+      "day": "Saturday",
+      "display": "March 28, 2026",
+      "summary": "0 session(s), 0 msgs, 1 commit(s) across 1 repo(s)",
+      "stats": {
+        "sessions": 0,
+        "messages": 0,
+        "commits": 1,
+        "repos": 1,
+        "timeRange": "",
+        "linesAdded": 111,
+        "linesRemoved": 0,
+        "filesChanged": 2
+      }
+    },
+    {
+      "date": "2026-03-27",
+      "day": "Friday",
+      "display": "March 27, 2026",
+      "summary": "0 session(s), 0 msgs, 9 commit(s) across 2 repo(s)",
+      "stats": {
+        "sessions": 0,
+        "messages": 0,
+        "commits": 9,
+        "repos": 2,
+        "timeRange": "",
+        "linesAdded": 102,
+        "linesRemoved": 0,
+        "filesChanged": 4
+      }
+    },
+    {
+      "date": "2026-03-26",
+      "day": "Thursday",
+      "display": "March 26, 2026",
+      "summary": "0 session(s), 0 msgs, 12 commit(s) across 2 repo(s)",
+      "stats": {
+        "sessions": 0,
+        "messages": 0,
+        "commits": 12,
+        "repos": 2,
+        "timeRange": "",
+        "linesAdded": 70110,
+        "linesRemoved": 5349,
+        "filesChanged": 1571
+      }
+    },
+    {
+      "date": "2026-03-25",
+      "day": "Wednesday",
+      "display": "March 25, 2026",
+      "summary": "0 session(s), 0 msgs, 4 commit(s) across 2 repo(s)",
+      "stats": {
+        "sessions": 0,
+        "messages": 0,
+        "commits": 4,
+        "repos": 2,
+        "timeRange": "",
+        "linesAdded": 1421,
+        "linesRemoved": 92,
+        "filesChanged": 11
+      }
+    },
+    {
+      "date": "2026-03-24",
+      "day": "Tuesday",
+      "display": "March 24, 2026",
+      "summary": "0 session(s), 0 msgs, 10 commit(s) across 2 repo(s)",
+      "stats": {
+        "sessions": 0,
+        "messages": 0,
+        "commits": 10,
+        "repos": 2,
+        "timeRange": "",
+        "linesAdded": 91,
+        "linesRemoved": 1,
+        "filesChanged": 3
+      }
+    },
+    {
+      "date": "2026-03-23",
+      "day": "Monday",
+      "display": "March 23, 2026",
+      "summary": "0 session(s), 0 msgs, 23 commit(s) across 2 repo(s)",
+      "stats": {
+        "sessions": 0,
+        "messages": 0,
+        "commits": 23,
+        "repos": 2,
+        "timeRange": "",
+        "linesAdded": 66,
+        "linesRemoved": 1,
+        "filesChanged": 3
+      }
+    },
+    {
+      "date": "2026-03-22",
+      "day": "Sunday",
+      "display": "March 22, 2026",
+      "summary": "0 session(s), 0 msgs, 1 commit(s) across 1 repo(s)",
+      "stats": {
+        "sessions": 0,
+        "messages": 0,
+        "commits": 1,
+        "repos": 1,
+        "timeRange": "",
+        "linesAdded": 691,
+        "linesRemoved": 0,
+        "filesChanged": 7
+      }
+    },
+    {
+      "date": "2026-03-21",
+      "day": "Saturday",
+      "display": "March 21, 2026",
+      "summary": "0 session(s), 0 msgs, 4 commit(s) across 2 repo(s)",
+      "stats": {
+        "sessions": 0,
+        "messages": 0,
+        "commits": 4,
+        "repos": 2,
+        "timeRange": "",
+        "linesAdded": 86,
+        "linesRemoved": 1,
+        "filesChanged": 3
+      }
+    },
+    {
+      "date": "2026-03-20",
+      "day": "Friday",
+      "display": "March 20, 2026",
+      "summary": "0 session(s), 0 msgs, 3 commit(s) across 2 repo(s)",
+      "stats": {
+        "sessions": 0,
+        "messages": 0,
+        "commits": 3,
+        "repos": 2,
+        "timeRange": "",
+        "linesAdded": 1018,
+        "linesRemoved": 265,
+        "filesChanged": 23
+      }
+    },
+    {
+      "date": "2026-03-19",
+      "day": "Thursday",
+      "display": "March 19, 2026",
+      "summary": "0 session(s), 0 msgs, 7 commit(s) across 2 repo(s)",
+      "stats": {
+        "sessions": 0,
+        "messages": 0,
+        "commits": 7,
+        "repos": 2,
+        "timeRange": "",
+        "linesAdded": 3,
+        "linesRemoved": 1,
+        "filesChanged": 2
+      }
+    },
+    {
+      "date": "2026-03-18",
+      "day": "Wednesday",
+      "display": "March 18, 2026",
+      "summary": "0 session(s), 0 msgs, 8 commit(s) across 2 repo(s)",
+      "stats": {
+        "sessions": 0,
+        "messages": 0,
+        "commits": 8,
+        "repos": 2,
+        "timeRange": "",
+        "linesAdded": 120,
+        "linesRemoved": 2,
+        "filesChanged": 4
+      }
+    },
+    {
+      "date": "2026-03-17",
+      "day": "Tuesday",
+      "display": "March 17, 2026",
+      "summary": "0 session(s), 0 msgs, 20 commit(s) across 2 repo(s)",
+      "stats": {
+        "sessions": 0,
+        "messages": 0,
+        "commits": 20,
+        "repos": 2,
+        "timeRange": "",
+        "linesAdded": 92,
+        "linesRemoved": 1,
+        "filesChanged": 3
+      }
+    },
+    {
+      "date": "2026-03-16",
+      "day": "Monday",
+      "display": "March 16, 2026",
+      "summary": "0 session(s), 0 msgs, 23 commit(s) across 2 repo(s)",
+      "stats": {
+        "sessions": 0,
+        "messages": 0,
+        "commits": 23,
+        "repos": 2,
+        "timeRange": "",
+        "linesAdded": 430,
+        "linesRemoved": 0,
+        "filesChanged": 3
+      }
+    },
+    {
+      "date": "2026-03-15",
+      "day": "Sunday",
+      "display": "March 15, 2026",
+      "summary": "0 session(s), 0 msgs, 11 commit(s) across 2 repo(s)",
+      "stats": {
+        "sessions": 0,
+        "messages": 0,
+        "commits": 11,
+        "repos": 2,
+        "timeRange": "",
+        "linesAdded": 97,
+        "linesRemoved": 2,
+        "filesChanged": 3
+      }
+    },
+    {
+      "date": "2026-03-14",
+      "day": "Saturday",
+      "display": "March 14, 2026",
+      "summary": "0 session(s), 0 msgs, 28 commit(s) across 2 repo(s)",
+      "stats": {
+        "sessions": 0,
+        "messages": 0,
+        "commits": 28,
+        "repos": 2,
+        "timeRange": "",
+        "linesAdded": 436,
+        "linesRemoved": 3,
+        "filesChanged": 4
+      }
+    },
+    {
+      "date": "2026-03-13",
+      "day": "Friday",
+      "display": "March 13, 2026",
+      "summary": "0 session(s), 0 msgs, 10 commit(s) across 1 repo(s)",
+      "stats": {
+        "sessions": 0,
+        "messages": 0,
+        "commits": 10,
+        "repos": 1,
+        "timeRange": "",
+        "linesAdded": 14,
+        "linesRemoved": 8,
+        "filesChanged": 2
+      }
+    },
+    {
+      "date": "2026-03-12",
+      "day": "Thursday",
+      "display": "March 12, 2026",
+      "summary": "0 session(s), 0 msgs, 35 commit(s) across 2 repo(s)",
+      "stats": {
+        "sessions": 0,
+        "messages": 0,
+        "commits": 35,
+        "repos": 2,
+        "timeRange": "",
+        "linesAdded": 1808,
+        "linesRemoved": 9,
+        "filesChanged": 6
+      }
+    },
+    {
+      "date": "2026-03-11",
+      "day": "Wednesday",
+      "display": "March 11, 2026",
+      "summary": "0 session(s), 0 msgs, 13 commit(s) across 1 repo(s)",
+      "stats": {
+        "sessions": 0,
+        "messages": 0,
+        "commits": 13,
+        "repos": 1,
+        "timeRange": "",
+        "linesAdded": 19,
+        "linesRemoved": 19,
+        "filesChanged": 19
+      }
+    },
+    {
+      "date": "2026-03-10",
+      "day": "Tuesday",
+      "display": "March 10, 2026",
+      "summary": "0 session(s), 0 msgs, 10 commit(s) across 1 repo(s)",
+      "stats": {
+        "sessions": 0,
+        "messages": 0,
+        "commits": 10,
+        "repos": 1,
+        "timeRange": "",
+        "linesAdded": 54,
+        "linesRemoved": 42,
+        "filesChanged": 28
+      }
+    },
+    {
+      "date": "2026-03-09",
+      "day": "Monday",
+      "display": "March 09, 2026",
+      "summary": "0 session(s), 0 msgs, 7 commit(s) across 1 repo(s)",
+      "stats": {
+        "sessions": 0,
+        "messages": 0,
+        "commits": 7,
+        "repos": 1,
+        "timeRange": "",
+        "linesAdded": 24,
+        "linesRemoved": 32,
+        "filesChanged": 24
+      }
+    },
+    {
+      "date": "2026-03-08",
+      "day": "Sunday",
+      "display": "March 08, 2026",
+      "summary": "0 session(s), 0 msgs, 16 commit(s) across 2 repo(s)",
+      "stats": {
+        "sessions": 0,
+        "messages": 0,
+        "commits": 16,
+        "repos": 2,
+        "timeRange": "",
+        "linesAdded": 35234,
+        "linesRemoved": 261,
+        "filesChanged": 145
+      }
+    },
+    {
+      "date": "2026-03-07",
+      "day": "Saturday",
+      "display": "March 07, 2026",
+      "summary": "0 session(s), 0 msgs, 3 commit(s) across 2 repo(s)",
+      "stats": {
+        "sessions": 0,
+        "messages": 0,
+        "commits": 3,
+        "repos": 2,
+        "timeRange": "",
+        "linesAdded": 4913,
+        "linesRemoved": 4,
+        "filesChanged": 27
+      }
+    },
+    {
+      "date": "2026-03-06",
+      "day": "Friday",
+      "display": "March 06, 2026",
+      "summary": "0 session(s), 0 msgs, 19 commit(s) across 1 repo(s)",
+      "stats": {
+        "sessions": 0,
+        "messages": 0,
+        "commits": 19,
+        "repos": 1,
+        "timeRange": "",
+        "linesAdded": 1,
+        "linesRemoved": 0,
+        "filesChanged": 1
+      }
+    },
+    {
+      "date": "2026-03-05",
+      "day": "Thursday",
+      "display": "March 05, 2026",
+      "summary": "0 session(s), 0 msgs, 15 commit(s) across 2 repo(s)",
+      "stats": {
+        "sessions": 0,
+        "messages": 0,
+        "commits": 15,
+        "repos": 2,
+        "timeRange": "",
+        "linesAdded": 2145,
+        "linesRemoved": 3,
+        "filesChanged": 19
+      }
+    },
+    {
+      "date": "2026-03-04",
+      "day": "Wednesday",
+      "display": "March 04, 2026",
+      "summary": "0 session(s), 0 msgs, 24 commit(s) across 2 repo(s)",
+      "stats": {
+        "sessions": 0,
+        "messages": 0,
+        "commits": 24,
+        "repos": 2,
+        "timeRange": "",
+        "linesAdded": 62522,
+        "linesRemoved": 1385,
+        "filesChanged": 265
+      }
+    },
+    {
+      "date": "2026-03-03",
+      "day": "Tuesday",
+      "display": "March 03, 2026",
+      "summary": "0 session(s), 0 msgs, 8 commit(s) across 1 repo(s)",
+      "stats": {
+        "sessions": 0,
+        "messages": 0,
+        "commits": 8,
+        "repos": 1,
+        "timeRange": "",
+        "linesAdded": 2,
+        "linesRemoved": 1,
+        "filesChanged": 1
+      }
+    },
+    {
+      "date": "2026-03-02",
+      "day": "Monday",
+      "display": "March 02, 2026",
+      "summary": "0 session(s), 0 msgs, 29 commit(s) across 1 repo(s)",
+      "stats": {
+        "sessions": 0,
+        "messages": 0,
+        "commits": 29,
+        "repos": 1,
+        "timeRange": "",
+        "linesAdded": 159,
+        "linesRemoved": 163,
+        "filesChanged": 2
+      }
+    }
+  ],
+  "daily": [
+    {
+      "date": "2026-04-14",
+      "day": "Tuesday",
+      "display": "April 14, 2026",
+      "summary": "69 terminal commands, 31 commits across 2 repos, 1 files modified.",
+      "stats": {
+        "commands": 69,
+        "commits": 31,
+        "repos": 2,
+        "filesModified": 1
+      }
+    },
+    {
+      "date": "2026-04-13",
+      "day": "Monday",
+      "display": "April 13, 2026",
+      "summary": "69 terminal commands, 3 commits across 2 repos, 4 files modified.",
+      "stats": {
+        "commands": 69,
+        "commits": 3,
+        "repos": 2,
+        "filesModified": 4
+      }
+    },
+    {
+      "date": "2026-04-12",
+      "day": "Sunday",
+      "display": "April 12, 2026",
+      "summary": "68 terminal commands, 9 commits across 1 repos, 1 files modified.",
+      "stats": {
+        "commands": 68,
+        "commits": 9,
+        "repos": 1,
+        "filesModified": 1
+      }
+    },
+    {
+      "date": "2026-04-11",
+      "day": "Saturday",
+      "display": "April 11, 2026",
+      "summary": "68 terminal commands, 1 commits across 1 repos, 1 files modified.",
+      "stats": {
+        "commands": 68,
+        "commits": 1,
+        "repos": 1,
+        "filesModified": 1
+      }
+    },
+    {
+      "date": "2026-04-10",
+      "day": "Friday",
+      "display": "April 10, 2026",
+      "summary": "68 terminal commands, 3 commits across 1 repos, 1 files modified.",
+      "stats": {
+        "commands": 68,
+        "commits": 3,
+        "repos": 1,
+        "filesModified": 1
+      }
+    },
+    {
+      "date": "2026-04-09",
+      "day": "Thursday",
+      "display": "April 09, 2026",
+      "summary": "68 terminal commands, 7 commits across 1 repos, 1 files modified.",
+      "stats": {
+        "commands": 68,
+        "commits": 7,
+        "repos": 1,
+        "filesModified": 1
+      }
+    },
+    {
+      "date": "2026-04-08",
+      "day": "Wednesday",
+      "display": "April 08, 2026",
+      "summary": "68 terminal commands, 11 commits across 2 repos, 9 files modified.",
+      "stats": {
+        "commands": 68,
+        "commits": 11,
+        "repos": 2,
+        "filesModified": 9
+      }
+    },
+    {
+      "date": "2026-04-07",
+      "day": "Tuesday",
+      "display": "April 07, 2026",
+      "summary": "57 terminal commands, 4 commits across 1 repos, 12 files modified.",
+      "stats": {
+        "commands": 57,
+        "commits": 4,
+        "repos": 1,
+        "filesModified": 12
+      }
+    },
+    {
+      "date": "2026-04-06",
+      "day": "Monday",
+      "display": "April 06, 2026",
+      "summary": "0 terminal commands, 1 commits across 1 repos, 1 files modified.",
+      "stats": {
+        "commands": 0,
+        "commits": 1,
+        "repos": 1,
+        "filesModified": 1
+      }
+    },
+    {
+      "date": "2026-04-05",
+      "day": "Sunday",
+      "display": "April 05, 2026",
+      "summary": "0 terminal commands, 1 commits across 1 repos, 0 files modified.",
+      "stats": {
+        "commands": 0,
+        "commits": 1,
+        "repos": 1,
+        "filesModified": 0
+      }
+    },
+    {
+      "date": "2026-04-03",
+      "day": "Friday",
+      "display": "April 03, 2026",
+      "summary": "0 terminal commands, 1 commits across 1 repos, 0 files modified.",
+      "stats": {
+        "commands": 0,
+        "commits": 1,
+        "repos": 1,
+        "filesModified": 0
+      }
+    },
+    {
+      "date": "2026-04-02",
+      "day": "Thursday",
+      "display": "April 02, 2026",
+      "summary": "0 terminal commands, 1 commits across 1 repos, 4 files modified.",
+      "stats": {
+        "commands": 0,
+        "commits": 1,
+        "repos": 1,
+        "filesModified": 4
+      }
+    },
+    {
+      "date": "2026-04-01",
+      "day": "Wednesday",
+      "display": "April 01, 2026",
+      "summary": "0 terminal commands, 1 commits across 1 repos, 0 files modified.",
+      "stats": {
+        "commands": 0,
+        "commits": 1,
+        "repos": 1,
+        "filesModified": 0
+      }
+    },
+    {
+      "date": "2026-03-31",
+      "day": "Tuesday",
+      "display": "March 31, 2026",
+      "summary": "0 terminal commands, 1 commits across 1 repos, 0 files modified.",
+      "stats": {
+        "commands": 0,
+        "commits": 1,
+        "repos": 1,
+        "filesModified": 0
+      }
+    },
+    {
+      "date": "2026-03-30",
+      "day": "Monday",
+      "display": "March 30, 2026",
+      "summary": "0 terminal commands, 1 commits across 1 repos, 0 files modified.",
+      "stats": {
+        "commands": 0,
+        "commits": 1,
+        "repos": 1,
+        "filesModified": 0
+      }
+    },
+    {
+      "date": "2026-03-29",
+      "day": "Sunday",
+      "display": "March 29, 2026",
+      "summary": "0 terminal commands, 1 commits across 1 repos, 0 files modified.",
+      "stats": {
+        "commands": 0,
+        "commits": 1,
+        "repos": 1,
+        "filesModified": 0
+      }
+    },
+    {
+      "date": "2026-03-28",
+      "day": "Saturday",
+      "display": "March 28, 2026",
+      "summary": "0 terminal commands, 1 commits across 1 repos, 0 files modified.",
+      "stats": {
+        "commands": 0,
+        "commits": 1,
+        "repos": 1,
+        "filesModified": 0
+      }
+    },
+    {
+      "date": "2026-03-27",
+      "day": "Friday",
+      "display": "March 27, 2026",
+      "summary": "0 terminal commands, 9 commits across 2 repos, 3 files modified.",
+      "stats": {
+        "commands": 0,
+        "commits": 9,
+        "repos": 2,
+        "filesModified": 3
+      }
+    },
+    {
+      "date": "2026-03-26",
+      "day": "Thursday",
+      "display": "March 26, 2026",
+      "summary": "0 terminal commands, 12 commits across 2 repos, 50 files modified.",
+      "stats": {
+        "commands": 0,
+        "commits": 12,
+        "repos": 2,
+        "filesModified": 50
+      }
+    },
+    {
+      "date": "2026-03-25",
+      "day": "Wednesday",
+      "display": "March 25, 2026",
+      "summary": "0 terminal commands, 4 commits across 2 repos, 5 files modified.",
+      "stats": {
+        "commands": 0,
+        "commits": 4,
+        "repos": 2,
+        "filesModified": 5
+      }
+    },
+    {
+      "date": "2026-03-24",
+      "day": "Tuesday",
+      "display": "March 24, 2026",
+      "summary": "0 terminal commands, 10 commits across 2 repos, 8 files modified.",
+      "stats": {
+        "commands": 0,
+        "commits": 10,
+        "repos": 2,
+        "filesModified": 8
+      }
+    },
+    {
+      "date": "2026-03-23",
+      "day": "Monday",
+      "display": "March 23, 2026",
+      "summary": "0 terminal commands, 23 commits across 2 repos, 6 files modified.",
+      "stats": {
+        "commands": 0,
+        "commits": 23,
+        "repos": 2,
+        "filesModified": 6
+      }
+    },
+    {
+      "date": "2026-03-22",
+      "day": "Sunday",
+      "display": "March 22, 2026",
+      "summary": "0 terminal commands, 1 commits across 1 repos, 0 files modified.",
+      "stats": {
+        "commands": 0,
+        "commits": 1,
+        "repos": 1,
+        "filesModified": 0
+      }
+    },
+    {
+      "date": "2026-03-21",
+      "day": "Saturday",
+      "display": "March 21, 2026",
+      "summary": "0 terminal commands, 4 commits across 2 repos, 1 files modified.",
+      "stats": {
+        "commands": 0,
+        "commits": 4,
+        "repos": 2,
+        "filesModified": 1
+      }
+    },
+    {
+      "date": "2026-03-20",
+      "day": "Friday",
+      "display": "March 20, 2026",
+      "summary": "0 terminal commands, 3 commits across 2 repos, 1 files modified.",
+      "stats": {
+        "commands": 0,
+        "commits": 3,
+        "repos": 2,
+        "filesModified": 1
+      }
+    },
+    {
+      "date": "2026-03-19",
+      "day": "Thursday",
+      "display": "March 19, 2026",
+      "summary": "0 terminal commands, 7 commits across 2 repos, 0 files modified.",
+      "stats": {
+        "commands": 0,
+        "commits": 7,
+        "repos": 2,
+        "filesModified": 0
+      }
+    },
+    {
+      "date": "2026-03-18",
+      "day": "Wednesday",
+      "display": "March 18, 2026",
+      "summary": "0 terminal commands, 8 commits across 2 repos, 0 files modified.",
+      "stats": {
+        "commands": 0,
+        "commits": 8,
+        "repos": 2,
+        "filesModified": 0
+      }
+    },
+    {
+      "date": "2026-03-17",
+      "day": "Tuesday",
+      "display": "March 17, 2026",
+      "summary": "0 terminal commands, 20 commits across 2 repos, 0 files modified.",
+      "stats": {
+        "commands": 0,
+        "commits": 20,
+        "repos": 2,
+        "filesModified": 0
+      }
+    },
+    {
+      "date": "2026-03-16",
+      "day": "Monday",
+      "display": "March 16, 2026",
+      "summary": "0 terminal commands, 23 commits across 2 repos, 0 files modified.",
+      "stats": {
+        "commands": 0,
+        "commits": 23,
+        "repos": 2,
+        "filesModified": 0
+      }
+    },
+    {
+      "date": "2026-03-15",
+      "day": "Sunday",
+      "display": "March 15, 2026",
+      "summary": "0 terminal commands, 11 commits across 2 repos, 0 files modified.",
+      "stats": {
+        "commands": 0,
+        "commits": 11,
+        "repos": 2,
+        "filesModified": 0
+      }
+    },
+    {
+      "date": "2026-03-14",
+      "day": "Saturday",
+      "display": "March 14, 2026",
+      "summary": "0 terminal commands, 28 commits across 2 repos, 2 files modified.",
+      "stats": {
+        "commands": 0,
+        "commits": 28,
+        "repos": 2,
+        "filesModified": 2
+      }
+    },
+    {
+      "date": "2026-03-13",
+      "day": "Friday",
+      "display": "March 13, 2026",
+      "summary": "0 terminal commands, 10 commits across 1 repos, 0 files modified.",
+      "stats": {
+        "commands": 0,
+        "commits": 10,
+        "repos": 1,
+        "filesModified": 0
+      }
+    },
+    {
+      "date": "2026-03-12",
+      "day": "Thursday",
+      "display": "March 12, 2026",
+      "summary": "0 terminal commands, 35 commits across 2 repos, 0 files modified.",
+      "stats": {
+        "commands": 0,
+        "commits": 35,
+        "repos": 2,
+        "filesModified": 0
+      }
+    },
+    {
+      "date": "2026-03-11",
+      "day": "Wednesday",
+      "display": "March 11, 2026",
+      "summary": "0 terminal commands, 13 commits across 1 repos, 0 files modified.",
+      "stats": {
+        "commands": 0,
+        "commits": 13,
+        "repos": 1,
+        "filesModified": 0
+      }
+    },
+    {
+      "date": "2026-03-10",
+      "day": "Tuesday",
+      "display": "March 10, 2026",
+      "summary": "0 terminal commands, 10 commits across 1 repos, 1 files modified.",
+      "stats": {
+        "commands": 0,
+        "commits": 10,
+        "repos": 1,
+        "filesModified": 1
+      }
+    },
+    {
+      "date": "2026-03-09",
+      "day": "Monday",
+      "display": "March 09, 2026",
+      "summary": "0 terminal commands, 7 commits across 1 repos, 0 files modified.",
+      "stats": {
+        "commands": 0,
+        "commits": 7,
+        "repos": 1,
+        "filesModified": 0
+      }
+    },
+    {
+      "date": "2026-03-08",
+      "day": "Sunday",
+      "display": "March 08, 2026",
+      "summary": "0 terminal commands, 16 commits across 2 repos, 0 files modified.",
+      "stats": {
+        "commands": 0,
+        "commits": 16,
+        "repos": 2,
+        "filesModified": 0
+      }
+    },
+    {
+      "date": "2026-03-07",
+      "day": "Saturday",
+      "display": "March 07, 2026",
+      "summary": "0 terminal commands, 3 commits across 2 repos, 0 files modified.",
+      "stats": {
+        "commands": 0,
+        "commits": 3,
+        "repos": 2,
+        "filesModified": 0
+      }
+    },
+    {
+      "date": "2026-03-06",
+      "day": "Friday",
+      "display": "March 06, 2026",
+      "summary": "0 terminal commands, 19 commits across 1 repos, 0 files modified.",
+      "stats": {
+        "commands": 0,
+        "commits": 19,
+        "repos": 1,
+        "filesModified": 0
+      }
+    },
+    {
+      "date": "2026-03-05",
+      "day": "Thursday",
+      "display": "March 05, 2026",
+      "summary": "0 terminal commands, 15 commits across 2 repos, 3 files modified.",
+      "stats": {
+        "commands": 0,
+        "commits": 15,
+        "repos": 2,
+        "filesModified": 3
+      }
+    },
+    {
+      "date": "2026-03-04",
+      "day": "Wednesday",
+      "display": "March 04, 2026",
+      "summary": "0 terminal commands, 24 commits across 2 repos, 1 files modified.",
+      "stats": {
+        "commands": 0,
+        "commits": 24,
+        "repos": 2,
+        "filesModified": 1
+      }
+    },
+    {
+      "date": "2026-03-03",
+      "day": "Tuesday",
+      "display": "March 03, 2026",
+      "summary": "0 terminal commands, 8 commits across 1 repos, 3 files modified.",
+      "stats": {
+        "commands": 0,
+        "commits": 8,
+        "repos": 1,
+        "filesModified": 3
+      }
+    },
+    {
+      "date": "2026-03-02",
+      "day": "Monday",
+      "display": "March 02, 2026",
+      "summary": "0 terminal commands, 29 commits across 1 repos, 0 files modified.",
+      "stats": {
+        "commands": 0,
+        "commits": 29,
+        "repos": 1,
+        "filesModified": 0
+      }
+    }
+  ]
+}
