@@ -1,0 +1,20 @@
+{
+  "name": "journals",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Personal development journal — automated daily reports from Claude Code sessions, git activity, and terminal history. Beautiful Vue 3 dashboard with themes and animations.",
+  "scripts": {
+    "setup": "node setup.js",
+    "dev": "cd app && npm run dev",
+    "build": "cd app && npm run build",
+    "generate": "python3 scripts/generate_all.py",
+    "generate:date": "python3 scripts/generate_all.py",
+    "manifest": "python3 scripts/build_manifest.py"
+  },
+  "keywords": ["journal", "claude-code", "developer-tools", "vue3", "dashboard"],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/magneticlab/journals"
+  }
+}

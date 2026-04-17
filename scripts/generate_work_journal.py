@@ -10,8 +10,11 @@ from datetime import datetime, timedelta
 from pathlib import Path
 from collections import defaultdict
 
-HISTORY_FILE = Path.home() / ".claude" / "history.jsonl"
-REPOS_DIR = Path.home() / "Documents" / "GitHub"
+from config import get as get_config
+
+_cfg = get_config()
+HISTORY_FILE = Path.home() / _cfg["sources"]["claudeHistory"]
+REPOS_DIR = Path.home() / _cfg["sources"]["reposDir"]
 APP_PUBLIC = Path(__file__).parent.parent / "app" / "public" / "entries" / "work"
 OUTPUT_DIR = Path(__file__).parent.parent / "work" / "entries"
 WEEKDAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]

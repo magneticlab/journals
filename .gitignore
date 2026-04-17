@@ -5,3 +5,8 @@ node_modules/
 dist/
 .env
 .env.local
+app/public/entries/work/*.json
+app/public/entries/daily/*.json
+app/public/entries/narrative/*.json
+work/entries/
+daily/entries/

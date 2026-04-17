@@ -10,7 +10,7 @@ import { analyzeReflection } from '../services/claude'
 const props = defineProps({ journal: String, date: String })
 const router = useRouter()
 const data = ref(null)
-const manifest = ref({ work: [], daily: [] })
+const manifest = ref({ work: [], daily: [], narrative: [] })
 const loading = ref(true)
 const weather = ref(null)
 const showTimeline = ref(false)
@@ -155,7 +155,7 @@ const heroStyle = computed(() => ({
 
 onMounted(async () => {
   window.addEventListener('scroll', onScroll, { passive: true })
-  manifest.value = await (await fetch('/manifest.json')).json()
+  manifest.value = await (await fetch(`${import.meta.env.BASE_URL}manifest.json`)).json()
   loadEntry()
   loadReflection()
   try {
@@ -169,7 +169,7 @@ watch([() => props.date, () => props.journal], () => { loadEntry(); loadReflecti
 async function loadEntry() {
   // Don't clear data — keep old content visible to prevent flicker
   try {
-    const res = await fetch(`/entries/${props.journal}/${props.date}.json`)
+    const res = await fetch(`${import.meta.env.BASE_URL}entries/${props.journal}/${props.date}.json`)
     data.value = res.ok ? await res.json() : null
   } catch { data.value = null }
   loading.value = false
@@ -185,20 +185,21 @@ function goToNext() { if (hasNext.value) router.push(`/${props.journal}/${dates.
 function goTo(e) { if (typeof e === 'string') router.push(`/${props.journal}/${e}`); else router.push(`/${props.journal}/${e.target.value}`) }
 
 const isWork = computed(() => props.journal === 'work')
+const isNarrative = computed(() => props.journal === 'narrative')
 const today = computed(() => new Date().toISOString().slice(0, 10))
 const isToday = computed(() => props.date === today.value)
 const hasTodayEntry = computed(() => dates.value.includes(today.value))
 function goToday() { if (hasTodayEntry.value) router.push(`/${props.journal}/${today.value}`) }
 const brand = computed(() => {
   const style = getComputedStyle(document.documentElement)
+  if (isNarrative.value) return style.getPropertyValue('--brand-narrative').trim() || '#f5b342'
   return isWork.value ? (style.getPropertyValue('--brand-work').trim() || '#6395ff') : (style.getPropertyValue('--brand-daily').trim() || '#34d399')
 })
 
-// Check if the other journal has an entry for this date
-const hasOtherJournal = computed(() => {
-  const other = isWork.value ? manifest.value.daily : manifest.value.work
-  return other.some(e => e.date === props.date)
-})
+// Whether the other journal types have an entry for this date (used for tab display)
+const hasWorkForDate = computed(() => manifest.value.work.some(e => e.date === props.date))
+const hasDailyForDate = computed(() => manifest.value.daily.some(e => e.date === props.date))
+const hasNarrativeForDate = computed(() => manifest.value.narrative.some(e => e.date === props.date))
 
 const themeIcons = { 'Design System': '⬡', 'Design & Layout': '◫', 'Page Building': '▦', 'Animation & Effects': '✦', 'Bug Fixes': '⚠', 'Git & Deployment': '⎇', 'Version Iteration': '↻', 'Refactoring': '⟲', 'Content & Copy': '¶', 'Planning & Strategy': '◈', 'General Development': '⌘', 'Git': '⎇', 'Claude Code': '◉', 'Navigation': '≡', 'File Inspection': '◧', 'Package Management': '⬢', 'Homebrew': '⚗', 'Remote': '⚡', 'GitHub CLI': '⎇', 'File Operations': '◧', 'Other': '◆', 'Docker': '◎', 'Python': '◉', 'HTTP': '◎' }
 function scoreColor(s) { if (s >= 75) return '#34d399'; if (s >= 50) return '#fbbf24'; if (s >= 25) return '#fb923c'; return '#f87171' }
@@ -213,7 +214,26 @@ function ringScoreColor(s) {
 }
 const genTime = computed(() => { if (!data.value?.generatedAt) return ''; return new Date(data.value.generatedAt).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }) })
 const activeHours = computed(() => { const tr = data.value?.stats?.timeRange; if (!tr) return null; const p = tr.split('–'); if (p.length !== 2) return null; const [h1,m1] = p[0].split(':').map(Number); const [h2,m2] = p[1].split(':').map(Number); const mins = (h2*60+m2)-(h1*60+m1); if (mins <= 0) return null; const h = Math.floor(mins/60); const m = mins%60; return h > 0 ? `${h}h ${m}m` : `${m}m` })
-const summaryLine = computed(() => { if (!data.value) return ''; const s = data.value.stats; const parts = []; if (isWork.value) { if (s?.sessions) parts.push(`${s.sessions} sessions`); if (s?.commits) parts.push(`${s.commits} commits`); if (s?.linesAdded) parts.push(`+${s.linesAdded.toLocaleString()} lines`); if (activeHours.value) parts.push(activeHours.value+' active') } else { if (s?.commands) parts.push(`${s.commands} commands`); if (s?.commits) parts.push(`${s.commits} commits`) }; return parts.join(' · ') })
+const summaryLine = computed(() => {
+  if (!data.value) return ''
+  const s = data.value.stats
+  const parts = []
+  if (isNarrative.value) {
+    if (s?.sections) parts.push(`${s.sections} section${s.sections === 1 ? '' : 's'}`)
+    if (data.value.summary) parts.push(data.value.summary)
+    return parts.join(' · ')
+  }
+  if (isWork.value) {
+    if (s?.sessions) parts.push(`${s.sessions} sessions`)
+    if (s?.commits) parts.push(`${s.commits} commits`)
+    if (s?.linesAdded) parts.push(`+${s.linesAdded.toLocaleString()} lines`)
+    if (activeHours.value) parts.push(activeHours.value + ' active')
+  } else {
+    if (s?.commands) parts.push(`${s.commands} commands`)
+    if (s?.commits) parts.push(`${s.commits} commits`)
+  }
+  return parts.join(' · ')
+})
 
 const wxCodes = { 0: { l: 'Clear', i: '☀' }, 1: { l: 'Mostly clear', i: '🌤' }, 2: { l: 'Partly cloudy', i: '⛅' }, 3: { l: 'Overcast', i: '☁' }, 45: { l: 'Foggy', i: '🌫' }, 51: { l: 'Drizzle', i: '🌦' }, 61: { l: 'Rain', i: '🌧' }, 63: { l: 'Rain', i: '🌧' }, 80: { l: 'Showers', i: '🌦' }, 95: { l: 'Storm', i: '⛈' } }
 const wx = computed(() => { if (!weather.value?.current) return null; const c = weather.value.current; const w = wxCodes[c.weather_code] || { l: '—', i: '🌡' }; return { ...w, temp: c.temperature_2m, hum: c.relative_humidity_2m, wind: c.wind_speed_10m } })
@@ -241,27 +261,33 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
         <!-- Hero — parallax + fade -->
         <div v-if="data" class="hero" :style="heroStyle">
           <div class="hero-title-row">
-            <button @click="goToPrev" :disabled="!hasPrev" :class="['arrow-btn', { disabled: !hasPrev }]">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
-            </button>
             <h1 class="hero-h1">{{ data.day }}, {{ data.display }}</h1>
-            <button @click="goToNext" :disabled="!hasNext" :class="['arrow-btn', { disabled: !hasNext }]">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
-            </button>
-            <CalendarPicker :modelValue="date" @update:modelValue="goTo" :availableDates="dates" :brandColor="brand" />
-            <button v-if="!isToday && hasTodayEntry" class="today-btn" @click="goToday">Today</button>
+            <div class="date-controls">
+              <button @click="goToPrev" :disabled="!hasPrev" :class="['arrow-btn', { disabled: !hasPrev }]">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+              </button>
+              <button @click="goToNext" :disabled="!hasNext" :class="['arrow-btn', { disabled: !hasNext }]">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+              </button>
+              <CalendarPicker :modelValue="date" @update:modelValue="goTo" :availableDates="dates" :brandColor="brand" />
+              <button v-if="!isToday && hasTodayEntry" class="today-btn" @click="goToday">Today</button>
+            </div>
           </div>
           <p class="hero-sub">{{ summaryLine }}</p>
 
-          <!-- Journal tabs — switch between work/daily for this day -->
+          <!-- Journal tabs — switch between work/daily/narrative for this day -->
           <div class="journal-tabs">
-            <router-link :to="`/work/${date}`" :class="['jtab', { active: journal === 'work' }]">
+            <router-link v-if="hasWorkForDate || journal === 'work'" :to="`/work/${date}`" :class="['jtab', { active: journal === 'work' }]">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
               Work
             </router-link>
-            <router-link v-if="hasOtherJournal || journal === 'daily'" :to="`/daily/${date}`" :class="['jtab', { active: journal === 'daily' }]">
+            <router-link v-if="hasDailyForDate || journal === 'daily'" :to="`/daily/${date}`" :class="['jtab', { active: journal === 'daily' }]">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
               Daily
+            </router-link>
+            <router-link v-if="hasNarrativeForDate || journal === 'narrative'" :to="`/narrative/${date}`" :class="['jtab', { active: journal === 'narrative' }]">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+              Narrative
             </router-link>
           </div>
         </div>
@@ -274,10 +300,22 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
       <div v-else-if="!data" class="mx empty">No entry for this date.</div>
       <div v-else class="mx body" :key="journal + '-' + date">
 
+        <!-- Narrative — long-form session reports from memory journal -->
+        <template v-if="isNarrative && data.sections?.length">
+          <section v-for="(sec, idx) in data.sections" :key="idx" v-reveal class="section narrative-section rv">
+            <div class="narrative-head">
+              <p class="section-label" :style="{ color: brand }">{{ sec.title }}</p>
+              <span v-if="sec.source" class="narrative-source">{{ sec.source }}</span>
+            </div>
+            <p v-if="sec.description" class="narrative-desc">{{ sec.description }}</p>
+            <div class="narrative-prose narrative-body" v-html="sec.html"></div>
+          </section>
+        </template>
+
         <!-- Daily Reflection — top of daily journal only -->
-        <section v-if="!isWork && reflection" v-reveal class="section">
+        <section v-if="!isWork && !isNarrative && reflection" v-reveal class="section">
           <div class="reflect-header">
-            <p class="section-label" style="color: #34d399">Daily Reflection</p>
+            <p class="section-label" style="color: var(--brand-daily)">Daily Reflection</p>
             <div class="reflect-actions">
               <button v-if="!reflection.ai" class="reanalyze-btn" @click="reanalyze" :disabled="reanalyzing">
                 {{ reanalyzing ? 'Analyzing...' : '✨ Analyze with AI' }}
@@ -553,30 +591,32 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
 
 /* Hero */
 .hero { padding-bottom: 48px; will-change: transform, opacity; }
-.hero-title-row { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
-.hero-h1 { font-family: var(--serif); font-size: 36px; font-weight: 400; color: var(--text-heading); flex: 1; }
-.hero-sub { font-size: 14px; color: var(--text-muted); margin-bottom: 16px; }
+.hero-title-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 8px; }
+.hero-h1 { font-family: var(--serif); font-size: 42px; font-weight: 400; color: var(--text-heading); }
+.date-controls { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+.hero-sub { font-size: 14px; color: var(--text-strong); margin-bottom: 16px; }
 
 /* Arrow buttons */
 .arrow-btn {
   display: flex; align-items: center; justify-content: center;
   width: 40px; height: 40px; border-radius: 10px; flex-shrink: 0;
-  border: 1px solid var(--border); background: rgba(12,12,14,0.7);
-  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-  color: var(--text); cursor: pointer;
+  border: none; background: rgba(12,12,14,0.7);
+  backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  color: var(--text-strong); cursor: pointer;
   transition: all 0.2s var(--ease-spring);
 }
-.arrow-btn:hover { border-color: var(--border-hover); color: var(--text-heading); background: rgba(12,12,14,0.85); }
+.arrow-btn:hover { color: var(--text-heading); background: rgba(12,12,14,0.85); }
 .arrow-btn.disabled { color: var(--border); cursor: not-allowed; opacity: 0.4; }
 
 .today-btn {
   padding: 8px 14px; border-radius: 8px; border: none;
-  background: rgba(52,211,153,0.15); color: var(--green);
-  font-size: 12px; font-weight: 600; font-family: inherit;
+  background: rgba(12,12,14,0.7); color: var(--text-heading);
+  font-size: 11px; font-weight: 600; font-family: inherit;
   cursor: pointer; transition: all 0.2s var(--ease-spring);
-  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  height: 40px; border-radius: 10px;
 }
-.today-btn:hover { background: rgba(52,211,153,0.25); }
+.today-btn:hover { background: rgba(12,12,14,0.85); }
 
 /* Journal tabs — switch work/daily for this day */
 .journal-tabs { display: flex; gap: 4px; }
@@ -584,11 +624,11 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
   display: flex; align-items: center; gap: 6px;
   padding: 7px 16px; border-radius: 8px;
   font-size: 13px; font-weight: 500;
-  color: var(--text-muted); transition: all 0.15s;
-  background: rgba(255,255,255,0.03);
+  color: var(--text-strong); transition: all 0.15s;
+  background: rgba(12,12,14,0.6); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
 }
-.jtab:hover { color: var(--text-strong); background: rgba(255,255,255,0.06); }
-.jtab.active { color: var(--text-heading); background: rgba(255,255,255,0.08); }
+.jtab:hover { color: var(--text-strong); background: rgba(12,12,14,0.75); }
+.jtab.active { color: var(--text-heading); background: rgba(12,12,14,0.8); }
 
 /* Body zone — below top-zone in stacking */
 .body-zone { position: relative; z-index: 5; background: linear-gradient(to bottom, transparent 0%, var(--bg) 120px); padding-top: 20px; min-height: 100vh; }
@@ -855,12 +895,23 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
 .hl-green li::before { color: var(--green); }
 .hl-amber li::before { color: #fbbf24; }
 
+/* Narrative section chrome (body content is styled globally via .narrative-prose) */
+.narrative-section {
+  background: rgba(12,12,14,0.55); border: 1px solid var(--border);
+  border-radius: 14px; padding: 22px 24px; margin-bottom: 18px;
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+}
+.narrative-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
+.narrative-source { font-size: 10px; font-family: ui-monospace, 'SF Mono', Consolas, monospace; color: var(--text-muted); }
+.narrative-desc { font-size: 13px; color: var(--text-muted); margin-bottom: 14px; font-style: italic; }
+.narrative-body { margin-top: 4px; }
+
 /* Footer */
 .footer { border-top: 1px solid var(--border); padding: 12px; text-align: center; }
 .footer-text { font-size: 10px; font-variant-numeric: tabular-nums; color: var(--text-muted); }
 
 @media (max-width: 640px) {
-  .hero-h1 { font-size: 24px; }
+  .hero-h1 { font-size: 28px; }
   .hero-title-row { flex-direction: column; align-items: flex-start; gap: 12px; }
   .duo-grid { grid-template-columns: 1fr; }
   .perf-card { flex-direction: column; }

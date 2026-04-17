@@ -1,8 +1,6 @@
 <template>
   <div class="aurora-wrap">
-    <canvas ref="glowCanvas" class="aurora-layer" />
-    <canvas ref="mainCanvas" class="aurora-layer" />
-    <canvas ref="starCanvas" class="aurora-layer" />
+    <canvas ref="canvas" class="aurora-canvas" />
   </div>
 </template>
 
@@ -11,222 +9,313 @@ import { ref, onMounted, onUnmounted } from 'vue'
 import { createNoise3D } from 'simplex-noise'
 
 const props = defineProps({ palette: { type: String, default: 'midnight' } })
-const mainCanvas = ref(null)
-const glowCanvas = ref(null)
-const starCanvas = ref(null)
-let mainCtx, glowCtx, starCtx
-let W = 0, H = 0, rafId, t = 0
+const canvas = ref(null)
+let ctx, W = 0, H = 0, rafId, t = 0
 const noise = createNoise3D()
 
-// Stars — drawn once, only redraw on resize
-const STAR_COUNT = 100
-function drawStars() {
-  if (!starCtx) return
-  starCtx.clearRect(0, 0, W, H)
-  for (let i = 0; i < STAR_COUNT; i++) {
-    const x = Math.random() * W
-    const y = Math.random() * H * 0.5
-    const r = 0.3 + Math.random() * 0.9
-    const a = 0.1 + Math.random() * 0.35
-    starCtx.beginPath()
-    starCtx.arc(x, y, r, 0, Math.PI * 2)
-    starCtx.fillStyle = `rgba(200,215,240,${a})`
-    starCtx.fill()
-  }
-}
-
-// Color palettes — aurora curtain colors
 const PALETTES = {
   midnight: [
-    [[30, 255, 140], [40, 220, 180], [60, 200, 240], [120, 80, 220]],
-    [[50, 240, 160], [30, 200, 200], [80, 160, 255], [140, 60, 240]],
-    [[40, 255, 120], [60, 230, 170], [50, 180, 220], [100, 100, 255]],
+    [[30, 255, 120], [40, 240, 180], [60, 200, 240], [140, 100, 255], [200, 60, 220], [255, 80, 160]],
+    [[255, 80, 160], [200, 60, 240], [120, 80, 255], [60, 160, 240], [40, 220, 200], [80, 255, 140]],
+    [[40, 220, 200], [80, 180, 255], [140, 120, 240], [60, 240, 160], [100, 200, 230], [50, 255, 180]],
   ],
   dawn: [
-    [[240, 160, 50], [220, 120, 80], [200, 100, 120], [180, 80, 140]],
-    [[255, 180, 40], [230, 140, 70], [210, 110, 100], [190, 90, 130]],
-    [[230, 150, 60], [210, 130, 90], [190, 110, 110], [170, 90, 150]],
+    [[255, 220, 60], [255, 180, 50], [240, 140, 70], [220, 100, 100], [200, 80, 140], [180, 60, 160]],
+    [[255, 140, 80], [240, 110, 100], [220, 80, 130], [200, 100, 160], [230, 160, 60], [255, 200, 40]],
+    [[240, 170, 50], [220, 130, 80], [200, 100, 110], [230, 150, 60], [250, 190, 40], [240, 160, 70]],
   ],
   daylight: [
-    [[50, 210, 200], [60, 230, 170], [80, 200, 240], [100, 160, 255]],
-    [[40, 220, 190], [70, 240, 160], [60, 190, 230], [90, 170, 250]],
-    [[60, 200, 210], [50, 220, 180], [70, 210, 240], [110, 150, 240]],
+    [[60, 240, 160], [50, 220, 200], [70, 200, 240], [100, 160, 255], [80, 240, 140], [60, 250, 180]],
+    [[80, 220, 200], [60, 200, 240], [90, 170, 255], [50, 240, 180], [70, 230, 160], [100, 200, 220]],
+    [[50, 250, 160], [60, 230, 190], [80, 200, 230], [70, 240, 170], [90, 210, 200], [60, 250, 150]],
   ],
   dusk: [
-    [[140, 60, 230], [180, 40, 200], [200, 50, 160], [160, 70, 250]],
-    [[120, 80, 240], [160, 50, 220], [190, 60, 180], [140, 90, 255]],
-    [[150, 50, 220], [170, 60, 200], [210, 40, 170], [130, 80, 250]],
+    [[140, 60, 255], [180, 50, 230], [220, 50, 180], [255, 60, 140], [200, 70, 240], [160, 80, 255]],
+    [[255, 50, 140], [220, 60, 180], [180, 70, 230], [140, 80, 255], [200, 50, 200], [240, 60, 160]],
+    [[120, 80, 250], [160, 60, 230], [200, 50, 200], [180, 70, 240], [140, 90, 255], [170, 50, 220]],
   ],
   aurora: [
-    [[20, 255, 130], [30, 230, 180], [50, 200, 230], [80, 120, 255]],
-    [[40, 250, 150], [25, 220, 200], [60, 180, 240], [100, 80, 240]],
-    [[30, 240, 140], [45, 210, 190], [40, 200, 220], [90, 100, 250]],
+    [[20, 255, 120], [30, 240, 170], [50, 200, 230], [80, 140, 255], [40, 255, 160], [60, 230, 200]],
+    [[50, 240, 180], [30, 220, 220], [60, 180, 250], [80, 120, 255], [40, 250, 190], [50, 230, 210]],
+    [[30, 250, 150], [40, 230, 190], [60, 200, 230], [50, 255, 170], [70, 220, 200], [40, 240, 180]],
   ],
 }
+const colorSets = PALETTES[props.palette] || PALETTES.aurora
 
-const curtainColors = PALETTES[props.palette] || PALETTES.aurora
+// Stars
+const STAR_COUNT = 70
+function drawStars() {
+  for (let i = 0; i < STAR_COUNT; i++) {
+    const seed = i * 7919
+    const x = ((seed * 13) % 10000) / 10000 * W
+    const y = ((seed * 17) % 10000) / 10000 * H * 0.35
+    const r = 0.3 + ((seed * 23) % 100) / 100 * 0.6
+    const tw = 0.5 + 0.5 * Math.sin(t * (0.002 + (seed % 50) * 0.00003) + seed)
+    const a = (0.04 + ((seed * 31) % 100) / 100 * 0.15) * tw
+    if (a < 0.015) continue
+    ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2)
+    ctx.fillStyle = `rgba(200,215,240,${a.toFixed(2)})`; ctx.fill()
+  }
+}
 
-// Curtain definitions
-const CURTAINS = [
-  { xCenter: 0.58, spread: 0.22, yStart: 0.02, yEnd: 0.58, noiseSeed: 0, speed: 1.0, opacity: 1.0 },
-  { xCenter: 0.68, spread: 0.18, yStart: 0.04, yEnd: 0.52, noiseSeed: 100, speed: 0.8, opacity: 0.8 },
-  { xCenter: 0.48, spread: 0.20, yStart: 0.06, yEnd: 0.50, noiseSeed: 200, speed: 1.2, opacity: 0.6 },
+// 3 flowing ribbon bands — wide, soft, like paint in water
+const RIBBONS = [
+  { seed: 0, speed: 1.0, width: 0.12, yBase: 0.22, opacity: 0.22, colSet: 0 },
+  { seed: 100, speed: 0.7, width: 0.08, yBase: 0.18, opacity: 0.14, colSet: 1 },
+  { seed: 200, speed: 1.2, width: 0.06, yBase: 0.26, opacity: 0.10, colSet: 2 },
 ]
 
-function drawCurtain(ctx, curtain, colorSet, time) {
-  const segs = 48
-  const cx = curtain.xCenter * W
-  const spread = curtain.spread * W
+function drawRibbon(ribbon) {
+  const cs = colorSets[ribbon.colSet % colorSets.length]
+  const pts = 80 // resolution along the ribbon
+  const yCenter = ribbon.yBase * H
 
-  // Build curtain shape points using noise
-  const leftPts = []
-  const rightPts = []
-  const midPts = []
+  // Build the flowing center line
+  const centerLine = []
+  for (let i = 0; i <= pts; i++) {
+    const u = i / pts
+    const x = u * W * 1.2 - W * 0.1 // extend slightly beyond viewport
 
-  for (let i = 0; i <= segs; i++) {
-    const v = i / segs
-    const y = (curtain.yStart + v * (curtain.yEnd - curtain.yStart)) * H
+    // Smooth flowing displacement — like silk in water
+    const flow1 = noise(u * 1.5 + ribbon.seed, t * 0.00008 * ribbon.speed, 0) * H * 0.15
+    const flow2 = noise(u * 3.5 + ribbon.seed + 40, t * 0.00018 * ribbon.speed, 10) * H * 0.06
+    const flow3 = noise(u * 7 + ribbon.seed + 80, t * 0.0005 * ribbon.speed, 20) * H * 0.02
 
-    // Slow drift — large-scale curtain shape
-    const drift = noise(
-      v * 1.5 + curtain.noiseSeed,
-      time * 0.00015 * curtain.speed,
-      curtain.noiseSeed * 0.1
-    ) * spread * 1.8
+    const y = yCenter + flow1 + flow2 + flow3
 
-    // Fast shimmer — fine vertical ripple
-    const shimmer = noise(
-      v * 8 + curtain.noiseSeed,
-      time * 0.0015 * curtain.speed,
-      curtain.noiseSeed * 0.3 + 50
-    ) * spread * 0.25
+    // Width breathes with noise — creates the dissolving paint effect
+    const widthMod = 0.5 + 0.5 * noise(u * 2 + ribbon.seed + 60, t * 0.00012 * ribbon.speed, 30)
+    const w = ribbon.width * H * widthMod
 
-    // Medium wave
-    const wave = noise(
-      v * 3 + curtain.noiseSeed + 30,
-      time * 0.0004 * curtain.speed,
-      curtain.noiseSeed * 0.2 + 20
-    ) * spread * 0.7
+    // Edge softness — occasionally one edge expands outward (dissolves)
+    const edgeNoise = noise(u * 3 + ribbon.seed + 90, t * 0.0003 * ribbon.speed, 60)
+    const topSoft = edgeNoise > 0.2 ? (edgeNoise - 0.2) * w * 1.5 : 0
+    const botSoft = edgeNoise < -0.2 ? (-edgeNoise - 0.2) * w * 1.5 : 0
 
-    const xMid = cx + drift + wave + shimmer
-
-    // Width tapers at top and bottom, wider in the belly
-    const taper = Math.pow(Math.sin(v * Math.PI), 0.6)
-    const widthNoise = noise(v * 4 + curtain.noiseSeed + 60, time * 0.0003, 0) * 0.3 + 0.7
-    const halfW = spread * 0.3 * taper * widthNoise
-
-    leftPts.push({ x: xMid - halfW, y })
-    rightPts.push({ x: xMid + halfW, y })
-    midPts.push({ x: xMid, y })
+    centerLine.push({ x, y, w, topSoft, botSoft })
   }
 
-  // Fill the curtain shape
+  // Draw as a filled shape with smooth curves
   ctx.beginPath()
-  ctx.moveTo(leftPts[0].x, leftPts[0].y)
-  for (let i = 1; i < leftPts.length; i++) {
-    const prev = leftPts[i - 1], curr = leftPts[i]
-    ctx.quadraticCurveTo(prev.x, prev.y, (prev.x + curr.x) / 2, (prev.y + curr.y) / 2)
+
+  // Top edge
+  ctx.moveTo(centerLine[0].x, centerLine[0].y - centerLine[0].w)
+  for (let i = 1; i < centerLine.length; i++) {
+    const prev = centerLine[i - 1], curr = centerLine[i]
+    const py = prev.y - prev.w, cy = curr.y - curr.w
+    ctx.quadraticCurveTo(prev.x, py, (prev.x + curr.x) / 2, (py + cy) / 2)
   }
-  ctx.lineTo(leftPts[leftPts.length - 1].x, leftPts[leftPts.length - 1].y)
-  for (let i = rightPts.length - 1; i >= 0; i--) {
-    const curr = rightPts[i]
-    const next = i > 0 ? rightPts[i - 1] : rightPts[0]
-    ctx.quadraticCurveTo(curr.x, curr.y, (curr.x + next.x) / 2, (curr.y + next.y) / 2)
+
+  // Bottom edge (reverse)
+  for (let i = centerLine.length - 1; i >= 0; i--) {
+    const curr = centerLine[i]
+    const prev = i > 0 ? centerLine[i - 1] : centerLine[0]
+    const cy = curr.y + curr.w, py = prev.y + prev.w
+    ctx.quadraticCurveTo(curr.x, cy, (curr.x + prev.x) / 2, (cy + py) / 2)
   }
   ctx.closePath()
 
-  // Vertical color gradient
-  const grad = ctx.createLinearGradient(0, curtain.yStart * H, 0, curtain.yEnd * H)
-  const [c0, c1, c2, c3] = colorSet
-  const baseAlpha = 0.14 * curtain.opacity
-  grad.addColorStop(0, `rgba(${c3[0]},${c3[1]},${c3[2]},0)`)
-  grad.addColorStop(0.15, `rgba(${c3[0]},${c3[1]},${c3[2]},${baseAlpha * 0.3})`)
-  grad.addColorStop(0.3, `rgba(${c2[0]},${c2[1]},${c2[2]},${baseAlpha * 0.7})`)
-  grad.addColorStop(0.45, `rgba(${c1[0]},${c1[1]},${c1[2]},${baseAlpha})`)
-  grad.addColorStop(0.6, `rgba(${c0[0]},${c0[1]},${c0[2]},${baseAlpha * 0.9})`)
-  grad.addColorStop(0.8, `rgba(${c0[0]},${c0[1]},${c0[2]},${baseAlpha * 0.4})`)
-  grad.addColorStop(1, `rgba(${c0[0]},${c0[1]},${c0[2]},0)`)
+  // Horizontal gradient — full spectrum across the ribbon
+  const grad = ctx.createLinearGradient(0, 0, W, 0)
+  const a = ribbon.opacity
+
+  // Smooth color cycling — interpolate between colors, no hard jumps
+  const shift = (t * 0.00003 * ribbon.speed) % cs.length
+
+  function getShiftedColor(ci) {
+    const idx = (ci + shift) % cs.length
+    const lo = Math.floor(idx) % cs.length
+    const hi = (lo + 1) % cs.length
+    const f = idx - Math.floor(idx)
+    return [
+      Math.round(cs[lo][0] + (cs[hi][0] - cs[lo][0]) * f),
+      Math.round(cs[lo][1] + (cs[hi][1] - cs[lo][1]) * f),
+      Math.round(cs[lo][2] + (cs[hi][2] - cs[lo][2]) * f),
+    ]
+  }
+
+  const gc0 = getShiftedColor(0), gc1 = getShiftedColor(1), gc2 = getShiftedColor(2)
+  const gc3 = getShiftedColor(3), gc4 = getShiftedColor(4), gc5 = getShiftedColor(5)
+
+  grad.addColorStop(0, `rgba(${gc0[0]},${gc0[1]},${gc0[2]},0)`)
+  grad.addColorStop(0.10, `rgba(${gc0[0]},${gc0[1]},${gc0[2]},${(a * 0.4).toFixed(3)})`)
+  grad.addColorStop(0.25, `rgba(${gc1[0]},${gc1[1]},${gc1[2]},${(a * 0.8).toFixed(3)})`)
+  grad.addColorStop(0.40, `rgba(${gc2[0]},${gc2[1]},${gc2[2]},${a.toFixed(3)})`)
+  grad.addColorStop(0.55, `rgba(${gc3[0]},${gc3[1]},${gc3[2]},${a.toFixed(3)})`)
+  grad.addColorStop(0.70, `rgba(${gc4[0]},${gc4[1]},${gc4[2]},${(a * 0.7).toFixed(3)})`)
+  grad.addColorStop(0.85, `rgba(${gc5[0]},${gc5[1]},${gc5[2]},${(a * 0.3).toFixed(3)})`)
+  grad.addColorStop(1, `rgba(${gc5[0]},${gc5[1]},${gc5[2]},0)`)
 
   ctx.fillStyle = grad
   ctx.fill()
 
-  // Bright fold line along the center
-  ctx.beginPath()
-  ctx.moveTo(midPts[0].x, midPts[0].y)
-  for (let i = 1; i < midPts.length; i++) {
-    const prev = midPts[i - 1], curr = midPts[i]
-    ctx.quadraticCurveTo(prev.x, prev.y, (prev.x + curr.x) / 2, (prev.y + curr.y) / 2)
+  // Traveling blur on edges — soft dissolution zones that sweep along
+  // Draw the bottom edge as a separate thick stroke with varying opacity
+  // A "focus point" travels left-to-right, blurring what's behind it
+  const blurSpeed1 = 0.00006 * ribbon.speed
+  const blurSpeed2 = 0.00009 * ribbon.speed
+  // Two focus waves traveling in opposite directions
+  const focus1 = (Math.sin(t * blurSpeed1 + ribbon.seed) + 1) / 2 // 0-1, sweeps right
+  const focus2 = (Math.sin(t * blurSpeed2 + ribbon.seed + 3) + 1) / 2 // offset, sweeps left
+
+  // Bottom edge blur strokes
+  for (let pass = 0; pass < 4; pass++) {
+    const spread = (pass + 1) * 10
+    const passAlpha = ribbon.opacity * 0.09 / (pass + 1)
+
+    ctx.beginPath()
+    for (let i = 0; i < centerLine.length; i++) {
+      const p = centerLine[i]
+      const u = i / centerLine.length
+
+      // How far from the focus points? Further = more blurred
+      const d1 = 1 - Math.pow(Math.abs(u - focus1) * 2.5, 2)
+      const d2 = 1 - Math.pow(Math.abs(u - focus2) * 2.5, 2)
+      const blur = Math.max(0, Math.max(d1, d2))
+
+      const y = p.y + p.w + spread * blur
+      i === 0 ? ctx.moveTo(p.x, y) : ctx.lineTo(p.x, y)
+    }
+    // Return along the original edge
+    for (let i = centerLine.length - 1; i >= 0; i--) {
+      const p = centerLine[i]
+      ctx.lineTo(p.x, p.y + p.w)
+    }
+    ctx.closePath()
+    const col = cs[(pass + 1) % cs.length]
+    ctx.fillStyle = `rgba(${col[0]},${col[1]},${col[2]},${passAlpha.toFixed(3)})`
+    ctx.fill()
   }
-  const foldPulse = 0.5 + 0.5 * noise(time * 0.0003, curtain.noiseSeed, 0)
-  const foldAlpha = 0.08 * curtain.opacity * foldPulse
-  ctx.strokeStyle = `rgba(${Math.min(255, c0[0] + 100)},${Math.min(255, c0[1] + 80)},${Math.min(255, c0[2] + 60)},${foldAlpha})`
-  ctx.lineWidth = 2
-  ctx.stroke()
+
+  // Top edge blur — same idea, different phase
+  const focus3 = (Math.sin(t * blurSpeed1 * 1.3 + ribbon.seed + 5) + 1) / 2
+
+  for (let pass = 0; pass < 3; pass++) {
+    const spread = (pass + 1) * 8
+    const passAlpha = ribbon.opacity * 0.07 / (pass + 1)
+
+    ctx.beginPath()
+    for (let i = 0; i < centerLine.length; i++) {
+      const p = centerLine[i]
+      const u = i / centerLine.length
+      const d = 1 - Math.pow(Math.abs(u - focus3) * 2.8, 2)
+      const blur = Math.max(0, d)
+      const y = p.y - p.w - spread * blur
+      i === 0 ? ctx.moveTo(p.x, y) : ctx.lineTo(p.x, y)
+    }
+    for (let i = centerLine.length - 1; i >= 0; i--) {
+      ctx.lineTo(centerLine[i].x, centerLine[i].y - centerLine[i].w)
+    }
+    ctx.closePath()
+    const col = cs[(pass + 3) % cs.length]
+    ctx.fillStyle = `rgba(${col[0]},${col[1]},${col[2]},${passAlpha.toFixed(3)})`
+    ctx.fill()
+  }
+}
+
+function drawSkyGlow() {
+  // Soft radial glow behind the aurora — like light reflecting off atmosphere
+  const cs = colorSets[0]
+  const [c0, c1] = cs
+  const pulse = 0.7 + 0.3 * Math.sin(t * 0.0003)
+
+  // Main glow — centered where the ribbons are
+  const gx = W * 0.55, gy = H * 0.18
+  const gr = Math.max(W, H) * 0.5
+  const glow = ctx.createRadialGradient(gx, gy, 0, gx, gy, gr)
+  glow.addColorStop(0, `rgba(${c0[0]},${c0[1]},${c0[2]},${(0.06 * pulse).toFixed(3)})`)
+  glow.addColorStop(0.3, `rgba(${c1[0]},${c1[1]},${c1[2]},${(0.03 * pulse).toFixed(3)})`)
+  glow.addColorStop(0.6, `rgba(${c1[0]},${c1[1]},${c1[2]},${(0.01 * pulse).toFixed(3)})`)
+  glow.addColorStop(1, 'rgba(0,0,0,0)')
+  ctx.fillStyle = glow
+  ctx.fillRect(0, 0, W, H)
+
+  // Top-to-bottom atmospheric gradient
+  const atm = ctx.createLinearGradient(0, 0, 0, H * 0.5)
+  atm.addColorStop(0, `rgba(${c1[0]},${c1[1]},${c1[2]},${(0.02 * pulse).toFixed(3)})`)
+  atm.addColorStop(0.5, `rgba(${c0[0]},${c0[1]},${c0[2]},${(0.015 * pulse).toFixed(3)})`)
+  atm.addColorStop(1, 'rgba(0,0,0,0)')
+  ctx.fillStyle = atm
+  ctx.fillRect(0, 0, W, H * 0.5)
+}
+
+function drawFoggyRibbon(ribbon) {
+  // Wider, more transparent version of the ribbon — creates foggy halo
+  const cs = colorSets[ribbon.colSet % colorSets.length]
+  const pts = 40 // lower res for fog
+  const yCenter = ribbon.yBase * H
+
+  const centerLine = []
+  for (let i = 0; i <= pts; i++) {
+    const u = i / pts
+    const x = u * W * 1.2 - W * 0.1
+    // Same flow but slightly offset in time — fog trails the sharp ribbon
+    const flow1 = noise(u * 1.5 + ribbon.seed, t * 0.00007 * ribbon.speed, 0) * H * 0.15
+    const flow2 = noise(u * 3.5 + ribbon.seed + 40, t * 0.00016 * ribbon.speed, 10) * H * 0.06
+    const y = yCenter + flow1 + flow2
+    // Fog is wider — 2.5x the ribbon width
+    const widthMod = 0.4 + 0.6 * noise(u * 1.5 + ribbon.seed + 60, t * 0.0001 * ribbon.speed, 30)
+    const w = ribbon.width * H * widthMod * 2.5
+    centerLine.push({ x, y, w })
+  }
+
+  ctx.beginPath()
+  ctx.moveTo(centerLine[0].x, centerLine[0].y - centerLine[0].w)
+  for (let i = 1; i < centerLine.length; i++) {
+    const prev = centerLine[i - 1], curr = centerLine[i]
+    ctx.quadraticCurveTo(prev.x, prev.y - prev.w, (prev.x + curr.x) / 2, ((prev.y - prev.w) + (curr.y - curr.w)) / 2)
+  }
+  for (let i = centerLine.length - 1; i >= 0; i--) {
+    const curr = centerLine[i], prev = i > 0 ? centerLine[i - 1] : centerLine[0]
+    ctx.quadraticCurveTo(curr.x, curr.y + curr.w, (curr.x + prev.x) / 2, ((curr.y + curr.w) + (prev.y + prev.w)) / 2)
+  }
+  ctx.closePath()
+
+  const a = ribbon.opacity * 0.25
+  const grad = ctx.createLinearGradient(0, 0, W, 0)
+  grad.addColorStop(0, `rgba(${cs[0][0]},${cs[0][1]},${cs[0][2]},0)`)
+  grad.addColorStop(0.15, `rgba(${cs[1][0]},${cs[1][1]},${cs[1][2]},${(a * 0.3).toFixed(3)})`)
+  grad.addColorStop(0.35, `rgba(${cs[2][0]},${cs[2][1]},${cs[2][2]},${(a * 0.8).toFixed(3)})`)
+  grad.addColorStop(0.55, `rgba(${cs[3][0]},${cs[3][1]},${cs[3][2]},${a.toFixed(3)})`)
+  grad.addColorStop(0.75, `rgba(${cs[4][0]},${cs[4][1]},${cs[4][2]},${(a * 0.5).toFixed(3)})`)
+  grad.addColorStop(1, `rgba(${cs[5][0]},${cs[5][1]},${cs[5][2]},0)`)
+  ctx.fillStyle = grad
+  ctx.fill()
 }
 
 function draw() {
-  if (!mainCtx || !glowCtx) { rafId = requestAnimationFrame(draw); return }
+  if (!ctx) { rafId = requestAnimationFrame(draw); return }
+  ctx.clearRect(0, 0, W, H)
 
-  // Clear main
-  mainCtx.clearRect(0, 0, W, H)
+  drawStars()
 
-  // Draw curtains to main canvas
-  mainCtx.globalCompositeOperation = 'screen'
-  for (let c = 0; c < CURTAINS.length; c++) {
-    drawCurtain(mainCtx, CURTAINS[c], curtainColors[c % curtainColors.length], t)
+  // Sky glow — atmospheric background
+  drawSkyGlow()
+
+  ctx.globalCompositeOperation = 'screen'
+
+  // Foggy halos first (behind)
+  for (const ribbon of RIBBONS) {
+    drawFoggyRibbon(ribbon)
   }
-  mainCtx.globalCompositeOperation = 'source-over'
 
-  // Glow pass — blur the main canvas content onto glow canvas
-  glowCtx.clearRect(0, 0, W, H)
-  glowCtx.filter = 'blur(40px)'
-  glowCtx.globalAlpha = 0.5
-  glowCtx.drawImage(mainCanvas.value, 0, 0)
-  glowCtx.globalAlpha = 1
-  glowCtx.filter = 'none'
-
-  // Second wide glow pass
-  glowCtx.filter = 'blur(80px)'
-  glowCtx.globalAlpha = 0.25
-  glowCtx.drawImage(mainCanvas.value, 0, 0)
-  glowCtx.globalAlpha = 1
-  glowCtx.filter = 'none'
-
-  // Twinkle some stars
-  if (starCtx && t % 3 === 0) {
-    starCtx.clearRect(0, 0, W, H)
-    for (let i = 0; i < STAR_COUNT; i++) {
-      // Deterministic position from index
-      const seed = i * 7919
-      const x = ((seed * 13) % 10000) / 10000 * W
-      const y = ((seed * 17) % 10000) / 10000 * H * 0.5
-      const r = 0.3 + ((seed * 23) % 100) / 100 * 0.9
-      const twinkle = 0.5 + 0.5 * Math.sin(t * (0.002 + (seed % 100) * 0.00004) + seed)
-      const a = (0.08 + ((seed * 31) % 100) / 100 * 0.3) * twinkle
-      if (a < 0.02) continue
-      starCtx.beginPath()
-      starCtx.arc(x, y, r, 0, Math.PI * 2)
-      starCtx.fillStyle = `rgba(200,215,240,${a.toFixed(2)})`
-      starCtx.fill()
-    }
+  // Sharp ribbons on top
+  for (const ribbon of RIBBONS) {
+    drawRibbon(ribbon)
   }
+
+  ctx.globalCompositeOperation = 'source-over'
 
   t++
   rafId = requestAnimationFrame(draw)
 }
 
 function resize() {
+  if (!canvas.value) return
   const dpr = window.devicePixelRatio || 1
-  for (const c of [mainCanvas.value, glowCanvas.value, starCanvas.value]) {
-    if (!c) continue
-    W = c.offsetWidth; H = c.offsetHeight
-    c.width = W * dpr; c.height = H * dpr
-    const cx = c.getContext('2d')
-    cx.scale(dpr, dpr)
-  }
-  mainCtx = mainCanvas.value?.getContext('2d')
-  glowCtx = glowCanvas.value?.getContext('2d')
-  starCtx = starCanvas.value?.getContext('2d')
+  W = canvas.value.offsetWidth; H = canvas.value.offsetHeight
+  canvas.value.width = W * dpr; canvas.value.height = H * dpr
+  ctx = canvas.value.getContext('2d'); ctx.scale(dpr, dpr)
 }
 
 onMounted(() => { resize(); window.addEventListener('resize', resize); draw() })
@@ -235,5 +324,5 @@ onUnmounted(() => { window.removeEventListener('resize', resize); cancelAnimatio
 
 <style scoped>
 .aurora-wrap { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 0; }
-.aurora-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+.aurora-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
 </style>

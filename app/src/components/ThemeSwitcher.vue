@@ -58,11 +58,11 @@ onUnmounted(() => document.removeEventListener('click', onClickOutside))
 .theme-btn {
   display: flex; align-items: center; justify-content: center;
   width: 36px; height: 36px; border-radius: 8px;
-  border: 1px solid var(--border); background: rgba(12,12,14,0.7);
-  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border); background: rgba(12,12,14,0.8);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
   color: var(--text-muted); cursor: pointer; transition: all 0.2s;
 }
-.theme-btn:hover { border-color: var(--border-hover); color: var(--text-heading); }
+.theme-btn:hover { border-color: var(--border-hover); color: var(--text-heading); background: rgba(12,12,14,0.9); }
 
 .theme-dropdown {
   position: absolute; top: calc(100% + 8px); right: 0;

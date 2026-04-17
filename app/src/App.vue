@@ -5,6 +5,7 @@ import BlobBackground from './components/BlobBackground.vue'
 import DiagonalBackground from './components/DiagonalBackground.vue'
 import SpikeBackground from './components/SpikeBackground.vue'
 import AuroraBackground from './components/AuroraBackground.vue'
+import MeshAuroraBackground from './components/MeshAuroraBackground.vue'
 import { useTheme } from './composables/useTheme'
 import { useAnimation } from './composables/useAnimation'
 
@@ -28,6 +29,7 @@ const fadeBg = computed(() => fadeBgs[theme.value] || '#0c0c0e')
       <DiagonalBackground v-else-if="animation === 'diagonal'" :key="'d-'+theme" :palette="theme" />
       <SpikeBackground v-else-if="animation === 'spikes'" :key="'s-'+theme" :palette="theme" />
       <AuroraBackground v-else-if="animation === 'aurora'" :key="'a-'+theme" :palette="theme" />
+      <MeshAuroraBackground v-else-if="animation === 'mesh'" :key="'m-'+theme" :palette="theme" />
       <div class="ribbon-fade" :style="{ background: `linear-gradient(to bottom, transparent 0%, ${fadeBg} 80%)` }"></div>
     </div>
     <div class="foreground">

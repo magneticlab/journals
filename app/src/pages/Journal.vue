@@ -6,7 +6,7 @@ import AnimationSwitcher from '../components/AnimationSwitcher.vue'
 
 const props = defineProps({ journal: String })
 const router = useRouter()
-const manifest = ref({ work: [], daily: [] })
+const manifest = ref({ work: [], daily: [], narrative: [] })
 const search = ref('')
 const sparkRange = ref(30)
 const weather = ref(null)
@@ -20,7 +20,7 @@ const heroStyle = computed(() => ({
 
 onMounted(async () => {
   window.addEventListener('scroll', onScroll, { passive: true })
-  manifest.value = await (await fetch('/manifest.json')).json()
+  manifest.value = await (await fetch(`${import.meta.env.BASE_URL}manifest.json`)).json()
   try {
     const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=37.98&longitude=23.73&current=temperature_2m,weather_code,relative_humidity_2m,wind_speed_10m&timezone=auto')
     if (res.ok) weather.value = await res.json()
@@ -35,22 +35,32 @@ const filtered = computed(() => {
   return entries.value.filter(e => e.date.includes(q) || e.day.toLowerCase().includes(q) || e.summary.toLowerCase().includes(q))
 })
 const isWork = computed(() => props.journal === 'work')
-const title = computed(() => isWork.value ? 'Work Journal' : 'Daily Journal')
-const subtitle = computed(() => isWork.value ? 'Claude Code sessions, git commits, project work.' : 'Terminal activity, file changes, development.')
+const isNarrative = computed(() => props.journal === 'narrative')
+const title = computed(() => {
+  if (isNarrative.value) return 'Narrative'
+  return isWork.value ? 'Work Journal' : 'Daily Journal'
+})
+const subtitle = computed(() => {
+  if (isNarrative.value) return 'Long-form session reports — context, decisions, what happened.'
+  return isWork.value ? 'Claude Code sessions, git commits, project work.' : 'Terminal activity, file changes, development.'
+})
 const latest = computed(() => entries.value[0] || null)
 const latestData = ref(null)
 
 watch(latest, async (l) => {
   if (!l) return
   try {
-    const res = await fetch(`/entries/${props.journal}/${l.date}.json`)
+    const res = await fetch(`${import.meta.env.BASE_URL}entries/${props.journal}/${l.date}.json`)
     if (res.ok) latestData.value = await res.json()
   } catch {}
 }, { immediate: true })
 
 const sparkData = computed(() => {
   const count = sparkRange.value === 0 ? entries.value.length : sparkRange.value
-  return entries.value.slice(0, count).reverse().map(e => ({ date: e.date.slice(5), commits: e.stats?.commits || 0 }))
+  return entries.value.slice(0, count).reverse().map(e => ({
+    date: e.date.slice(5),
+    commits: isNarrative.value ? (e.stats?.sections || 0) : (e.stats?.commits || 0),
+  }))
 })
 const sparkMax = computed(() => Math.max(...sparkData.value.map(d => d.commits), 1))
 
@@ -76,6 +86,7 @@ const linesRemoved = computed(() => latestData.value?.stats?.linesRemoved || 0)
 const filesChanged = computed(() => latestData.value?.stats?.filesChanged || 0)
 const brandColor = computed(() => {
   const style = getComputedStyle(document.documentElement)
+  if (isNarrative.value) return style.getPropertyValue('--brand-narrative').trim() || '#f5b342'
   return isWork.value ? (style.getPropertyValue('--brand-work').trim() || '#6395ff') : (style.getPropertyValue('--brand-daily').trim() || '#34d399')
 })
 
@@ -105,8 +116,9 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
         <!-- Hero — parallax + fade -->
         <div class="hero" :style="heroStyle">
           <div class="hero-title-row">
-            <div :class="['hero-icon', isWork ? 'hicon-work' : 'hicon-daily']">
-              <svg v-if="isWork" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+            <div :class="['hero-icon', isNarrative ? 'hicon-narrative' : (isWork ? 'hicon-work' : 'hicon-daily')]">
+              <svg v-if="isNarrative" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+              <svg v-else-if="isWork" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
               <svg v-else width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
             </div>
             <h1 class="hero-h1">{{ title }}</h1>
@@ -124,10 +136,16 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
           <div class="feat-row-top">
             <p class="feat-label" :style="{ color: brandColor }">Latest Report</p>
             <div class="feat-stats">
-              <div class="fstat" v-if="isWork"><span class="fstat-val">{{ latest.stats?.sessions || 0 }}</span><span class="fstat-lbl">sessions</span></div>
-              <div class="fstat"><span class="fstat-val">{{ latest.stats?.commits || 0 }}</span><span class="fstat-lbl">commits</span></div>
-              <div class="fstat" v-if="!isWork"><span class="fstat-val">{{ latest.stats?.commands || 0 }}</span><span class="fstat-lbl">commands</span></div>
-              <div class="fstat"><span class="fstat-val">{{ latest.stats?.repos || 0 }}</span><span class="fstat-lbl">repos</span></div>
+              <template v-if="isNarrative">
+                <div class="fstat"><span class="fstat-val">{{ latest.stats?.sections || 0 }}</span><span class="fstat-lbl">sections</span></div>
+                <div class="fstat"><span class="fstat-val">{{ latest.stats?.sourceFiles?.length || 0 }}</span><span class="fstat-lbl">files</span></div>
+              </template>
+              <template v-else>
+                <div class="fstat" v-if="isWork"><span class="fstat-val">{{ latest.stats?.sessions || 0 }}</span><span class="fstat-lbl">sessions</span></div>
+                <div class="fstat"><span class="fstat-val">{{ latest.stats?.commits || 0 }}</span><span class="fstat-lbl">commits</span></div>
+                <div class="fstat" v-if="!isWork"><span class="fstat-val">{{ latest.stats?.commands || 0 }}</span><span class="fstat-lbl">commands</span></div>
+                <div class="fstat"><span class="fstat-val">{{ latest.stats?.repos || 0 }}</span><span class="fstat-lbl">repos</span></div>
+              </template>
             </div>
           </div>
           <h2 class="feat-date">{{ latest.day }}, {{ latest.display }}</h2>
@@ -166,7 +184,17 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
                 <div class="entry-line"></div><div class="entry-dot" :style="{ background: brandColor + '60', borderColor: brandColor + '30' }"></div>
                 <div class="entry-content">
                   <div class="entry-top"><span class="entry-date">{{ e.date.slice(8) }}</span><span class="entry-day">{{ e.day?.slice(0, 3) }}</span>
-                    <div class="entry-meta"><span v-if="isWork && e.stats?.sessions" class="meta-item">{{ e.stats.sessions }}s</span><span v-if="e.stats?.commits" class="meta-item">{{ e.stats.commits }}c</span><span v-if="isWork && e.stats?.linesAdded" class="meta-item meta-add">+{{ e.stats.linesAdded.toLocaleString() }}</span><span v-if="!isWork && e.stats?.commands" class="meta-item">{{ e.stats.commands }} cmd</span></div>
+                    <div class="entry-meta">
+                      <template v-if="isNarrative">
+                        <span v-if="e.stats?.sections" class="meta-item">{{ e.stats.sections }} section{{ e.stats.sections === 1 ? '' : 's' }}</span>
+                      </template>
+                      <template v-else>
+                        <span v-if="isWork && e.stats?.sessions" class="meta-item">{{ e.stats.sessions }}s</span>
+                        <span v-if="e.stats?.commits" class="meta-item">{{ e.stats.commits }}c</span>
+                        <span v-if="isWork && e.stats?.linesAdded" class="meta-item meta-add">+{{ e.stats.linesAdded.toLocaleString() }}</span>
+                        <span v-if="!isWork && e.stats?.commands" class="meta-item">{{ e.stats.commands }} cmd</span>
+                      </template>
+                    </div>
                   </div>
                   <p class="entry-summary">{{ e.summary }}</p>
                 </div>
@@ -197,8 +225,9 @@ const wx = computed(() => { if (!weather.value?.current) return null; const c = 
 .hero-icon { display: flex; align-items: center; justify-content: center; width: 48px; height: 48px; border-radius: 14px; flex-shrink: 0; }
 .hicon-work { background: var(--brand-work-bg); color: var(--brand-work); }
 .hicon-daily { background: var(--brand-daily-bg); color: var(--brand-daily); }
-.hero-h1 { font-family: var(--serif); font-size: 36px; font-weight: 400; color: var(--text-heading); }
-.hero-sub { font-size: 14px; color: var(--text-muted); margin-left: 62px; }
+.hicon-narrative { background: var(--brand-narrative-bg); color: var(--brand-narrative); }
+.hero-h1 { font-family: var(--serif); font-size: 42px; font-weight: 400; color: var(--text-heading); }
+.hero-sub { font-size: 14px; color: var(--text-strong); margin-left: 62px; }
 
 /* Body zone */
 .body-zone { position: relative; background: linear-gradient(to bottom, transparent 0%, var(--bg) 120px); padding-top: 20px; min-height: 100vh; }

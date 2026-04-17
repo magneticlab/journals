@@ -10,7 +10,10 @@ from datetime import datetime, timedelta
 from pathlib import Path
 from collections import defaultdict
 
-REPOS_DIR = Path.home() / "Documents" / "GitHub"
+from config import get as get_config
+
+_cfg = get_config()
+REPOS_DIR = Path.home() / _cfg["sources"]["reposDir"]
 OUTPUT_DIR = Path(__file__).parent.parent / "daily" / "entries"
 APP_PUBLIC = Path(__file__).parent.parent / "app" / "public" / "entries" / "daily"
 WEEKDAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]

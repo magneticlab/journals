@@ -11,9 +11,9 @@ APP_PUBLIC = JOURNALS_DIR / "app" / "public"
 
 
 def build():
-    manifest = {"work": [], "daily": []}
+    manifest = {"work": [], "daily": [], "narrative": []}
 
-    for journal_type in ["work", "daily"]:
+    for journal_type in ["work", "daily", "narrative"]:
         entries_dir = APP_PUBLIC / "entries" / journal_type
         if not entries_dir.exists():
             continue
@@ -32,8 +32,12 @@ def build():
                 continue
 
     (APP_PUBLIC / "manifest.json").write_text(json.dumps(manifest, indent=2))
-    total = len(manifest["work"]) + len(manifest["daily"])
-    print(f"Manifest built: {len(manifest['work'])} work + {len(manifest['daily'])} daily ({total} total)")
+    total = sum(len(v) for v in manifest.values())
+    print(
+        f"Manifest built: {len(manifest['work'])} work + "
+        f"{len(manifest['daily'])} daily + "
+        f"{len(manifest['narrative'])} narrative ({total} total)"
+    )
 
 
 if __name__ == "__main__":

@@ -3,8 +3,9 @@ import { ref, onMounted, onUnmounted, computed } from 'vue'
 import ReflectModal from '../components/ReflectModal.vue'
 import ThemeSwitcher from '../components/ThemeSwitcher.vue'
 import AnimationSwitcher from '../components/AnimationSwitcher.vue'
+import config from '../../../journals.config.js'
 
-const manifest = ref({ work: [], daily: [] })
+const manifest = ref({ work: [], daily: [], narrative: [] })
 const weather = ref(null)
 const scrollY = ref(0)
 const showReflect = ref(false)
@@ -27,12 +28,15 @@ const heroStyle = computed(() => ({
 onMounted(async () => {
   window.addEventListener('scroll', onScroll, { passive: true })
   loadTodayReflection()
-  manifest.value = await (await fetch('/manifest.json')).json()
-  // Fetch weather (Athens, Greece — no API key needed)
-  try {
-    const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=37.98&longitude=23.73&current=temperature_2m,weather_code,relative_humidity_2m,wind_speed_10m&timezone=auto')
-    if (res.ok) weather.value = await res.json()
-  } catch {}
+  manifest.value = await (await fetch(`${import.meta.env.BASE_URL}manifest.json`)).json()
+  // Fetch weather (location from config, no API key needed)
+  if (config.weather?.enabled) {
+    try {
+      const { latitude, longitude } = config.weather
+      const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,weather_code,relative_humidity_2m,wind_speed_10m&timezone=auto`)
+      if (res.ok) weather.value = await res.json()
+    } catch {}
+  }
 })
 
 // Time-based greeting
@@ -179,7 +183,7 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll))
 
         <!-- Hero — parallax + fade on scroll -->
         <div class="hero" :style="heroStyle">
-          <p class="hero-greeting">{{ greeting }}, Alek.</p>
+          <p class="hero-greeting">{{ greeting }}, {{ config.name }}.</p>
           <p class="hero-date">{{ todayStr }}</p>
           <button class="reflect-btn" @click="showReflect = true">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
@@ -229,6 +233,23 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll))
                 <div class="card-stats">
                   <div class="cstat"><span class="cstat-val">{{ manifest.daily.reduce((s, e) => s + (e.stats?.commands || 0), 0) }}</span><span class="cstat-label">Commands</span></div>
                   <div class="cstat"><span class="cstat-val">{{ manifest.daily.reduce((s, e) => s + (e.stats?.commits || 0), 0) }}</span><span class="cstat-label">Commits</span></div>
+                </div>
+              </div>
+            </router-link>
+
+            <router-link to="/narrative" class="card card-narrative rv">
+              <div class="card-head">
+                <div class="card-icon icon-narrative">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                </div>
+                <span class="card-count">{{ manifest.narrative.length }}</span>
+              </div>
+              <h2 class="card-label">Narrative</h2>
+              <p class="card-desc">Long-form session reports — context, decisions, what happened.</p>
+              <div class="card-bottom">
+                <div class="card-stats">
+                  <div class="cstat"><span class="cstat-val">{{ manifest.narrative.reduce((s, e) => s + (e.stats?.sections || 0), 0) }}</span><span class="cstat-label">Sections</span></div>
+                  <div class="cstat"><span class="cstat-val">{{ manifest.narrative.length }}</span><span class="cstat-label">Days</span></div>
                 </div>
               </div>
             </router-link>
@@ -335,18 +356,18 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll))
 .wx-detail { color: var(--text-muted); }
 
 .hero-greeting { font-family: var(--serif); font-size: 42px; font-weight: 400; color: var(--text-heading); line-height: 1.2; margin-top: 8px; }
-.hero-date { font-size: 15px; color: var(--text-muted); margin-top: 10px; }
+.hero-date { font-size: 15px; color: var(--text-strong); margin-top: 10px; }
 .reflect-btn {
   display: inline-flex; align-items: center; gap: 8px;
-  margin-top: 20px; padding: 10px 20px; border-radius: 10px;
-  border: 1px solid rgba(52,211,153,0.2);
-  background: rgba(52,211,153,0.08);
-  color: var(--brand-daily); font-size: 13px; font-weight: 600;
+  margin-top: 20px; padding: 12px 22px; border-radius: 10px;
+  border: none;
+  background: rgba(12,12,14,0.65);
+  color: var(--text-heading); font-size: 13px; font-weight: 600;
   font-family: inherit; cursor: pointer;
-  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
   transition: all 0.2s var(--ease-spring);
 }
-.reflect-btn:hover { background: rgba(52,211,153,0.15); border-color: rgba(52,211,153,0.35); }
+.reflect-btn:hover { background: rgba(12,12,14,0.8); }
 
 /* BODY ZONE — soft gradient, no hard edge */
 .body-zone {
@@ -364,7 +385,7 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll))
 
 /* Cards — pulled up into the fade zone */
 .cards-wrap { position: relative; margin-top: -60px; z-index: 2; }
-.cards { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 56px; }
+.cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 56px; }
 .card {
   border-radius: 14px; padding: 24px; transition: all 0.4s var(--ease-spring); display: block;
   backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
@@ -381,10 +402,17 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll))
   box-shadow: 0 4px 16px rgba(0,0,0,0.3), 0 1px 2px rgba(0,0,0,0.2);
 }
 .card-daily:hover { border-color: color-mix(in srgb, var(--brand-daily) 40%, transparent); }
+.card-narrative {
+  background: linear-gradient(135deg, var(--brand-narrative-bg) 0%, var(--bg-card) 50%);
+  border: 1px solid color-mix(in srgb, var(--brand-narrative) 20%, transparent);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3), 0 1px 2px rgba(0,0,0,0.2);
+}
+.card-narrative:hover { border-color: color-mix(in srgb, var(--brand-narrative) 40%, transparent); }
 .card-head { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 16px; }
 .card-icon { display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 10px; }
 .icon-work { background: var(--brand-work-bg); color: var(--brand-work); }
 .icon-daily { background: var(--brand-daily-bg); color: var(--brand-daily); }
+.icon-narrative { background: var(--brand-narrative-bg); color: var(--brand-narrative); }
 .card-count { font-size: 12px; font-weight: 600; color: var(--text-muted); background: var(--bg-elevated); padding: 3px 10px; border-radius: 6px; }
 .card-label { font-family: var(--serif); font-size: 24px; font-weight: 400; color: var(--text-heading); margin-bottom: 4px; }
 .card-desc { font-size: 13px; color: var(--text-muted); line-height: 1.5; margin-bottom: 20px; }
@@ -469,6 +497,9 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll))
 .col-empty { display: flex; align-items: center; justify-content: center; min-height: 60px; }
 .empty-label { font-size: 11px; color: var(--border-hover); }
 
+@media (max-width: 880px) {
+  .cards { grid-template-columns: 1fr; }
+}
 @media (max-width: 640px) {
   .cards { grid-template-columns: 1fr; }
   .day-cols { grid-template-columns: 1fr; }
