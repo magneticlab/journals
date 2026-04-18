@@ -10,6 +10,10 @@ export default {
   // Display name shown in the greeting ("Good morning, {name}.")
   name: 'User',
 
+  // Machine identifier — used to merge journal data across multiple computers.
+  // Each machine should have a unique ID (e.g., 'macbook', 'macstudio').
+  machineId: 'macstudio',
+
   // Site title shown in the browser tab and nav
   siteTitle: 'Journals',
 
@@ -39,7 +43,7 @@ export default {
 
   // Git auto-publish after generation
   git: {
-    autoPush: false,
+    autoPush: true,
     // Branch to push to (set to your deploy branch if using CI/CD)
     branch: 'main',
   },

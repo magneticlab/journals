@@ -15,6 +15,7 @@ from config import get as get_config
 _cfg = get_config()
 HISTORY_FILE = Path.home() / _cfg["sources"]["claudeHistory"]
 REPOS_DIR = Path.home() / _cfg["sources"]["reposDir"]
+MACHINE_ID = _cfg.get("machineId", "default")
 APP_PUBLIC = Path(__file__).parent.parent / "app" / "public" / "entries" / "work"
 OUTPUT_DIR = Path(__file__).parent.parent / "work" / "entries"
 WEEKDAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
@@ -491,6 +492,104 @@ def generate_report(target_date):
     }
 
 
+def merge_reports(existing, new_report, machine_id):
+    """Merge this machine's report with existing data from other machines."""
+    machines = existing.get("_machines", {})
+
+    # If existing report was from a different machine with no _machines yet, adopt it
+    if not machines and existing.get("machineId") and existing["machineId"] != machine_id:
+        machines[existing["machineId"]] = existing
+
+    # Store this machine's contribution (without _machines to avoid circular refs)
+    machines[machine_id] = {k: v for k, v in new_report.items() if k != "_machines"}
+
+    if len(machines) <= 1:
+        new_report["_machines"] = machines
+        new_report["machineId"] = machine_id
+        return new_report
+
+    # Aggregate stats across all machines
+    all_sessions = 0
+    all_messages = 0
+    all_commits_set = set()
+    all_repos = set()
+    all_lines_added = 0
+    all_lines_removed = 0
+    all_files_changed = 0
+    time_starts = []
+    time_ends = []
+    merged_git = {}
+    merged_themes = defaultdict(int)
+    merged_what = []
+    merged_timeline = []
+    merged_insights = []
+    merged_projects = []
+
+    for mid, rpt in machines.items():
+        stats = rpt.get("stats", {})
+        all_sessions += stats.get("sessions", 0)
+        all_messages += stats.get("messages", 0)
+        all_lines_added += stats.get("linesAdded", 0)
+        all_lines_removed += stats.get("linesRemoved", 0)
+        all_files_changed += stats.get("filesChanged", 0)
+
+        tr = stats.get("timeRange", "")
+        if "–" in tr:
+            s, e = tr.split("–")
+            time_starts.append(s)
+            time_ends.append(e)
+
+        # Merge git activity — deduplicate commits by hash
+        for repo in rpt.get("gitActivity", []):
+            rname = repo["repo"]
+            if rname not in merged_git:
+                merged_git[rname] = {"repo": rname, "commits": [], "stat": repo.get("stat", "")}
+            seen_hashes = {c["hash"] for c in merged_git[rname]["commits"]}
+            for c in repo["commits"]:
+                if c["hash"] not in seen_hashes:
+                    merged_git[rname]["commits"].append(c)
+                    all_commits_set.add(c["hash"])
+            all_repos.add(rname)
+
+        for theme, count in rpt.get("themes", {}).items():
+            merged_themes[theme] = max(merged_themes[theme], count)
+
+        merged_what.extend(rpt.get("whatIDid", []))
+        merged_timeline.extend(rpt.get("activityTimeline", []))
+        merged_insights.extend(rpt.get("insights", []))
+        merged_projects.extend(rpt.get("projectsWip", []))
+
+    time_range = ""
+    if time_starts and time_ends:
+        time_range = f"{min(time_starts)}–{max(time_ends)}"
+
+    # Build merged report using new_report as base for date/day/display
+    merged = dict(new_report)
+    merged["machineId"] = machine_id
+    merged["_machines"] = machines
+    merged["stats"] = {
+        "sessions": all_sessions,
+        "messages": all_messages,
+        "commits": len(all_commits_set),
+        "repos": len(all_repos),
+        "timeRange": time_range,
+        "linesAdded": all_lines_added,
+        "linesRemoved": all_lines_removed,
+        "filesChanged": all_files_changed,
+    }
+    merged["gitActivity"] = list(merged_git.values())
+    merged["themes"] = dict(sorted(merged_themes.items(), key=lambda x: -x[1]))
+    merged["whatIDid"] = list(dict.fromkeys(merged_what))[:8]
+    merged["activityTimeline"] = list(dict.fromkeys(merged_timeline))[:20]
+    merged["insights"] = list(dict.fromkeys(merged_insights))[:6]
+    merged["projectsWip"] = sorted(set(merged_projects))
+    merged["summary"] = (
+        f"{all_sessions} session(s), {all_messages} msgs, "
+        f"{len(all_commits_set)} commit(s) across {len(all_repos)} repo(s)"
+    )
+    return merged
+
+
 def main():
     import sys
     target_date = sys.argv[1] if len(sys.argv) > 1 else datetime.now().strftime("%Y-%m-%d")
@@ -500,7 +599,23 @@ def main():
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
     if report:
-        (APP_PUBLIC / f"{target_date}.json").write_text(json.dumps(report, indent=2))
+        report["machineId"] = MACHINE_ID
+
+        # Merge with existing data from other machines
+        entry_file = APP_PUBLIC / f"{target_date}.json"
+        if entry_file.exists():
+            try:
+                existing = json.loads(entry_file.read_text())
+                report = merge_reports(existing, report, MACHINE_ID)
+            except (json.JSONDecodeError, KeyError):
+                pass
+
+        # Store a snapshot for multi-machine merge (avoid circular refs)
+        snapshot = {k: v for k, v in report.items() if k != "_machines"}
+        report["_machines"] = report.get("_machines", {})
+        report["_machines"][MACHINE_ID] = snapshot
+
+        entry_file.write_text(json.dumps(report, indent=2))
         print(f"Work: {target_date} ({report['stats']['sessions']}s, {report['stats']['commits']}c)")
     else:
         print(f"Work: {target_date} (empty)")

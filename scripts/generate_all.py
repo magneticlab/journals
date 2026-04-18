@@ -30,9 +30,9 @@ def git_publish(target_date):
     """Stage entries, commit if there are changes, push to origin/dev."""
     paths = [
         "app/public/entries",
-        "daily/entries",
-        "work/entries",
-        # narrative entries live under app/public/entries/narrative — covered above
+        "app/public/manifest.json",
+        "daily/index.html",
+        "work/index.html",
     ]
 
     add = subprocess.run(
@@ -75,6 +75,14 @@ def main():
     args = [a for a in sys.argv[1:] if a != "--no-push"]
     no_push = "--no-push" in sys.argv
     target_date = args[0] if args else datetime.now().strftime("%Y-%m-%d")
+
+    # Pull latest entries from remote (other machines may have pushed)
+    pull = subprocess.run(
+        ["git", "pull", "--rebase", "--autostash", "origin", "main"],
+        cwd=REPO_ROOT, capture_output=True, text=True,
+    )
+    if pull.returncode == 0 and "Already up to date" not in pull.stdout:
+        print(f"Pulled latest entries from remote.")
 
     print(f"Generating journals for {target_date}...")
     print()

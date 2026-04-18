@@ -14,6 +14,7 @@ from config import get as get_config
 
 _cfg = get_config()
 REPOS_DIR = Path.home() / _cfg["sources"]["reposDir"]
+MACHINE_ID = _cfg.get("machineId", "default")
 OUTPUT_DIR = Path(__file__).parent.parent / "daily" / "entries"
 APP_PUBLIC = Path(__file__).parent.parent / "app" / "public" / "entries" / "daily"
 WEEKDAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
@@ -226,6 +227,88 @@ def generate_report(target_date: str) -> dict:
     }
 
 
+def merge_reports(existing, new_report, machine_id):
+    """Merge this machine's daily report with existing data from other machines."""
+    machines = existing.get("_machines", {})
+
+    if not machines and existing.get("machineId") and existing["machineId"] != machine_id:
+        machines[existing["machineId"]] = existing
+
+    machines[machine_id] = {k: v for k, v in new_report.items() if k != "_machines"}
+
+    if len(machines) <= 1:
+        new_report["_machines"] = machines
+        new_report["machineId"] = machine_id
+        return new_report
+
+    # Aggregate across machines
+    all_commands = 0
+    all_commits_set = set()
+    all_repos = set()
+    all_files = 0
+    merged_git = {}
+    merged_categories = defaultdict(int)
+    merged_hours = defaultdict(int)
+    merged_notable = []
+    merged_file_groups = {}
+
+    for mid, rpt in machines.items():
+        stats = rpt.get("stats", {})
+        all_commands += stats.get("commands", 0)
+        all_files += stats.get("filesModified", 0)
+
+        for repo in rpt.get("gitActivity", []):
+            rname = repo["repo"]
+            if rname not in merged_git:
+                merged_git[rname] = {"repo": rname, "commits": []}
+            seen = {c["hash"] for c in merged_git[rname]["commits"]}
+            for c in repo["commits"]:
+                if c["hash"] not in seen:
+                    merged_git[rname]["commits"].append(c)
+                    all_commits_set.add(c["hash"])
+            all_repos.add(rname)
+
+        for cat, count in rpt.get("categories", {}).items():
+            merged_categories[cat] += count
+
+        for h, count in rpt.get("activityByHour", {}).items():
+            merged_hours[h] += count
+
+        merged_notable.extend(rpt.get("notableCommands", []))
+
+        for grp, files in rpt.get("fileGroups", {}).items():
+            if grp not in merged_file_groups:
+                merged_file_groups[grp] = []
+            merged_file_groups[grp].extend(files)
+
+    merged = dict(new_report)
+    merged["machineId"] = machine_id
+    merged["_machines"] = machines
+    merged["stats"] = {
+        "commands": all_commands,
+        "commits": len(all_commits_set),
+        "repos": len(all_repos),
+        "filesModified": all_files,
+    }
+    merged["gitActivity"] = list(merged_git.values())
+    merged["categories"] = dict(sorted(merged_categories.items(), key=lambda x: -x[1]))
+    merged["activityByHour"] = dict(sorted(merged_hours.items()))
+    # Deduplicate notable commands by command text
+    seen_cmds = set()
+    unique_notable = []
+    for cmd in merged_notable:
+        if cmd["command"] not in seen_cmds:
+            seen_cmds.add(cmd["command"])
+            unique_notable.append(cmd)
+    merged["notableCommands"] = unique_notable[:30]
+    merged["fileGroups"] = {k: v[:10] for k, v in sorted(merged_file_groups.items())}
+    merged["summary"] = (
+        f"{all_commands} terminal commands, {len(all_commits_set)} commits "
+        f"across {len(all_repos)} repos, {all_files} files modified."
+    )
+    return merged
+
+
 def main():
     import sys
     target_date = sys.argv[1] if len(sys.argv) > 1 else datetime.now().strftime("%Y-%m-%d")
@@ -236,7 +319,21 @@ def main():
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
     if report:
-        (APP_PUBLIC / f"{target_date}.json").write_text(json.dumps(report, indent=2))
+        report["machineId"] = MACHINE_ID
+
+        entry_file = APP_PUBLIC / f"{target_date}.json"
+        if entry_file.exists():
+            try:
+                existing = json.loads(entry_file.read_text())
+                report = merge_reports(existing, report, MACHINE_ID)
+            except (json.JSONDecodeError, KeyError):
+                pass
+
+        snapshot = {k: v for k, v in report.items() if k != "_machines"}
+        report["_machines"] = report.get("_machines", {})
+        report["_machines"][MACHINE_ID] = snapshot
+
+        entry_file.write_text(json.dumps(report, indent=2))
         print(f"Daily journal written: {target_date} ({report['stats']['commands']} cmds, {report['stats']['commits']} commits)")
     else:
         print(f"Daily journal written: {target_date} (empty day)")
