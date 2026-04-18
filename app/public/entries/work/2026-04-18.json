@@ -2,7 +2,7 @@
   "date": "2026-04-18",
   "day": "Saturday",
   "display": "April 18, 2026",
-  "generatedAt": "2026-04-18T02:24:50.479540",
+  "generatedAt": "2026-04-18T15:01:46.664876",
   "metrics": {
     "volume": {
       "score": 100,
@@ -13,7 +13,7 @@
       "label": "Complexity"
     },
     "focus": {
-      "score": 92,
+      "score": 68,
       "label": "Focus"
     },
     "depth": {
@@ -21,7 +21,7 @@
       "label": "Depth"
     },
     "craft": {
-      "score": 46,
+      "score": 41,
       "label": "Craft"
     },
     "momentum": {
@@ -30,25 +30,26 @@
     }
   },
   "stats": {
-    "sessions": 3,
-    "messages": 71,
-    "commits": 14,
-    "repos": 3,
-    "timeRange": "00:02\u201302:21",
-    "linesAdded": 15190,
-    "linesRemoved": 30,
-    "filesChanged": 38
+    "sessions": 4,
+    "messages": 78,
+    "commits": 23,
+    "repos": 7,
+    "timeRange": "00:02\u201315:00",
+    "linesAdded": 19688,
+    "linesRemoved": 1501,
+    "filesChanged": 69
   },
-  "wentRight": "Productive day with 14 commit(s) across 3 repo(s) during 3 Claude session(s) spanning 00:02\u201302:21.",
-  "couldBeBetter": "Hit 5 bugs during the session \u2014 check if recurring patterns need architectural fixes.",
+  "wentRight": "Productive day with 23 commit(s) across 7 repo(s) during 4 Claude session(s) spanning 00:02\u201315:00.",
+  "couldBeBetter": "Hit 6 bugs during the session \u2014 check if recurring patterns need architectural fixes.",
   "whatIDid": [
     "adent: 5 commits \u2014 Lock in Palette F: Charcoal + Burnt Orange design system. Also: Facade-derived palette moodboard + client interview checklist; Redesign moodboard: 3 palette options + Manrope/Merriweather (+2 more)",
-    "claude-config: 4 commits \u2014 auto-sync: Mac-Studio 2026-04-18_02:20. Also: auto-sync: MacBook-Pro-M4 2026-04-18_00:35; auto-sync: Mac-Studio 2026-04-18_00:19 (+1 more)",
-    "journals: 5 commits \u2014 journal: 2026-04-18 dentalmodern consolidation session. Also: Add 2026-04-18 journal: DentaFlow analytics, billing, invoicing & treatment plans; index on main: f0335e0 journal: 2026-04-18 dentalmodern consolidation session (+2 more)",
-    "Focused on page building with 16 interactions across sessions",
-    "Focused on design system with 5 interactions across sessions",
-    "Focused on bug fixes with 5 interactions across sessions",
-    "Focused on content & copy with 5 interactions across sessions"
+    "carpdent: Update package-lock.json",
+    "claude-config: 7 commits \u2014 auto-sync: Mac-Studio 2026-04-18_14:32. Also: auto-sync: Mac-Studio 2026-04-18_14:22; auto-sync: Mac-Studio 2026-04-18_02:30 (+4 more)",
+    "dentaflow: Add analytics, billing, invoicing pages and enhance treatment plans",
+    "dentalmodern: Consolidate paketi, lechenie variants, ekip panorama and uslugi pages",
+    "journals: 7 commits \u2014 Update 2026-04-18 journal entry. Also: regenerate after merge; journal: 2026-04-18 dentalmodern consolidation session (+4 more)",
+    "magvzn: Update package-lock.json",
+    "Focused on page building with 16 interactions across sessions"
   ],
   "activityTimeline": [
     "adent: Lock in Palette F: Charcoal + Burnt Orange design system",
@@ -56,53 +57,62 @@
     "adent: Redesign moodboard: 3 palette options + Manrope/Merriweather",
     "adent: Rebuild homepage with production quality",
     "adent: Initial scaffold: Nuxt 4 + Tailwind v4 + i18n",
+    "carpdent: Update package-lock.json",
+    "claude-config: auto-sync: Mac-Studio 2026-04-18_14:32",
+    "claude-config: auto-sync: Mac-Studio 2026-04-18_14:22",
+    "claude-config: auto-sync: Mac-Studio 2026-04-18_02:30",
     "claude-config: auto-sync: Mac-Studio 2026-04-18_02:20",
     "claude-config: auto-sync: MacBook-Pro-M4 2026-04-18_00:35",
     "claude-config: auto-sync: Mac-Studio 2026-04-18_00:19",
     "claude-config: auto-sync: Mac-Studio 2026-04-18_00:09",
+    "dentaflow: Add analytics, billing, invoicing pages and enhance treatment plans",
+    "dentalmodern: Consolidate paketi, lechenie variants, ekip panorama and uslugi pages",
+    "journals: Update 2026-04-18 journal entry",
+    "journals: regenerate after merge",
     "journals: journal: 2026-04-18 dentalmodern consolidation session",
     "journals: Add 2026-04-18 journal: DentaFlow analytics, billing, invoicing & treatment plans",
-    "journals: index on main: f0335e0 journal: 2026-04-18 dentalmodern consolidation session",
-    "journals: journal: 2026-04-18 dentalmodern consolidation session",
-    "journals: Add 2026-04-18 journal: DentaFlow analytics, billing, invoicing & treatment plans",
-    "Page Building: 16 interaction(s)",
-    "Design System: 5 interaction(s)",
-    "Bug Fixes: 5 interaction(s)",
-    "Content & Copy: 5 interaction(s)",
-    "Planning & Strategy: 1 interaction(s)",
-    "Design & Layout: 1 interaction(s)"
+    "journals: index on main: f0335e0 journal: 2026-04-18 dentalmodern consolidation session"
   ],
   "insights": [
-    "High-volume day: 15,190 lines added across 38 files. Net change of +15,160 lines \u2014 significant new code.",
-    "Cross-project day spanning 3 repositories (adent, claude-config, journals). Context switching between projects may indicate parallel workstreams or dependencies.",
-    "Diverse focus across 4 areas: Page Building (16), Design System (5), Bug Fixes (5). Breadth of work suggests design-to-implementation pipeline or sprint-style execution.",
+    "High-volume day: 19,688 lines added across 69 files. Net change of +18,187 lines \u2014 significant new code.",
+    "Cross-project day spanning 7 repositories (adent, carpdent, claude-config, dentaflow, dentalmodern, journals, magvzn). Context switching between projects may indicate parallel workstreams or dependencies.",
+    "Diverse focus across 4 areas: Page Building (16), Bug Fixes (6), Content & Copy (6). Breadth of work suggests design-to-implementation pipeline or sprint-style execution.",
     "Deep work detected: longest session had 36 messages \u2014 sustained focus on a complex task. This level of engagement typically produces the highest-quality output.",
     "Significant design system investment today. Systematic token and component work compounds over time \u2014 every page built after this benefits from the foundation."
   ],
   "continuedFromYesterday": [
     "Page Building work ongoing \u2014 16 interactions in this session, likely a multi-day effort",
-    "Design System work ongoing \u2014 5 interactions in this session, likely a multi-day effort"
+    "Bug Fixes work ongoing \u2014 6 interactions in this session, likely a multi-day effort"
   ],
   "roadblocks": [
-    "Hit 5 bugs during the session \u2014 may indicate fragile areas that need architectural attention"
+    "Hit 6 bugs during the session \u2014 may indicate fragile areas that need architectural attention"
   ],
   "themes": {
+    "General Development": 19,
     "Page Building": 16,
-    "General Development": 16,
+    "Bug Fixes": 6,
+    "Content & Copy": 6,
     "Design System": 5,
-    "Bug Fixes": 5,
-    "Content & Copy": 5,
     "Planning & Strategy": 1,
     "Design & Layout": 1,
-    "Version Iteration": 1
+    "Version Iteration": 1,
+    "Git & Deployment": 1
   },
   "projectsWip": [
     "adent \u2014 5 commit(s)",
     "alek \u2014 session work",
-    "claude-config \u2014 4 commit(s)",
-    "journals \u2014 5 commit(s)"
+    "carpdent \u2014 1 commit(s)",
+    "claude-config \u2014 7 commit(s)",
+    "dentaflow \u2014 1 commit(s)",
+    "dentalmodern \u2014 1 commit(s)",
+    "journals \u2014 7 commit(s)",
+    "magvzn \u2014 1 commit(s)"
   ],
   "docsCreated": [
+    {
+      "title": "Add analytics, billing, invoicing pages and enhance treatment plans",
+      "description": "dentaflow \u00b7 230a920"
+    },
     {
       "title": "Add 2026-04-18 journal: DentaFlow analytics, billing, invoicing & treatment plans",
       "description": "journals \u00b7 dee8324"
@@ -150,8 +160,38 @@
       "stat": "31 files changed, 15034 insertions(+)"
     },
     {
+      "repo": "carpdent",
+      "commits": [
+        {
+          "hash": "b4ab036",
+          "author": "Alek Manov",
+          "message": "Update package-lock.json",
+          "time": "14:19"
+        }
+      ],
+      "stat": "1 file changed, 153 deletions(-)"
+    },
+    {
       "repo": "claude-config",
       "commits": [
+        {
+          "hash": "c849c68",
+          "author": "Alek Manov",
+          "message": "auto-sync: Mac-Studio 2026-04-18_14:32",
+          "time": "14:32"
+        },
+        {
+          "hash": "71f2ab3",
+          "author": "Alek Manov",
+          "message": "auto-sync: Mac-Studio 2026-04-18_14:22",
+          "time": "14:22"
+        },
+        {
+          "hash": "50baf75",
+          "author": "Alek Manov",
+          "message": "auto-sync: Mac-Studio 2026-04-18_02:30",
+          "time": "02:30"
+        },
         {
           "hash": "2356388",
           "author": "Alek Manov",
@@ -180,8 +220,44 @@
       "stat": "2 files changed, 44 insertions(+)"
     },
     {
+      "repo": "dentaflow",
+      "commits": [
+        {
+          "hash": "230a920",
+          "author": "Alek Manov",
+          "message": "Add analytics, billing, invoicing pages and enhance treatment plans",
+          "time": "14:19"
+        }
+      ],
+      "stat": "14 files changed, 2731 insertions(+), 156 deletions(-)"
+    },
+    {
+      "repo": "dentalmodern",
+      "commits": [
+        {
+          "hash": "fa7aa7a",
+          "author": "Alek Manov",
+          "message": "Consolidate paketi, lechenie variants, ekip panorama and uslugi pages",
+          "time": "14:18"
+        }
+      ],
+      "stat": "15 files changed, 1767 insertions(+), 985 deletions(-)"
+    },
+    {
       "repo": "journals",
       "commits": [
+        {
+          "hash": "d34495c",
+          "author": "Alek Manov",
+          "message": "Update 2026-04-18 journal entry",
+          "time": "14:19"
+        },
+        {
+          "hash": "0898d05",
+          "author": "Alek Manov",
+          "message": "regenerate after merge",
+          "time": "02:24"
+        },
         {
           "hash": "91d5d89",
           "author": "Alek Manov",
@@ -214,7 +290,19 @@
         }
       ],
       "stat": "5 files changed, 112 insertions(+), 30 deletions(-)"
+    },
+    {
+      "repo": "magvzn",
+      "commits": [
+        {
+          "hash": "9cb1fe9",
+          "author": "Alek Manov",
+          "message": "Update package-lock.json",
+          "time": "14:17"
+        }
+      ],
+      "stat": "1 file changed, 177 deletions(-)"
     }
   ],
-  "summary": "3 session(s), 71 msgs, 14 commit(s) across 3 repo(s)"
+  "summary": "4 session(s), 78 msgs, 23 commit(s) across 7 repo(s)"
 }
