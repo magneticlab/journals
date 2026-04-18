@@ -43,7 +43,7 @@ export default {
 
   // Git auto-publish after generation
   git: {
-    autoPush: true,
+    autoPush: false,
     // Branch to push to (set to your deploy branch if using CI/CD)
     branch: 'main',
   },

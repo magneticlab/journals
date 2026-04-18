@@ -77,8 +77,10 @@ def main():
     target_date = args[0] if args else datetime.now().strftime("%Y-%m-%d")
 
     # Pull latest entries from remote (other machines may have pushed)
+    cfg = get_config()
+    branch = cfg.get("git", {}).get("branch", "main")
     pull = subprocess.run(
-        ["git", "pull", "--rebase", "--autostash", "origin", "main"],
+        ["git", "pull", "--rebase", "--autostash", "origin", branch],
         cwd=REPO_ROOT, capture_output=True, text=True,
     )
     if pull.returncode == 0 and "Already up to date" not in pull.stdout:
@@ -97,7 +99,6 @@ def main():
 
     print()
 
-    cfg = get_config()
     auto_push = cfg.get("git", {}).get("autoPush", False)
 
     if no_push or not auto_push:

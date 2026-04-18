@@ -54,11 +54,20 @@ async function main() {
   const narrativeInput = await ask('  Narrative journal dir (relative to ~, or "skip")', 'skip')
   const narrativeDir = narrativeInput === 'skip' ? null : narrativeInput
 
-  // 4. Git auto-push
-  const autoPush = (await ask('  Auto-push after generation? (y/n)', 'n')).toLowerCase() === 'y'
+  // 4. Multi-machine
+  console.log()
+  console.log('  Multi-Machine Sync')
+  console.log('  ──────────────────')
+  console.log('  If you use multiple computers, Journals can merge entries from all of them.')
+  console.log('  Each machine gets a unique ID (auto-detected from hostname by default).')
+  const machineIdInput = await ask('  Machine ID (auto-detect from hostname, or enter custom)', 'auto')
+  const machineId = machineIdInput === 'auto' ? null : machineIdInput
+
+  // 5. Git auto-push
+  const autoPush = (await ask('  Auto-push after generation? Needed for multi-machine sync (y/n)', 'n')).toLowerCase() === 'y'
   const branch = autoPush ? await ask('  Push branch', 'main') : 'main'
 
-  // 5. Claude API (for Reflect feature)
+  // 6. Claude API (for Reflect feature)
   const reflectEnabled = (await ask('  Enable AI Reflect feature? Requires Claude API key (y/n)', 'n')).toLowerCase() === 'y'
 
   // Write config
@@ -69,7 +78,7 @@ async function main() {
 
 export default {
   name: '${name}',
-  siteTitle: '${siteTitle}',
+  siteTitle: '${siteTitle}',${machineId ? `\n  machineId: '${machineId}',` : '\n  // machineId: auto-detected from hostname'}
 
   weather: {
     enabled: ${weatherEnabled},
