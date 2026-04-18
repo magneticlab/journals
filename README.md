@@ -11,7 +11,7 @@ Works across multiple machines with automatic git-based sync.
 
 ## What It Does
 
-- **Work Journal** — Parses your Claude Code session history and git commits to generate structured daily reports with metrics (output volume, complexity, focus, depth, craft, momentum)
+- **Work Journal** — Parses your [Claude Code](https://claude.ai/code) session history and git commits to generate structured daily reports with performance metrics (output volume, complexity, focus, depth, craft, momentum)
 - **Daily Journal** — Captures terminal activity, command categories, and file changes
 - **Narrative Journal** — Renders long-form markdown journal entries from Claude Code memory files (optional)
 - **Multi-Machine Sync** — Entries from multiple computers merge automatically via git
@@ -20,27 +20,72 @@ Works across multiple machines with automatic git-based sync.
 - **5 Themes** — Midnight, Dawn, Daylight, Dusk, Aurora (auto-switches by time of day)
 - **Weather Widget** — Current conditions via Open-Meteo (no API key needed)
 
+## Prerequisites
+
+Before you start, make sure you have these installed:
+
+### Required
+
+| Tool | Why | Install |
+|------|-----|---------|
+| **Node.js 18+** | Runs the Vue frontend and setup wizard | [nodejs.org](https://nodejs.org) or `brew install node` |
+| **Python 3.9+** | Runs the journal generators (zero pip deps) | [python.org](https://python.org) or `brew install python` |
+| **Git** | Version control + multi-machine sync | `xcode-select --install` (macOS) or [git-scm.com](https://git-scm.com) |
+
+### Required for Work Journal
+
+| Tool | Why | Install |
+|------|-----|---------|
+| **Claude Code** | The Work Journal reads `~/.claude/history.jsonl` which is created by Claude Code. Without it, only the Daily Journal (terminal + git activity) will have data. | `npm install -g @anthropic-ai/claude-code` then run `claude` once to initialize |
+
+### Required for Multi-Machine Sync
+
+If you plan to sync entries between multiple computers:
+
+| Tool | Why | Setup |
+|------|-----|-------|
+| **SSH key** | Git push/pull with GitHub requires SSH authentication | `ssh-keygen -t ed25519 -C "you@example.com"` then add `~/.ssh/id_ed25519.pub` at [github.com/settings/ssh/new](https://github.com/settings/ssh/new) |
+| **Git identity** | Commits require a name and email | `git config --global user.name "Your Name"` and `git config --global user.email "you@example.com"` |
+| **Your own fork/repo** | You need push access to a remote | Fork this repo or create a private repo, then update the remote (see [Quick Start](#quick-start)) |
+
+### Optional
+
+| Tool | Why |
+|------|-----|
+| **zsh** | Daily Journal reads `~/.zsh_history`. Bash users will see limited terminal data. macOS uses zsh by default. |
+| **Anthropic API key** | Only needed for the AI Reflect feature (`app/.env`) |
+
+### Verify Setup
+
+Run the setup wizard — it checks all prerequisites and tells you what's missing:
+
+```bash
+node setup.js
+```
+
 ## Quick Start
 
 ```bash
-# Clone the repo
-git clone https://github.com/magneticlab/journals.git
+# 1. Fork this repo on GitHub, then clone your fork
+git clone git@github.com:YOUR_USERNAME/journals.git
 cd journals
 
-# Edit the config
-nano journals.config.js
+# 2. Run the setup wizard (checks prerequisites + configures)
+node setup.js
 
-# Install frontend dependencies
-cd app && npm install && cd ..
-
-# Generate today's entries
+# 3. Generate today's entries
 python3 scripts/generate_all.py
 
-# Start the dev server
+# 4. Start the dev server
 cd app && npm run dev
 ```
 
 Open [http://localhost:5173](http://localhost:5173) to see your journal.
+
+> **Note:** If you cloned with HTTPS and want multi-machine sync, switch to SSH:
+> ```bash
+> git remote set-url origin git@github.com:YOUR_USERNAME/journals.git
+> ```
 
 ## Generate Entries
 
@@ -65,12 +110,12 @@ python3 scripts/build_manifest.py
 
 The generators read from local sources (all configurable in `journals.config.js`):
 
-| Source | Used By | Default Path |
-|--------|---------|--------------|
-| Claude Code history | Work Journal | `~/.claude/history.jsonl` |
-| Git repos | Work + Daily | `~/GitHub/` |
-| Terminal history | Daily Journal | `~/.zsh_history` |
-| Claude memory files | Narrative | *(disabled by default)* |
+| Source | Used By | Default Path | Notes |
+|--------|---------|--------------|-------|
+| Claude Code history | Work Journal | `~/.claude/history.jsonl` | Created by Claude Code after your first session |
+| Git repos | Work + Daily | `~/GitHub/` | Any directory containing git repos |
+| Terminal history | Daily Journal | `~/.zsh_history` | macOS zsh only |
+| Claude memory files | Narrative | *(disabled by default)* | Set `narrativeDir` in config to enable |
 
 ## Configuration
 
@@ -83,7 +128,7 @@ export default {
 
   weather: {
     enabled: true,
-    latitude: 40.71,    // your coordinates
+    latitude: 40.71,    // your coordinates (open-meteo.com)
     longitude: -74.01,
   },
 
@@ -107,7 +152,7 @@ export default {
 
 ### Per-Machine Overrides
 
-Create `journals.config.local.js` (gitignored) to override any shared config value on a specific machine:
+Create `journals.config.local.js` (gitignored) to override any shared config value on a specific machine without affecting other machines:
 
 ```js
 export default {
@@ -122,14 +167,29 @@ export default {
 
 If you use multiple computers, Journals can merge entries from all of them into a single unified timeline. Each machine contributes its own Claude Code sessions, terminal history, and git activity — deduplicated and aggregated automatically.
 
+### Prerequisites for Multi-Machine
+
+Before setting up sync, make sure **each machine** has:
+
+1. **Claude Code installed** — `npm install -g @anthropic-ai/claude-code`
+2. **SSH key configured** with access to your GitHub repo — [GitHub SSH guide](https://docs.github.com/en/authentication/connecting-to-github-with-ssh)
+3. **Git identity set** — `git config --global user.name` and `user.email`
+4. **Push access** to the repo — use your own fork, not the upstream
+
+Test SSH connectivity:
+```bash
+ssh -T git@github.com
+# Should say: "Hi USERNAME! You've successfully authenticated"
+```
+
 ### How It Works
 
 1. **Machine ID** — Each computer is identified by a `machineId` (auto-detected from hostname, or set manually). Common hostnames like `MacBook-Pro.local` become `macbook`, `Mac-Studio.local` becomes `macstudio`.
 
 2. **Merge on write** — When generating entries, the scripts check if a JSON file already exists for that date. If it does and contains data from a different machine, the new data is merged in:
-   - Git commits are deduplicated by hash (shared across machines)
-   - Claude Code sessions are additive (each machine has its own)
-   - Shell commands are additive
+   - Git commits are deduplicated by hash (shared across machines via git)
+   - Claude Code sessions are additive (each machine has its own `~/.claude/history.jsonl`)
+   - Shell commands are additive (each machine has its own `~/.zsh_history`)
    - Stats are aggregated across all machines
 
 3. **Git as sync layer** — The repo itself is the sync mechanism:
@@ -137,36 +197,24 @@ If you use multiple computers, Journals can merge entries from all of them into 
    - After generating, it commits and pushes (if `autoPush: true`)
    - No external services, databases, or sync tools needed
 
-### Setup
+### Setup (Per Machine)
 
 **Step 1 — Clone on each machine:**
 
 ```bash
-git clone https://github.com/you/your-journals-fork.git journals
+git clone git@github.com:YOUR_USERNAME/journals.git
 cd journals
 ```
 
-**Step 2 — Configure each machine:**
+> Use SSH (`git@github.com:...`), not HTTPS. Auto-push requires SSH authentication.
 
-Edit `journals.config.js` (shared settings):
+**Step 2 — Run setup on each machine:**
 
-```js
-export default {
-  name: 'Your Name',
-  git: { autoPush: true, branch: 'main' },
-  // ...
-}
+```bash
+node setup.js
 ```
 
-Optionally create `journals.config.local.js` on machines that need overrides:
-
-```js
-// Only needed if auto-detection doesn't work or repos are in a different location
-export default {
-  machineId: 'office-desktop',
-  sources: { reposDir: 'Projects' },
-}
-```
+The wizard will detect your hostname, check prerequisites, and configure everything. Set `autoPush: true` when prompted.
 
 **Step 3 — Generate on each machine:**
 
@@ -174,15 +222,15 @@ export default {
 python3 scripts/generate_all.py
 ```
 
-Each machine will:
-1. Pull latest entries from remote
+Each run will:
+1. `git pull` — get latest entries from the other machine
 2. Generate this machine's data for today
 3. Merge with any existing data from other machines
-4. Commit and push
+4. `git commit` + `git push` — share with other machines
 
 **Step 4 — Automate (optional):**
 
-Set up a daily cron or LaunchAgent on each machine (see [Automation](#automate-with-cron--launchagent) below).
+Set up a daily LaunchAgent or cron on each machine (see [Automation](#automate-with-cron--launchagent) below).
 
 ### Entry Structure
 
@@ -202,9 +250,20 @@ Multi-machine entries store per-machine snapshots for future merges:
 
 Top-level `stats` are aggregated. The `_machines` object preserves each machine's contribution so subsequent runs can re-merge cleanly.
 
+### Troubleshooting Multi-Machine
+
+| Problem | Cause | Fix |
+|---------|-------|-----|
+| `Permission denied (publickey)` | SSH key not configured for GitHub | [Add your SSH key](https://github.com/settings/ssh/new) |
+| `fatal: could not read Username` | Remote uses HTTPS, not SSH | `git remote set-url origin git@github.com:USER/journals.git` |
+| Entries from other machine don't appear | `autoPush` is `false` | Set `autoPush: true` in `journals.config.js` |
+| Merge conflicts on entries | Both machines pushed at the same time | `git pull --rebase` then re-run `python3 scripts/generate_all.py` |
+| Work Journal is empty | Claude Code not installed or never used | Install Claude Code: `npm install -g @anthropic-ai/claude-code` |
+| Daily Journal is empty | No zsh history found | Only zsh is supported; bash users see git-only data |
+
 ### Single Machine
 
-If you only use one computer, multi-machine sync is transparent — everything works the same, entries just won't have the `_machines` metadata. No extra setup needed.
+If you only use one computer, multi-machine sync is transparent — everything works the same, entries just won't have the `_machines` metadata. No extra setup needed. You can leave `autoPush: false`.
 
 ## Automate with Cron / LaunchAgent
 
@@ -292,8 +351,9 @@ Your `journals.config.local.js` is gitignored, so merges should be clean.
 
 ```
 journals/
-├── journals.config.js        # Shared configuration
+├── journals.config.js         # Shared configuration
 ├── journals.config.local.js   # Per-machine overrides (gitignored)
+├── setup.js                   # Interactive setup wizard with pre-flight checks
 ├── app/                       # Vue 3 + Vite frontend
 │   ├── src/
 │   │   ├── pages/             # Home, Journal, Entry
@@ -308,7 +368,7 @@ journals/
 │           └── narrative/     # Long-form journal entries
 ├── scripts/                   # Python generators (zero pip deps)
 │   ├── generate_all.py        # Master orchestrator (pull → generate → push)
-│   ├── generate_work_journal.py   # Claude sessions → metrics
+│   ├── generate_work_journal.py   # Claude Code sessions → metrics
 │   ├── generate_daily_journal.py  # Shell history → activity
 │   ├── generate_narrative.py      # Markdown → sections
 │   ├── config.py              # Config loader (JS parser + machine ID)
@@ -317,13 +377,6 @@ journals/
 │   └── backfill.py            # Bulk date generation
 └── README.md
 ```
-
-## Requirements
-
-- **Node.js** 18+
-- **Python** 3.9+ (no pip dependencies)
-- **Claude Code** for work journal data (optional — daily journal works without it)
-- **Git** for multi-machine sync
 
 ## License
 
