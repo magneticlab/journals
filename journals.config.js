@@ -10,9 +10,9 @@ export default {
   // Display name shown in the greeting ("Good morning, {name}.")
   name: 'User',
 
-  // Machine identifier — used to merge journal data across multiple computers.
-  // Each machine should have a unique ID (e.g., 'macbook', 'macstudio').
-  machineId: 'macstudio',
+  // Machine identifier — auto-detected from hostname.
+  // Override per-machine in journals.config.local.js if needed.
+  // machineId: 'macstudio',
 
   // Site title shown in the browser tab and nav
   siteTitle: 'Journals',
