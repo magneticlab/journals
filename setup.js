@@ -5,7 +5,7 @@
  * Run: node setup.js
  * Or:  npm run setup
  *
- * Walks you through configuring your journal instance,
+ * Checks prerequisites, walks you through configuration,
  * generates sample entries, and gets you ready to run.
  */
 
@@ -14,6 +14,7 @@ import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'fs'
 import { join, dirname } from 'path'
 import { fileURLToPath } from 'url'
 import { execSync } from 'child_process'
+import { homedir } from 'os'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const CONFIG_PATH = join(__dirname, 'journals.config.js')
@@ -25,17 +26,177 @@ const ask = (q, fallback = '') => new Promise(resolve => {
   })
 })
 
-async function main() {
+// ─── Pre-flight checks ────────────────────────────────────────────
+
+function checkCommand(cmd, label) {
+  try {
+    const version = execSync(cmd, { encoding: 'utf-8', stdio: ['pipe', 'pipe', 'pipe'] }).trim()
+    return { ok: true, version }
+  } catch {
+    return { ok: false, version: null }
+  }
+}
+
+function runPreflight() {
   console.log()
   console.log('  Journals — Setup Wizard')
   console.log('  ━━━━━━━━━━━━━━━━━━━━━━')
   console.log()
+  console.log('  Checking prerequisites...')
+  console.log()
+
+  const checks = []
+  let hasErrors = false
+  let hasWarnings = false
+
+  // 1. Python
+  const py = checkCommand('python3 --version')
+  if (py.ok) {
+    const ver = py.version.replace('Python ', '')
+    const [major, minor] = ver.split('.').map(Number)
+    if (major >= 3 && minor >= 9) {
+      checks.push({ icon: '✓', label: `Python ${ver}`, status: 'ok' })
+    } else {
+      checks.push({ icon: '✗', label: `Python ${ver} — need 3.9+`, status: 'error' })
+      hasErrors = true
+    }
+  } else {
+    checks.push({ icon: '✗', label: 'Python 3 — not found', status: 'error' })
+    hasErrors = true
+  }
+
+  // 2. Node.js
+  const node = checkCommand('node --version')
+  if (node.ok) {
+    const ver = node.version.replace('v', '')
+    const major = parseInt(ver.split('.')[0])
+    if (major >= 18) {
+      checks.push({ icon: '✓', label: `Node.js ${ver}`, status: 'ok' })
+    } else {
+      checks.push({ icon: '✗', label: `Node.js ${ver} — need 18+`, status: 'error' })
+      hasErrors = true
+    }
+  } else {
+    checks.push({ icon: '✗', label: 'Node.js — not found', status: 'error' })
+    hasErrors = true
+  }
+
+  // 3. Git
+  const git = checkCommand('git --version')
+  if (git.ok) {
+    checks.push({ icon: '✓', label: git.version, status: 'ok' })
+  } else {
+    checks.push({ icon: '✗', label: 'Git — not found', status: 'error' })
+    hasErrors = true
+  }
+
+  // 4. Git user config
+  if (git.ok) {
+    const userName = checkCommand('git config user.name')
+    const userEmail = checkCommand('git config user.email')
+    if (userName.ok && userEmail.ok) {
+      checks.push({ icon: '✓', label: `Git user: ${userName.version} <${userEmail.version}>`, status: 'ok' })
+    } else {
+      checks.push({ icon: '!', label: 'Git user.name/email not set — needed for commits', status: 'warn' })
+      hasWarnings = true
+    }
+  }
+
+  // 5. Claude Code
+  const claude = checkCommand('claude --version')
+  if (claude.ok) {
+    checks.push({ icon: '✓', label: `Claude Code ${claude.version}`, status: 'ok' })
+  } else {
+    checks.push({ icon: '!', label: 'Claude Code — not installed (work journal will be empty without it)', status: 'warn' })
+    hasWarnings = true
+  }
+
+  // 6. Claude history file
+  const historyPath = join(homedir(), '.claude', 'history.jsonl')
+  if (existsSync(historyPath)) {
+    checks.push({ icon: '✓', label: 'Claude Code history file found', status: 'ok' })
+  } else if (claude.ok) {
+    checks.push({ icon: '!', label: 'Claude Code history not found — it will be created after your first session', status: 'warn' })
+    hasWarnings = true
+  }
+
+  // 7. SSH key (for multi-machine push)
+  const sshDir = join(homedir(), '.ssh')
+  const hasSSH = existsSync(join(sshDir, 'id_ed25519')) ||
+                 existsSync(join(sshDir, 'id_rsa')) ||
+                 existsSync(join(sshDir, 'id_ecdsa'))
+  if (hasSSH) {
+    checks.push({ icon: '✓', label: 'SSH key found', status: 'ok' })
+  } else {
+    checks.push({ icon: '!', label: 'No SSH key found — needed for git push (multi-machine sync)', status: 'warn' })
+    hasWarnings = true
+  }
+
+  // 8. zsh (for daily journal)
+  const zshHistory = existsSync(join(homedir(), '.zsh_history'))
+  if (zshHistory) {
+    checks.push({ icon: '✓', label: 'zsh history found', status: 'ok' })
+  } else {
+    checks.push({ icon: '!', label: 'No zsh history — daily journal uses zsh; bash users will see limited data', status: 'warn' })
+    hasWarnings = true
+  }
+
+  // Print results
+  for (const c of checks) {
+    const color = c.status === 'ok' ? '\x1b[32m' : c.status === 'error' ? '\x1b[31m' : '\x1b[33m'
+    console.log(`  ${color}${c.icon}\x1b[0m  ${c.label}`)
+  }
+  console.log()
+
+  return { hasErrors, hasWarnings }
+}
+
+// ─── Main ──────────────────────────────────────────────────────────
+
+async function main() {
+  const { hasErrors, hasWarnings } = runPreflight()
+
+  if (hasErrors) {
+    console.log('  \x1b[31mSome required tools are missing. Install them before continuing:\x1b[0m')
+    console.log()
+    console.log('    Python 3.9+  →  https://python.org or: brew install python')
+    console.log('    Node.js 18+  →  https://nodejs.org or: brew install node')
+    console.log('    Git          →  https://git-scm.com or: xcode-select --install')
+    console.log()
+    const cont = (await ask('  Continue anyway? (y/n)', 'n')).toLowerCase() === 'y'
+    if (!cont) {
+      rl.close()
+      return
+    }
+  }
+
+  if (hasWarnings) {
+    console.log('  \x1b[33mSome optional tools are missing. Here\'s how to set them up:\x1b[0m')
+    console.log()
+    console.log('    Claude Code   →  npm install -g @anthropic-ai/claude-code')
+    console.log('                     Required for the Work Journal. Without it, only the')
+    console.log('                     Daily Journal (terminal + git activity) will have data.')
+    console.log()
+    console.log('    Git identity  →  git config --global user.name "Your Name"')
+    console.log('                     git config --global user.email "you@example.com"')
+    console.log()
+    console.log('    SSH key       →  ssh-keygen -t ed25519 -C "you@example.com"')
+    console.log('                     Then add ~/.ssh/id_ed25519.pub to GitHub:')
+    console.log('                     https://github.com/settings/ssh/new')
+    console.log('                     Required for auto-push (multi-machine sync).')
+    console.log()
+    await ask('  Press Enter to continue')
+  }
 
   // 1. Basic info
+  console.log()
+  console.log('  Configuration')
+  console.log('  ─────────────')
   const name = await ask('  Your name', 'User')
   const siteTitle = await ask('  Site title', 'Journals')
 
   // 2. Weather
+  console.log()
   const weatherEnabled = (await ask('  Enable weather widget? (y/n)', 'y')).toLowerCase() === 'y'
   let lat = '40.71', lon = '-74.01', weatherLabel = 'New York'
   if (weatherEnabled) {
@@ -49,16 +210,96 @@ async function main() {
   console.log()
   console.log('  Data Sources')
   console.log('  ────────────')
-  const reposDir = await ask('  Git repos directory (relative to ~)', 'GitHub')
-  const claudeHistory = await ask('  Claude Code history path (relative to ~)', '.claude/history.jsonl')
-  const narrativeInput = await ask('  Narrative journal dir (relative to ~, or "skip")', 'skip')
+  console.log('  Paths are relative to your home directory (~).')
+  const reposDir = await ask('  Git repos directory', 'GitHub')
+
+  // Verify the repos dir exists
+  const reposDirFull = join(homedir(), reposDir)
+  if (!existsSync(reposDirFull)) {
+    console.log(`  \x1b[33m!\x1b[0m  ${reposDirFull} does not exist.`)
+    console.log(`     Create it, or check the path. Git activity won't be tracked without it.`)
+  }
+
+  const claudeHistory = await ask('  Claude Code history path', '.claude/history.jsonl')
+  const narrativeInput = await ask('  Narrative journal dir (or "skip" to disable)', 'skip')
   const narrativeDir = narrativeInput === 'skip' ? null : narrativeInput
 
-  // 4. Git auto-push
-  const autoPush = (await ask('  Auto-push after generation? (y/n)', 'n')).toLowerCase() === 'y'
+  // 4. Multi-machine
+  console.log()
+  console.log('  Multi-Machine Sync')
+  console.log('  ──────────────────')
+  console.log('  If you use multiple computers, Journals can merge entries from all of them.')
+  console.log('  Each machine gets a unique ID (auto-detected from hostname by default).')
+  console.log()
+
+  // Show detected hostname
+  let detectedId = 'unknown'
+  try {
+    const hostname = execSync('hostname', { encoding: 'utf-8' }).trim().toLowerCase().replace('.local', '').replace(/ /g, '-')
+    if (hostname.includes('macbook')) detectedId = 'macbook'
+    else if (hostname.includes('mac-studio') || hostname.includes('macstudio')) detectedId = 'macstudio'
+    else if (hostname.includes('imac')) detectedId = 'imac'
+    else detectedId = hostname
+    console.log(`  Detected machine ID: ${detectedId}`)
+  } catch {}
+
+  const machineIdInput = await ask('  Machine ID (press Enter to use detected, or type custom)', detectedId)
+  const machineId = machineIdInput === detectedId ? null : machineIdInput
+
+  // 5. Git auto-push
+  console.log()
+  console.log('  Git Auto-Push')
+  console.log('  ─────────────')
+  console.log('  When enabled, entries are committed and pushed to your remote after generation.')
+  console.log('  This is required for multi-machine sync — other machines pull your entries.')
+  console.log()
+
+  if (!existsSync(join(homedir(), '.ssh', 'id_ed25519')) &&
+      !existsSync(join(homedir(), '.ssh', 'id_rsa')) &&
+      !existsSync(join(homedir(), '.ssh', 'id_ecdsa'))) {
+    console.log('  \x1b[33m!\x1b[0m  No SSH key detected. Auto-push requires SSH authentication with GitHub.')
+    console.log('     Set up an SSH key first:')
+    console.log('       ssh-keygen -t ed25519 -C "you@example.com"')
+    console.log('       Then add the public key to https://github.com/settings/ssh/new')
+    console.log()
+  }
+
+  const autoPush = (await ask('  Enable auto-push? (y/n)', 'n')).toLowerCase() === 'y'
   const branch = autoPush ? await ask('  Push branch', 'main') : 'main'
 
-  // 5. Claude API (for Reflect feature)
+  if (autoPush) {
+    // Verify remote is configured
+    try {
+      const remote = execSync('git remote get-url origin', { encoding: 'utf-8', cwd: __dirname }).trim()
+      console.log(`  Remote: ${remote}`)
+      if (remote.startsWith('https://github.com/magneticlab/journals')) {
+        console.log('  \x1b[33m!\x1b[0m  You\'re using the upstream remote. Fork the repo first, then update:')
+        console.log(`     git remote set-url origin git@github.com:YOUR_USERNAME/journals.git`)
+      }
+    } catch {
+      console.log('  \x1b[33m!\x1b[0m  No git remote configured. Add one:')
+      console.log('     git remote add origin git@github.com:YOUR_USERNAME/journals.git')
+    }
+
+    // Test SSH connectivity
+    console.log()
+    console.log('  Testing GitHub SSH connection...')
+    try {
+      execSync('ssh -T git@github.com', { encoding: 'utf-8', stdio: ['pipe', 'pipe', 'pipe'], timeout: 10000 })
+    } catch (e) {
+      const stderr = e.stderr || ''
+      if (stderr.includes('successfully authenticated')) {
+        console.log('  \x1b[32m✓\x1b[0m  GitHub SSH authentication successful')
+      } else {
+        console.log('  \x1b[31m✗\x1b[0m  GitHub SSH connection failed')
+        console.log('     Auto-push won\'t work until SSH is configured.')
+        console.log('     Guide: https://docs.github.com/en/authentication/connecting-to-github-with-ssh')
+      }
+    }
+  }
+
+  // 6. Claude API (for Reflect feature)
+  console.log()
   const reflectEnabled = (await ask('  Enable AI Reflect feature? Requires Claude API key (y/n)', 'n')).toLowerCase() === 'y'
 
   // Write config
@@ -69,7 +310,7 @@ async function main() {
 
 export default {
   name: '${name}',
-  siteTitle: '${siteTitle}',
+  siteTitle: '${siteTitle}',${machineId ? `\n  machineId: '${machineId}',` : '\n  // machineId: auto-detected from hostname'}
 
   weather: {
     enabled: ${weatherEnabled},
@@ -97,7 +338,7 @@ export default {
 `
   writeFileSync(CONFIG_PATH, config)
   console.log()
-  console.log('  Config saved to journals.config.js')
+  console.log('  \x1b[32m✓\x1b[0m  Config saved to journals.config.js')
 
   // Create .env if reflect enabled
   if (reflectEnabled) {
@@ -118,7 +359,7 @@ export default {
   const genSample = (await ask('  Generate sample entries to see how it looks? (y/n)', 'y')).toLowerCase() === 'y'
   if (genSample) {
     generateSampleEntries()
-    console.log('  Sample entries generated.')
+    console.log('  \x1b[32m✓\x1b[0m  Sample entries generated')
   }
 
   // Install dependencies
@@ -126,17 +367,33 @@ export default {
   console.log('  Installing dependencies...')
   try {
     execSync('npm install', { cwd: join(__dirname, 'app'), stdio: 'inherit' })
+    console.log()
+    console.log('  \x1b[32m✓\x1b[0m  Dependencies installed')
   } catch {
     console.log('  npm install failed — run it manually: cd app && npm install')
   }
 
   // Done
   console.log()
+  console.log('  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━')
   console.log('  Setup complete!')
+  console.log('  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━')
   console.log()
   console.log('  Next steps:')
-  console.log('    cd app && npm run dev        Start dev server')
-  console.log('    python3 scripts/generate_all.py   Generate today\'s entries')
+  console.log()
+  console.log('    1. Start the dev server:')
+  console.log('       cd app && npm run dev')
+  console.log()
+  console.log('    2. Generate real entries from your data:')
+  console.log('       python3 scripts/generate_all.py')
+  console.log()
+  if (autoPush) {
+    console.log('    3. On your other machine(s):')
+    console.log('       git clone git@github.com:YOU/journals.git')
+    console.log('       node setup.js')
+    console.log()
+  }
+  console.log('  For daily automation, see the README.')
   console.log()
 
   rl.close()

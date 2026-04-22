@@ -10,6 +10,10 @@ export default {
   // Display name shown in the greeting ("Good morning, {name}.")
   name: 'User',
 
+  // Machine identifier — auto-detected from hostname.
+  // Override per-machine in journals.config.local.js if needed.
+  // machineId: 'macstudio',
+
   // Site title shown in the browser tab and nav
   siteTitle: 'Journals',
 
